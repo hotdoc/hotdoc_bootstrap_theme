@@ -3,14 +3,22 @@ module.exports = function(grunt) {
     grunt.initConfig({
 
     copy: {  
-      main: {
+      fonts: {
         expand: true,
         cwd: 'bower_components/bootstrap/fonts/',
         src: '**',
-        dest: 'public/assets/fonts/',
+        dest: 'assets/fonts/',
         flatten: true,
         filter: 'isFile',
       },
+      templates: {
+	expand: true,
+	cwd: 'app/assets/templates',
+	src: '**',
+	dest: 'assets/templates/',
+	flatten: true,
+	filter: 'isFile',
+      }
     },      
     less: {
         development: {
@@ -18,7 +26,7 @@ module.exports = function(grunt) {
               compress: true,
             },
             files: {
-              "./public/assets/stylesheets/frontend.css":"./app/assets/stylesheets/frontend.less",
+              "./assets/css/frontend.css":"./app/assets/stylesheets/frontend.less",
             }
         }
     },
@@ -30,9 +38,9 @@ module.exports = function(grunt) {
         src: [
           './bower_components/jquery/jquery.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
-          './app/assets/javascript/frontend.js'
+          './app/javascript/frontend.js'
         ],
-        dest: './public/assets/javascript/frontend.js',
+        dest: './assets/js/frontend.js',
       },
     },
     uglify: {
@@ -41,7 +49,7 @@ module.exports = function(grunt) {
       },
       frontend: {
         files: {
-          './public/assets/javascript/frontend.js': './public/assets/javascript/frontend.js',
+          './assets/js/frontend.js': './assets/js/frontend.js',
         }
       },
     },
@@ -62,11 +70,9 @@ module.exports = function(grunt) {
     });
 
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('init', ['copy', 'less', 'concat', 'uglify']);
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['copy', 'less', 'concat', 'uglify']);
 };
