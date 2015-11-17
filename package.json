@@ -1,6 +1,6 @@
 {
   "name": "hotdoc_bootstrap_template",
-  "version": "0.1",
+  "version": "0.0.1",
   "description": "A hotdoc template",
   "main": "Gruntfile.js",
   "repository": {
@@ -10,7 +10,7 @@
   "keywords": [
     "Hotdoc",
     "Grunt",
-    "Bootstrap",
+    "Bootstrap"
   ],
   "author": "Mathieu Duponchelle",
   "license": "LGPL",
