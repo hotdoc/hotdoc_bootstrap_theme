@@ -1,6 +1,6 @@
 {
-  "name": "gruntRocks",
+  "name": "hotdoc_bootstrap_template",
   "dependencies": {
-    "bootstrap": "~3.0.3"
+    "bootstrap": "3.3.5"
   }
 }

@@ -1,22 +1,20 @@
 {
-  "name": "gruntRocks",
-  "version": "0.0.0",
-  "description": "Usando Grunt com Laravel e Bootstrap",
+  "name": "hotdoc_bootstrap_template",
+  "version": "0.1",
+  "description": "A hotdoc template",
   "main": "Gruntfile.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/elena-kolevska/grunt-laravel.git"
+    "url": "https://github.com/MathieuDuponchelle/hotdoc_bootstrap_template.git"
   },
   "keywords": [
-    "Laravel",
+    "Hotdoc",
     "Grunt",
     "Bootstrap",
-    "laravel.com.br"
   ],
-  "author": "Elena Kolevska",
-  "license": "BSD",
+  "author": "Mathieu Duponchelle",
+  "license": "LGPL",
   "bugs": {
-    "url": "https://github.com/elena-kolevska/grunt-laravel/issues"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
@@ -24,6 +22,6 @@
     "grunt-contrib-less": "~0.8.2",
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-contrib-watch": "~0.5.3",
-    "grunt-phpunit": "~0.3.1"
+    "grunt-contrib-copy": "0.8.2"
   }
 }
