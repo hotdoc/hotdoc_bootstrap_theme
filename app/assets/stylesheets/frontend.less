@@ -1,10 +1,49 @@
 @import 'base.less';
 
-/*==========  Global  ==========*/
-html{
-	height: 100%;
+.parameter_container {
+	> table {
+		&:extend(.table all);
+		> thead,
+		> tbody,
+		> tfoot {
+		  > tr {
+		    td:nth-child(3) {
+		            text-align: right;
+		    }
+		  }
+		}
+	}
 }
-body {
-	font-weight: 300;
-	height: 100%;
+
+.page_container {
+	&:extend(.container);
+}
+
+.symbols_toc {
+  &:extend(.table all);
+  // Cells
+  > thead,
+  > tbody,
+  > tfoot {
+    > tr {
+      > th,
+      > td {
+        padding: @table-cell-padding;
+        line-height: @line-height-base;
+        vertical-align: top;
+        border-top: 0px solid @table-border-color;
+      }
+      > th {
+	font-size: @font-size-large;
+      }
+
+      td:first-of-type {
+	      text-align: right;
+      }
+
+      td:nth-child(3) {
+	      text-align: right;
+      }
+    }
+  }
 }

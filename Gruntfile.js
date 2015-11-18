@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         expand: true,
         cwd: 'bower_components/bootstrap/fonts/',
         src: '**',
-        dest: 'assets/fonts/',
+        dest: 'dist/fonts/',
         flatten: true,
         filter: 'isFile',
       },
@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 	expand: true,
 	cwd: 'app/assets/templates',
 	src: '**',
-	dest: 'assets/templates/',
+	dest: 'dist/templates/',
 	flatten: true,
 	filter: 'isFile',
       }
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
               compress: true,
             },
             files: {
-              "./assets/css/frontend.css":"./app/assets/stylesheets/frontend.less",
+              "./dist/css/frontend.css":"./app/assets/stylesheets/frontend.less",
             }
         }
     },
@@ -36,11 +36,11 @@ module.exports = function(grunt) {
       },
       js_frontend: {
         src: [
-          './bower_components/jquery/jquery.js',
+          './bower_components/jquery/dist/jquery.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
           './app/javascript/frontend.js'
         ],
-        dest: './assets/js/frontend.js',
+        dest: './dist/js/frontend.js',
       },
     },
     uglify: {
@@ -49,24 +49,10 @@ module.exports = function(grunt) {
       },
       frontend: {
         files: {
-          './assets/js/frontend.js': './assets/js/frontend.js',
+          './dist/js/frontend.js': './dist/js/frontend.js',
         }
       },
     },
-    watch: {
-        js_frontend: {
-          files: [
-            './bower_components/jquery/jquery.js',
-            './bower_components/bootstrap/dist/js/bootstrap.js',
-            './app/assets/javascript/frontend.js'
-            ],   
-          tasks: ['concat:js_frontend','uglify:frontend'],
-        },
-        less: {
-          files: ['./app/assets/stylesheets/*.less'],
-          tasks: ['less'],
-        },
-      }
     });
 
   grunt.loadNpmTasks('grunt-contrib-concat');
