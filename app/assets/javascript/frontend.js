@@ -1,5 +1,9 @@
 /* Behold my best javascript ! */
 
+String.prototype.capitalizeFirstLetter = function() {
+	    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 function createSymbolDropdown() {
 	var nav = $('#nav');
 	var symbol_dropdown = '';
@@ -35,11 +39,13 @@ function createTagsDropdown(tags_hashtable) {
 
 		var tag_dropdown = '<li class="dropdown">';
 		tag_dropdown += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"';
-		tag_dropdown += 'aria-haspopup="true" aria-expanded="false">' + title + '<span class="caret"></span></a>';
+		tag_dropdown += 'aria-haspopup="true" aria-expanded="false">' + title.capitalizeFirstLetter() + '<span class="caret"></span></a>';
 		tag_dropdown += '<ul class="dropdown-menu" id="' + key + '-menu">';
 
+		tag_dropdown += '<li><a id="' + key + '">Reset</a></li>';
+
 		values.map(function (item) {
-			tag_dropdown += '<li><a>';
+			tag_dropdown += '<li><a id="'+ key + '">';
 			tag_dropdown += item;
 			tag_dropdown += '</a></li>';
 		});
@@ -71,7 +77,9 @@ function createTagsHashtable() {
 			if (!tags_hashtable[key]) {
 				tags_hashtable[key] = [];
 			}
-			tags_hashtable[key].push(value);
+			if ($.inArray(value, tags_hashtable[key]) == -1) {
+				tags_hashtable[key].push(value);
+			}
 		});
 	});
 
@@ -115,20 +123,39 @@ function doCompareVersions(filter_value, item_value) {
 	return (compareVersions(filter_value, item_value) >= 0);
 }
 
+function doCompareStability(filter_value, item_value) {
+	if (item_value === undefined) {
+		/* We consider API as stable by default */
+		if (filter_value == 'unstable') {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	return (filter_value == item_value);
+}
+
 function setupFilters() {
 	var mainEl = $('#main');
 	var tocEl = $(".symbols_toc");
 	var transitionDuration = 800;
 	var currentSince = "since-more";
 	var currentFilters = {};
-	var customCompareFunctions = {'since': doCompareVersions};
+	var customCompareFunctions = {'since': doCompareVersions,
+				      'stability': doCompareStability};
 
 	var tags_hashtable = createTagsHashtable();
 	createTagsDropdown(tags_hashtable);
 	for (var key in tags_hashtable) {
 		currentFilters[key] = undefined;
 		$('#' + key + '-menu a').click(function() {
-			currentFilters[key] = $(this).text();
+			var key = $(this).attr('id');
+			if ($(this).text() == "Reset")
+				currentFilters[key] = undefined;
+			else
+				currentFilters[key] = $(this).text();
+
 			currentSince = $(this).attr('id');
 			tocEl.isotope({filter: sinceFilter});
 			mainEl.isotope({filter: sinceFilter});
@@ -160,6 +187,7 @@ function setupFilters() {
 				break;
 			}
 		}
+
 		return res;
 	}
 
