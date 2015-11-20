@@ -38,7 +38,9 @@ module.exports = function(grunt) {
         src: [
           './bower_components/jquery/dist/jquery.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
-          './app/javascript/frontend.js'
+	  './bower_components/isotope/dist/isotope.pkgd.min.js',
+	  './bower_components/compare-versions/index.js',
+          './app/assets/javascript/frontend.js'
         ],
         dest: './dist/js/frontend.js',
       },

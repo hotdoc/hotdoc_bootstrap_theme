@@ -1,6 +1,8 @@
 {
   "name": "hotdoc_bootstrap_template",
   "dependencies": {
-    "bootstrap": "3.3.5"
+    "bootstrap": "3.3.5",
+    "isotope": "~2.2.2",
+    "compare-versions": "~2.0.1"
   }
 }
