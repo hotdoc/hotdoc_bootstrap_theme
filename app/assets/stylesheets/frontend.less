@@ -1,6 +1,6 @@
 @import 'base.less';
 
-.parameter_container {
+.parameter_container, .member_container {
 	> table {
 		&:extend(.table all);
 		> thead,
@@ -36,11 +36,18 @@ body {
 	width: 100%;
 }
 
-.symbols_toc {
+.symbols_toc, .base_symbol_header {
 	list-style: none;
 	width: 100%;
 	margin: 0;
 	padding: 0;
+}
+
+.base_symbol_header {
+	> li {
+		display: inline-block;
+		padding: 0px 4px;
+	}
 }
 
 .symbols_toc:after {
