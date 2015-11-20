@@ -1,0 +1,10 @@
+@require(toc_sections)
+<ul class="symbols_toc">
+	@for toc_section in toc_sections:
+		<li class="summary_section_title"><h3>@toc_section.name</h3></li>
+		@for summary in toc_section.summaries:
+		@summary
+		@end
+	\
+	@end
+</ul>

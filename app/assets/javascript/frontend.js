@@ -25,7 +25,6 @@ function createSymbolDropdown() {
 function createTagsDropdown(tags_hashtable) {
 	var nav = $('#nav');
 
-	console.log('tags hash', tags_hashtable);
 	for (var key in tags_hashtable) {
 		var values = tags_hashtable[key];
 		var title = key;
@@ -43,7 +42,6 @@ function createTagsDropdown(tags_hashtable) {
 			tag_dropdown += '<li><a>';
 			tag_dropdown += item;
 			tag_dropdown += '</a></li>';
-			console.log ('One value', item);
 		});
 
 		tag_dropdown += '</ul>';
@@ -106,7 +104,6 @@ function parseTags(item) {
 }
 
 function compareDefault(filter_value, item_value) {
-	console.log ("comparing", filter_value, item_value);
 	return (filter_value == item_value);
 }
 
@@ -120,6 +117,7 @@ function doCompareVersions(filter_value, item_value) {
 
 function setupFilters() {
 	var mainEl = $('#main');
+	var tocEl = $(".symbols_toc");
 	var transitionDuration = 800;
 	var currentSince = "since-more";
 	var currentFilters = {};
@@ -130,15 +128,16 @@ function setupFilters() {
 	for (var key in tags_hashtable) {
 		currentFilters[key] = undefined;
 		$('#' + key + '-menu a').click(function() {
-			console.log ('menu clicked', key, $(this).text());
 			currentFilters[key] = $(this).text();
 			currentSince = $(this).attr('id');
+			tocEl.isotope({filter: sinceFilter});
 			mainEl.isotope({filter: sinceFilter});
 		});
 	}
 
-	function sinceFilter() {
-		var item_tags = parseTags($(this));
+	function shouldBeVisible(item) {
+		var item_tags = parseTags(item);
+
 		if (!item_tags) {
 			return true;
 		}
@@ -164,9 +163,44 @@ function setupFilters() {
 		return res;
 	}
 
+	function sinceFilter() {
+		if ($(this).hasClass('summary_section_title')) {
+			res = false;
+			var next = $(this).nextUntil(".summary_section_title");
+
+			next.map(function () {
+				if (shouldBeVisible($(this))) {
+					res = true;
+				}
+			});
+			return res;
+		} else if ($(this).hasClass('symbol_section')) {
+			res = false;
+			var next = $(this).nextUntil(".symbol_section");
+
+			next.map(function () {
+				if (shouldBeVisible($(this))) {
+					res = true;
+				}
+			});
+			return res;
+		}
+
+		return shouldBeVisible ($(this));
+	}
+
+	tocEl.isotope({
+		layoutMode: 'vertical',
+		animationEngine: 'best-available',
+		containerStyle: null,
+		animationOptions: {
+			duration: transitionDuration
+		},
+	});
+
 	mainEl.isotope({
 		layoutMode: 'vertical',
-		animationEngine: 'best-available', //CSS3 if browser supports it, jQuery otherwise
+		animationEngine: 'best-available',
 		containerStyle: null,
 		animationOptions: {
 			duration: transitionDuration
@@ -182,7 +216,6 @@ function setupFilters() {
 	}
 
 	layoutTimer();
-
 }
 
 $( document ).ready(function() {
