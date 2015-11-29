@@ -2,3 +2,4 @@ bower_components
 node_modules
 dist
 Makefile
+dist.tgz

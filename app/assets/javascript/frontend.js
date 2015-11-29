@@ -244,6 +244,16 @@ function setupFilters() {
 	}
 
 	layoutTimer();
+
+	// Isotope messes with our anchors positions
+	var hash_index = window.location.href.indexOf("#");
+	if (hash_index != -1) {
+		var hash = window.location.href.substring(hash_index + 1);
+		location.hash = "#" + hash;
+	} else {
+		console.log('No hash, done');
+	}
+
 }
 
 $( document ).ready(function() {
