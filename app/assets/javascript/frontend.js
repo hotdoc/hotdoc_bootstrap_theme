@@ -37,22 +37,34 @@ function createTagsDropdown(tags_hashtable) {
 			title = 'API Version';
 		}
 
-		var tag_dropdown = '<li class="dropdown">';
-		tag_dropdown += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"';
-		tag_dropdown += 'aria-haspopup="true" aria-expanded="false">' + title.capitalizeFirstLetter() + '<span class="caret"></span></a>';
-		tag_dropdown += '<ul class="dropdown-menu" id="' + key + '-menu">';
+		if (title == 'deprecated') {
+			var widget = '<li><a>';
+			widget += 'Deprecated functions <input type="checkbox" id="show-deprecated">';
+			widget += '</a></li>';
+		} else {
+			var widget = '<li class="dropdown">';
+			widget += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"';
+			widget += 'aria-haspopup="true" aria-expanded="false">' + title.capitalizeFirstLetter() + '<span class="caret"></span></a>';
+			widget += '<ul class="dropdown-menu" id="' + key + '-menu">';
 
-		tag_dropdown += '<li><a id="' + key + '">Reset</a></li>';
+			widget += '<li><a id="' + key + '">Reset</a></li>';
 
-		values.map(function (item) {
-			tag_dropdown += '<li><a id="'+ key + '">';
-			tag_dropdown += item;
-			tag_dropdown += '</a></li>';
-		});
+			values.map(function (item) {
+				widget += '<li><a id="'+ key + '">';
+				widget += item;
+				widget += '</a></li>';
+			});
+			widget += '</ul>';
+			widget += '</li>';
+		}
 
-		tag_dropdown += '</ul>';
-		tag_dropdown += '</li>';
-		nav.append(tag_dropdown);
+		nav.append(widget);
+		if (title == 'deprecated') {
+			$('#show-deprecated').bootstrapToggle({
+				on: 'Visible',
+				off: 'Hidden',
+			});
+		}
 	}
 }
 
@@ -111,11 +123,11 @@ function parseTags(item) {
 	return tags_table;
 }
 
-function compareDefault(filter_value, item_value) {
+function compareDefault(all_values, filter_value, item_value) {
 	return (filter_value == item_value);
 }
 
-function doCompareVersions(filter_value, item_value) {
+function doCompareVersions(all_values, filter_value, item_value) {
 	if (item_value === undefined) {
 		return true;
 	}
@@ -123,7 +135,7 @@ function doCompareVersions(filter_value, item_value) {
 	return (compareVersions(filter_value, item_value) >= 0);
 }
 
-function doCompareStability(filter_value, item_value) {
+function doCompareStability(all_values, filter_value, item_value) {
 	if (item_value === undefined) {
 		/* We consider API as stable by default */
 		if (filter_value == 'unstable') {
@@ -136,30 +148,60 @@ function doCompareStability(filter_value, item_value) {
 	return (filter_value == item_value);
 }
 
+function doCompareDeprecated(all_values, filter_value, item_value) {
+	var since = all_values['since'];
+
+	/* Item isn't marked as deprecated */
+	if (item_value === undefined) {
+		return true;
+	}
+
+	/* Item is marked as deprecated, but we show deprecated */
+	if (filter_value == true) {
+		return true;
+	}
+
+	/* Item is marked as deprecated and we show the latest version */
+	if (since === undefined) {
+		return false;
+	}
+
+	/* returns false if item was deprecated at the version we filter on */
+	return (compareVersions (since, item_value) < 0);
+}
+
 function setupFilters() {
 	var mainEl = $('#main');
 	var tocEl = $(".symbols_toc");
 	var transitionDuration = 800;
-	var currentSince = "since-more";
 	var currentFilters = {};
 	var customCompareFunctions = {'since': doCompareVersions,
-				      'stability': doCompareStability};
+				      'stability': doCompareStability,
+				      'deprecated': doCompareDeprecated};
 
 	var tags_hashtable = createTagsHashtable();
 	createTagsDropdown(tags_hashtable);
 	for (var key in tags_hashtable) {
 		currentFilters[key] = undefined;
-		$('#' + key + '-menu a').click(function() {
-			var key = $(this).attr('id');
-			if ($(this).text() == "Reset")
-				currentFilters[key] = undefined;
-			else
-				currentFilters[key] = $(this).text();
+		if (key == 'deprecated') {
+			currentFilters[key] = $('#show-deprecated').prop('checked');
+			$('#show-deprecated').change(function() {
+				currentFilters["deprecated"] = $(this).prop('checked');
+				tocEl.isotope({filter: isotopeFilter});
+				mainEl.isotope({filter: isotopeFilter});
+			})
+		} else {
+			$('#' + key + '-menu a').click(function() {
+				var key = $(this).attr('id');
+				if ($(this).text() == "Reset")
+					currentFilters[key] = undefined;
+				else
+					currentFilters[key] = $(this).text();
 
-			currentSince = $(this).attr('id');
-			tocEl.isotope({filter: sinceFilter});
-			mainEl.isotope({filter: sinceFilter});
-		});
+				tocEl.isotope({filter: isotopeFilter});
+				mainEl.isotope({filter: isotopeFilter});
+			});
+		}
 	}
 
 	function shouldBeVisible(item) {
@@ -182,7 +224,7 @@ function setupFilters() {
 				continue;
 			}
 
-			if (!compareFunction (value, item_tags[key])) {
+			if (!compareFunction (currentFilters, value, item_tags[key])) {
 				res = false;
 				break;
 			}
@@ -191,7 +233,7 @@ function setupFilters() {
 		return res;
 	}
 
-	function sinceFilter() {
+	function isotopeFilter() {
 		if ($(this).hasClass('summary_section_title')) {
 			res = false;
 			var next = $(this).nextUntil(".summary_section_title");
@@ -221,6 +263,7 @@ function setupFilters() {
 		layoutMode: 'vertical',
 		animationEngine: 'best-available',
 		containerStyle: null,
+		filter: isotopeFilter,
 		animationOptions: {
 			duration: transitionDuration
 		},
@@ -230,6 +273,7 @@ function setupFilters() {
 		layoutMode: 'vertical',
 		animationEngine: 'best-available',
 		containerStyle: null,
+		filter: isotopeFilter,
 		animationOptions: {
 			duration: transitionDuration
 		},
@@ -250,8 +294,6 @@ function setupFilters() {
 	if (hash_index != -1) {
 		var hash = window.location.href.substring(hash_index + 1);
 		location.hash = "#" + hash;
-	} else {
-		console.log('No hash, done');
 	}
 
 }

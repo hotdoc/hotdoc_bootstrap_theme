@@ -3,6 +3,7 @@
   "dependencies": {
     "bootstrap": "3.3.5",
     "isotope": "~2.2.2",
-    "compare-versions": "~2.0.1"
+    "compare-versions": "~2.0.1",
+    "bootstrap-toggle": "~2.2.1"
   }
 }

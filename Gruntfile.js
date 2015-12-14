@@ -38,12 +38,20 @@ module.exports = function(grunt) {
         src: [
           './bower_components/jquery/dist/jquery.js',
           './bower_components/bootstrap/dist/js/bootstrap.js',
+	  './bower_components/bootstrap-toggle/js/bootstrap-toggle.js',
 	  './bower_components/isotope/dist/isotope.pkgd.min.js',
 	  './bower_components/compare-versions/index.js',
           './app/assets/javascript/frontend.js'
         ],
         dest: './dist/js/frontend.js',
       },
+      css_frontend: {
+        src: [
+	  './dist/css/frontend.css',
+	  './bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css',
+	],
+	dest: './dist/css/frontend.css',
+      }
     },
     uglify: {
       options: {
