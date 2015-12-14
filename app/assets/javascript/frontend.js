@@ -38,7 +38,8 @@ function createTagsDropdown(tags_hashtable) {
 		}
 
 		if (title == 'deprecated') {
-			var widget = '<li><a>';
+			/* FIXME : small hack to align with other widgets. CSS is difficult */
+			var widget = '<li><a style="padding-top: 10px;">';
 			widget += 'Deprecated functions <input type="checkbox" id="show-deprecated">';
 			widget += '</a></li>';
 		} else {
