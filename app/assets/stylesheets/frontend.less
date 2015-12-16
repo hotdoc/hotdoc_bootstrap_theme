@@ -19,9 +19,15 @@
 	&:extend(.container-fluid);
 }
 
+.navbar {
+	min-height: 0px;
+}
+
 // Account for the navbar, official solution
 body {
 	padding-top: 70px;
+	// scrollspying
+	position: relative;
 }
 
 .symbol_section, .base_symbol_container {
@@ -74,4 +80,48 @@ body {
 
 .base_symbol_summary .summary_extra {
 	width: 20%;
+}
+
+// sidenav
+
+#sidenav {
+	position: fixed;
+	overflow-y: auto;
+	width: 15%;
+	height: 80%;
+}
+
+.sidenav-panel-body {
+  &:extend(.panel-body);
+  padding: 0px;
+  padding-left: 5px;
+}
+
+// Scrollspy
+
+.scrollspy {
+	padding-left: 5px;
+}
+
+.nav a {
+  color: black;
+  font-style: italic;
+}
+
+.nav li a:hover,
+.nav li a:focus {
+  background: #86c5da;
+}
+
+.nav .active {
+  font-weight: bold;
+  border-left: 5px solid black;
+}
+
+.nav .nav {
+  display: none;
+}
+
+.nav .active .nav {
+  display: block;
 }

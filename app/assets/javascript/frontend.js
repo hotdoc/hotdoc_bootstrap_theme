@@ -4,31 +4,11 @@ String.prototype.capitalizeFirstLetter = function() {
 	    return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
-function createSymbolDropdown() {
-	var nav = $('#nav');
-	var symbol_dropdown = '';
-
-	$('.symbol_section').map (function() {
-		var id = $(this).attr('id');
-		if (symbol_dropdown == '') {
-			symbol_dropdown += '<li class="dropdown">'
-			symbol_dropdown += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"';
-			symbol_dropdown += 'aria-haspopup="true" aria-expanded="false">Symbol Type<span class="caret"></span></a>'
-			symbol_dropdown += '<ul class="dropdown-menu">';
-		}
-		symbol_dropdown += '<li><a href="#' + id + '">' + id + '</a></li>';
-	});
-
-	if (symbol_dropdown != '') {
-		symbol_dropdown += '</ul>';
-		symbol_dropdown += '</li>';
-		nav.append(symbol_dropdown);
-	}
-}
+String.prototype.endsWith = function(suffix) {
+	    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
 
 function createTagsDropdown(tags_hashtable) {
-	var nav = $('#nav');
-
 	for (var key in tags_hashtable) {
 		var values = tags_hashtable[key];
 		var title = key;
@@ -38,17 +18,23 @@ function createTagsDropdown(tags_hashtable) {
 		}
 
 		if (title == 'deprecated') {
-			/* FIXME : small hack to align with other widgets. CSS is difficult */
-			var widget = '<li><a style="padding-top: 10px;">';
-			widget += 'Deprecated functions <input type="checkbox" id="show-deprecated">';
-			widget += '</a></li>';
+			var menu = $("#navbar-wrapper");
+			var widget = '<span>Deprecated functions: </span><input type="checkbox" id="show-deprecated">';
+			menu.append(widget);
+			$('#show-deprecated').bootstrapToggle({
+				on: 'Visible',
+				off: 'Hidden',
+			});
 		} else {
-			var widget = '<li class="dropdown">';
-			widget += '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"';
-			widget += 'aria-haspopup="true" aria-expanded="false">' + title.capitalizeFirstLetter() + '<span class="caret"></span></a>';
+			var menu = $('#menu');
+			var widget = '<div class="btn-group">';
+			widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+			widget += title.capitalizeFirstLetter();
+			widget += '<span class="caret"></span></button>';
 			widget += '<ul class="dropdown-menu" id="' + key + '-menu">';
 
 			widget += '<li><a id="' + key + '">Reset</a></li>';
+			widget += '<li role="separator" class="divider"></li>';
 
 			values.map(function (item) {
 				widget += '<li><a id="'+ key + '">';
@@ -56,15 +42,8 @@ function createTagsDropdown(tags_hashtable) {
 				widget += '</a></li>';
 			});
 			widget += '</ul>';
-			widget += '</li>';
-		}
-
-		nav.append(widget);
-		if (title == 'deprecated') {
-			$('#show-deprecated').bootstrapToggle({
-				on: 'Visible',
-				off: 'Hidden',
-			});
+			widget += '</div>';
+			menu.append(widget);
 		}
 	}
 }
@@ -299,7 +278,86 @@ function setupFilters() {
 
 }
 
+function setupSidenav() {
+	var here =  window.location.href;
+	var hash_index = here.indexOf("#");
+	var panel = undefined;
+	if (hash_index != -1) {
+		here = here.substring(0, hash_index);
+	}
+
+	$('.panel-collapse[data-nav-ref]').map(function() {
+		var navref = $(this).attr('data-nav-ref');
+		if (here.endsWith('/' + navref)) {
+			panel = $(this);
+		}
+	});
+
+	if (panel != undefined) {
+		var elem = panel;
+		while (elem.length) {
+			elem.removeClass('collapse');
+			elem.addClass('collapse in');
+			elem = elem.parent();
+		}
+
+		var widget = '';
+		widget += '<div class="scrollspy" id="sidenav-wrapper">';
+		widget += '<ul class="nav">';
+
+		$('h2[id]').map(function() {
+			widget += '<li><a href="#' + $(this).attr('id') + '">';
+			widget += '<span class="fa fa-angle-double-right"></span>';
+			widget += $(this).text();
+			widget += '</a></li>';
+		});
+
+		widget += '</ul>';
+		widget += '</div>';
+
+		panel.append(widget);
+	}
+
+	var extension_name = $('#page-wrapper').attr('data-extension');
+	var language = 'c';
+
+	if (extension_name == 'gi-extension') {
+		split_here = here.split('/');
+		language = split_here[split_here.length - 2];
+		var widget = '<div class="btn-group">';
+	       	widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+		widget += 'Language';
+		widget += '<span class="caret"></span></button>';
+		widget += '<ul class="dropdown-menu">';
+
+		widget += '<li><a href="' + '../c/' + split_here[split_here.length - 1] + '">';
+		widget += 'C';
+		widget += '</a></li>';
+
+		widget += '<li><a href="' + '../javascript/' + split_here[split_here.length - 1] + '">';
+		widget += 'Javascript';
+		widget += '</a></li>';
+
+		widget += '<li><a href="' + '../python/' + split_here[split_here.length - 1] + '">';
+		widget += 'Python';
+		widget += '</a></li>';
+
+		widget += '</ul>';
+		widget += '</div>';
+		$("#menu").append (widget);
+	}
+
+	$('.sidenav-ref').map(function() {
+		var ref_extension_name = $(this).attr('data-extension');
+		if (ref_extension_name != "gi-extension" && extension_name == 'gi-extension') {
+			$(this).attr('href', '../' + $(this).attr('href'));
+		} else if (ref_extension_name == 'gi-extension' && extension_name != 'gi-extension') {
+			$(this).attr('href', language + '/' + $(this).attr('href'));
+		}
+	});
+}
+
 $( document ).ready(function() {
-	createSymbolDropdown();
+	setupSidenav();
 	setupFilters();
 });
