@@ -16,8 +16,9 @@ print sidenav_panel_extra_class
 		<h4 class="panel-title">
 			<a class="sidenav-ref" href="@page.link.get_link()" data-extension="@str(page.extension_name)">@page.get_title()</a>
 			@if page.subpages:
-			<a data-toggle="collapse" data-parent="#@parent_name" href="#@name-children">
-				<span class="glyphicon glyphicon-chevron-right"></span>
+			<a class="sidenav-toggle" data-toggle="collapse" data-parent="#@parent_name" href="#@name-children" aria-expanded="false">
+				<i class="glyphicon glyphicon-chevron-right pull-right"></i>
+				<i class="glyphicon glyphicon-chevron-down pull-right"></i>
 			</a>
 			@end
 		</h4> 

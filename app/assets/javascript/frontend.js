@@ -296,8 +296,13 @@ function setupSidenav() {
 	if (panel != undefined) {
 		var elem = panel;
 		while (elem.length) {
-			elem.removeClass('collapse');
-			elem.addClass('collapse in');
+			if (elem.hasClass('collapse')) {
+				//elem.removeClass('collapse');
+				//elem.addClass('collapse in');
+				$.support.transition = false;
+				elem.collapse(false);
+				$.support.transition = true;
+			}
 			elem = elem.parent();
 		}
 
@@ -307,7 +312,6 @@ function setupSidenav() {
 
 		$('h2[id]').map(function() {
 			widget += '<li><a href="#' + $(this).attr('id') + '">';
-			widget += '<span class="fa fa-angle-double-right"></span>';
 			widget += $(this).text();
 			widget += '</a></li>';
 		});
