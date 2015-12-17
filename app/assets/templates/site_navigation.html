@@ -3,8 +3,15 @@
 @def format_level(page, parent_name, level):
 @(
 name = parent_name + '-' + str(level)
+actual_level = name.count('-')
+if actual_level % 2 == 0:
+	sidenav_panel_extra_class = "sidenav-panel-even"
+else:
+	sidenav_panel_extra_class = "sidenav-panel-odd"
+print sidenav_panel_extra_class
 )
-<div class="sidenav-panel-body">
+
+<div class="sidenav-panel-body @sidenav_panel_extra_class">
 	<div class="panel-heading">  
 		<h4 class="panel-title">
 			<a class="sidenav-ref" href="@page.link.get_link()" data-extension="@str(page.extension_name)">@page.get_title()</a>

@@ -84,28 +84,51 @@ body {
 
 // sidenav
 
+#sidenav-column {
+	padding: 0px;
+}
+
 #sidenav {
 	position: fixed;
+	top: 35px;
+	bottom: 0px;
+	left: 0px;
 	overflow-y: auto;
 	width: 15%;
-	height: 80%;
+	min-height: 100%;
+	background-color: #333;
 }
 
 .sidenav-panel-body {
   &:extend(.panel-body);
   padding: 0px;
   padding-left: 5px;
+  color: white;
+}
+
+.sidenav-main-panel-body {
+  &:extend(.sidenav-panel-body);
+  padding: 0px;
+}
+
+.sidenav-panel-even {
+	background-color: #1C1C1C;
+}
+
+.sidenav-panel-odd {
+	background-color: #333;
 }
 
 // Scrollspy
 
 .scrollspy {
 	padding-left: 5px;
+	background-color: #131313;
 }
 
 .nav a {
-  color: black;
   font-style: italic;
+  color: white;
 }
 
 .nav li a:hover,
