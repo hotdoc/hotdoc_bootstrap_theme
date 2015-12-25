@@ -1,4 +1,4 @@
-@require(page, assets_path, site_navigation)
+@require(page, assets_path, scripts, site_navigation)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +11,11 @@
 
 <link rel="stylesheet" href="@assets_path/css/frontend.css" type="text/css"/>
 <script src="@assets_path/js/frontend.js"></script>
+
+@for script in scripts:
+<script src="@assets_path/js/@script"></script>
+@end
+
 </head>
 
 <body data-spy="scroll" data-target=".scrollspy" data-offset="70">
