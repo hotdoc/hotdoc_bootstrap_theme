@@ -326,7 +326,10 @@ function setupSidenav() {
 	var language = 'c';
 
 	if (extension_name == 'gi-extension') {
-		split_here = here.split('/');
+		var split_here = here.split('/');
+		var base_name = split_here.pop();
+		var language = split_here.pop();
+		here = split_here.join('/');
 		language = split_here[split_here.length - 2];
 		var widget = '<div class="btn-group">';
 	       	widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
@@ -334,15 +337,15 @@ function setupSidenav() {
 		widget += '<span class="caret"></span></button>';
 		widget += '<ul class="dropdown-menu">';
 
-		widget += '<li><a href="' + '../c/' + split_here[split_here.length - 1] + '">';
+		widget += '<li><a href="' + '../c/' + base_name + '">';
 		widget += 'C';
 		widget += '</a></li>';
 
-		widget += '<li><a href="' + '../javascript/' + split_here[split_here.length - 1] + '">';
+		widget += '<li><a href="' + '../javascript/' + base_name + '">';
 		widget += 'Javascript';
 		widget += '</a></li>';
 
-		widget += '<li><a href="' + '../python/' + split_here[split_here.length - 1] + '">';
+		widget += '<li><a href="' + '../python/' + base_name + '">';
 		widget += 'Python';
 		widget += '</a></li>';
 
@@ -359,9 +362,36 @@ function setupSidenav() {
 			$(this).attr('href', language + '/' + $(this).attr('href'));
 		}
 	});
+
+	return here;
 }
 
-$( document ).ready(function() {
-	setupSidenav();
+function dirname(path) {
+	return path.replace(/\\/g, '/')
+		.replace(/\/[^\/]*\/?$/, '');
+}
+
+function setupSearch(root) {
+	var req = new XMLHttpRequest();
+	console.log("requesting", root + "/assets/js/dumped.trie");
+	req.open("GET", root + "/assets/js/search/dumped.trie", true);
+	req.overrideMimeType('text\/plain; charset=x-user-defined');
+
+	var trie = undefined;
+	var here = dirname(window.location.href);
+
+	req.onload = function (event) {
+		data = req.responseText;
+		console.time('trie_creation');
+		var trie = new Trie(data);
+		console.timeEnd('trie_creation');
+	};
+
+	req.send(null);
+}
+
+$(document).ready(function() {
+	var root = setupSidenav();
 	setupFilters();
+	setupSearch(root);
 });
