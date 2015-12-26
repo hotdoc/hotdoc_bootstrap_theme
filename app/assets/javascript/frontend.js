@@ -387,7 +387,9 @@ function do_search(trie, word) {
 }
 
 function display_urls_for_token(token, data) {
-	var token_results_div = $('#' + token + '-result');
+	var selector = '#' + CSS.escape(token) + '-result';
+
+	var token_results_div = $(selector);
 
 	if (token_results_div.length == 0) {
 		return;
@@ -456,6 +458,28 @@ function prepare_results_view (tokens) {
 	results_div.html(skeleton);
 }
 
+function debounce (func, threshold, execAsap) {
+
+    var timeout;
+
+    return function debounced () {
+        var obj = this, args = arguments;
+        function delayed () {
+            if (!execAsap)
+                func.apply(obj, args);
+            timeout = null;
+        };
+
+        if (timeout)
+            clearTimeout(timeout);
+        else if (execAsap)
+            func.apply(obj, args);
+
+        timeout = setTimeout(delayed, threshold || 100);
+    };
+
+}
+
 function setupSearch(root) {
 	var req = new XMLHttpRequest();
 	req.open("GET", root + "/assets/js/search/dumped.trie", true);
@@ -467,20 +491,26 @@ function setupSearch(root) {
 		var trie = new Trie(req.responseText);
 		var search_input = $('#sidenav-lookup-field');
 
+		search_input.val("");
+
 		search_input.removeAttr('disabled');
 		search_input.attr('placeholder', 'Search');
 
 		setup_json_override();
 
+		var refresher = debounce(display_urls_for_tokens, 500);
+
 		search_input.keyup(function () {
 			var word = $(this).val();
 			if (word.length == 0) {
+				var search_results = $('#search_results');
+				search_results.html('');
+				search_results.hide();
 				$('#main').show();
-				$('#search_results').hide()
 			} else {
 				var tokens = do_search(trie, word);
 				prepare_results_view(tokens);
-				display_urls_for_tokens(root, tokens);
+				refresher(root, tokens);
 			}
 		});
 	};

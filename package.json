@@ -21,4 +21,7 @@
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-contrib-copy": "0.8.2"
   },
+  "dependencies": {
+    "css.escape": "^1.4.0"
+  }
 }
