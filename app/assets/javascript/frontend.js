@@ -1,11 +1,11 @@
 /* Behold my best javascript ! */
 
 String.prototype.capitalizeFirstLetter = function() {
-	    return this.charAt(0).toUpperCase() + this.slice(1);
+	return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
 String.prototype.endsWith = function(suffix) {
-	    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
 function createTagsDropdown(tags_hashtable) {
@@ -156,8 +156,8 @@ function setupFilters() {
 	var transitionDuration = 800;
 	var currentFilters = {};
 	var customCompareFunctions = {'since': doCompareVersions,
-				      'stability': doCompareStability,
-				      'deprecated': doCompareDeprecated};
+		'stability': doCompareStability,
+		'deprecated': doCompareDeprecated};
 
 	var tags_hashtable = createTagsHashtable();
 	createTagsDropdown(tags_hashtable);
@@ -264,7 +264,7 @@ function setupFilters() {
 		setTimeout(function(){
 			mainEl.isotope('layout');
 		}, transitionDuration);
-		
+
 	}
 
 	layoutTimer();
@@ -297,8 +297,6 @@ function setupSidenav() {
 		var elem = panel;
 		while (elem.length) {
 			if (elem.hasClass('collapse')) {
-				//elem.removeClass('collapse');
-				//elem.addClass('collapse in');
 				$.support.transition = false;
 				elem.collapse(false);
 				$.support.transition = true;
@@ -325,14 +323,13 @@ function setupSidenav() {
 	var extension_name = $('#page-wrapper').attr('data-extension');
 	var language = 'c';
 
+	var split_here = here.split('/');
+	var base_name = split_here.pop();
+
 	if (extension_name == 'gi-extension') {
-		var split_here = here.split('/');
-		var base_name = split_here.pop();
 		var language = split_here.pop();
-		here = split_here.join('/');
-		language = split_here[split_here.length - 2];
 		var widget = '<div class="btn-group">';
-	       	widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+		widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
 		widget += 'Language';
 		widget += '<span class="caret"></span></button>';
 		widget += '<ul class="dropdown-menu">';
@@ -363,7 +360,7 @@ function setupSidenav() {
 		}
 	});
 
-	return here;
+	return split_here.join('/');
 }
 
 function dirname(path) {
@@ -371,20 +368,121 @@ function dirname(path) {
 		.replace(/\/[^\/]*\/?$/, '');
 }
 
+function to_original(word) {
+	return word.replace(/\|/g, '_').replace(/}/g, '.');
+}
+
+function do_search(trie, word) {
+	var results = [];
+	var query = word.replace(/\./g, '}');
+	query = query.replace(/_/g, '|');
+
+	var node = trie.lookup_node(query);
+
+	if (node && node.is_final) {
+		results.push (to_original(node.get_word()));
+	}
+
+	return results;
+}
+
+function display_urls_for_token(token, data) {
+	var token_results_div = $('#' + token + '-result');
+
+	if (token_results_div.length == 0) {
+		return;
+	}
+
+	var urls = data.urls;
+	var meat = "<h5>Search results for " + token + "<h5>";
+
+	meat += '<ul>';
+
+	var url;
+	for (var i = 0; i < urls.length; i++) {
+		url = urls[i];
+		meat += "<li>" + url + "</li>";
+	}
+
+	meat += "</ul>";
+
+	token_results_div.html(meat);
+}
+
+function display_urls_for_tokens(root, tokens) {
+	for (var i = 0; i < tokens.length; i++) {
+		var query_token = function(i) {
+			var token = tokens[i];
+			var url = root + "/assets/js/search/" + token;
+
+			return function() {
+				var jqxhr = $.getJSON(url)
+				.done(function(data) {
+					display_urls_for_token(token, data);
+				})
+				.fail(function() {
+				})
+				.always(function() {
+				});
+			};
+		};
+
+		query_token(i)();
+	}
+}
+
+function setup_json_override() {
+	$.ajaxSetup({beforeSend: function(xhr){
+		if (xhr.overrideMimeType)
+		{
+			xhr.overrideMimeType("application/json");
+		}
+	}
+	});
+}
+
+function prepare_results_view (tokens) {
+	var results_div = $("#search_results");
+	$('#main').hide();
+	results_div.show()
+
+	var skeleton = "<h3>Search results</h3>";
+	var token = null;
+
+	for (var i = 0; i < tokens.length; i++) {
+		token = tokens[i];
+		skeleton += '<div id="' + token + '-result"></div>'
+	}
+	results_div.html(skeleton);
+}
+
 function setupSearch(root) {
 	var req = new XMLHttpRequest();
-	console.log("requesting", root + "/assets/js/dumped.trie");
 	req.open("GET", root + "/assets/js/search/dumped.trie", true);
 	req.overrideMimeType('text\/plain; charset=x-user-defined');
 
-	var trie = undefined;
 	var here = dirname(window.location.href);
 
 	req.onload = function (event) {
-		data = req.responseText;
-		console.time('trie_creation');
-		var trie = new Trie(data);
-		console.timeEnd('trie_creation');
+		var trie = new Trie(req.responseText);
+		var search_input = $('#sidenav-lookup-field');
+
+		search_input.removeAttr('disabled');
+		search_input.attr('placeholder', 'Search');
+
+		setup_json_override();
+
+		search_input.keyup(function () {
+			var word = $(this).val();
+			if (word.length == 0) {
+				$('#main').show();
+				$('#search_results').hide()
+			} else {
+				var tokens = do_search(trie, word);
+				prepare_results_view(tokens);
+				display_urls_for_tokens(root, tokens);
+			}
+		});
 	};
 
 	req.send(null);
