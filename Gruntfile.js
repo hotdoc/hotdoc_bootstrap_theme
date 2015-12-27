@@ -42,6 +42,7 @@ module.exports = function(grunt) {
 	  './bower_components/isotope/dist/isotope.pkgd.min.js',
 	  './bower_components/compare-versions/index.js',
 	  './node_modules/css.escape/css.escape.js',
+          './app/assets/javascript/searchit.js',
           './app/assets/javascript/frontend.js'
         ],
         dest: './dist/js/frontend.js',

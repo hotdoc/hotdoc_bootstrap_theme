@@ -386,7 +386,7 @@ function do_search(trie, word) {
 	return results;
 }
 
-function display_fragment_for_url(fragment, data) {
+function display_fragment_for_url(fragment, data, token) {
 	var selector = '#' + CSS.escape(fragment) + '-fragment';
 
 	var fragment_div = $(selector);
@@ -395,17 +395,29 @@ function display_fragment_for_url(fragment, data) {
 		return;
 	}
 
-	var meat = data;
+	var html = $.parseHTML(data);
 
-	fragment_div.html(data);
+	var compact = $(html).text().match(/\S+/g).join(' ');
+
+	try {
+		compact = ellipsize_fragment(compact, token, 40);
+	} catch (err) {
+		console.log(err);
+	}
+
+	html = '<p>' + compact + '</p>'
+
+	fragment_div.html(html);
 }
 
-function display_fragments_for_urls(root, fragments) {
+function display_fragments_for_urls(root, fragments, token) {
+	var token = token;
+
 	for (var i = 0; i < fragments.length; i++) {
 		var query_fragment = function(i) {
 			var fragment = fragments[i];
 			var url = root +
-				"/assets/js/search/fragments/" +
+				"/assets/js/search/hotdoc_fragments/" +
 				encodeURIComponent(fragment) + ".fragment";
 
 			return function() {
@@ -417,7 +429,7 @@ function display_fragments_for_urls(root, fragments) {
 					}
 				})
 				.done(function(data) {
-					display_fragment_for_url(fragment, data);
+					display_fragment_for_url(fragment, data, token);
 				})
 				.fail(function(xhr, text_status, error_thrown) {
 				})
@@ -440,12 +452,12 @@ function display_urls_for_token(root, token, data) {
 	}
 
 	var urls = data.urls;
-	var meat = "<h5>Search results for " + token + "<h5>";
+	var meat = "<h5>Search results for " + token + "</h5>";
 
 	var url;
 	for (var i = 0; i < urls.length; i++) {
 		url = urls[i];
-		meat += '<div>';
+		meat += '<div class="search_result">';
 		meat += '<a href="' + url + '">' + url + '</a>';
 		meat += '<div id="' + url + '-fragment"></div>';
 		meat += '</div>';
@@ -453,7 +465,7 @@ function display_urls_for_token(root, token, data) {
 
 	token_results_div.html(meat);
 
-	display_fragments_for_urls(root, urls);
+	display_fragments_for_urls(root, urls, token);
 }
 
 function display_urls_for_tokens(root, tokens) {
