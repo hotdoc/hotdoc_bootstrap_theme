@@ -4,7 +4,7 @@ function escapeRegExp(string) {
 	return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
 
-function test_fun (fragment, term, size_goal) {
+function ellipsize (fragment, term, size_goal) {
 	var words_remaining = (fragment.match(/\S+/g) || []).length;
 
 	if (words_remaining < size_goal) {
@@ -20,9 +20,15 @@ function test_fun (fragment, term, size_goal) {
 	var passthrough = 0;
 	var words_included = 0;
 
+	var backbuffer;
 	for (var i = 0; i < sentences.length; i++) {
 		var sentence = sentences[i];
-		var backbuffer = [];
+
+		if (backbuffer != undefined && backbuffer.length) {
+			result += '... ';
+		}
+
+		backbuffer = [];
 
 		var words = sentence.match(/\S+/g);
 		for (var j = 0; j < words.length; j++) {
@@ -35,12 +41,21 @@ function test_fun (fragment, term, size_goal) {
 			} else if (word.toLowerCase().indexOf(term) != -1) {
 				start_index = Math.max(j - words_per_match / 2, 0);
 				passthrough = words_per_match - start_index;
+
+				if (start_index > 0 && start_index < backbuffer.length) {
+					result += 'ELLIPSIS ';
+				}
+
+				for (var k = start_index; k < j; k++) {
+					if (backbuffer[k] != undefined) {
+						result += backbuffer[k] + ' ';
+						words_included += 1;
+					} else {
+						passthrough += 1;
+					}
+				}
 				result += word + ' ';
 				words_included += 1;
-				for (var k = start_index; k < j; k++) {
-					result += backbuffer[k] + ' ';
-					words_included += 1;
-				}
 				backbuffer = [];
 			} else {
 				backbuffer.push(word);
@@ -56,16 +71,16 @@ function test_fun (fragment, term, size_goal) {
 			words_remaining -= 1;
 			if (words_remaining > passthrough &&
 					words_remaining + words_included <= size_goal) {
-				console.log(words_remaining, words_included, passthrough);
 				passthrough += words_remaining;
 			}
 		}
 	}
 
-	console.log("I'm done ???");
-	console.log(result);
-	console.log(result.match(/\S+/g).length);
+	return result;
 }
 
-
-test_fun(my_string, 'struct', 100);
+console.time("compacter");
+for (var i=0; i < 10000; i++) {
+	ellipsize(my_string, 'bytes', 100);
+}
+console.timeEnd("compacter");
