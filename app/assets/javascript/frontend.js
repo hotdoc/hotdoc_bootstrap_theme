@@ -370,7 +370,7 @@ function dirname(path) {
 
 function to_original(word) {
 	return word.replace(/\|/g, '_').replace(/}/g, '.');
-}
+	}
 
 function do_search(trie, word) {
 	var results = [];
@@ -386,7 +386,51 @@ function do_search(trie, word) {
 	return results;
 }
 
-function display_urls_for_token(token, data) {
+function display_fragment_for_url(fragment, data) {
+	var selector = '#' + CSS.escape(fragment) + '-fragment';
+
+	var fragment_div = $(selector);
+
+	if (fragment_div.length == 0) {
+		return;
+	}
+
+	var meat = data;
+
+	fragment_div.html(data);
+}
+
+function display_fragments_for_urls(root, fragments) {
+	for (var i = 0; i < fragments.length; i++) {
+		var query_fragment = function(i) {
+			var fragment = fragments[i];
+			var url = root +
+				"/assets/js/search/fragments/" +
+				encodeURIComponent(fragment) + ".fragment";
+
+			return function() {
+				var jqxhr = $.ajax({
+					url: url,
+					dataType: "text",
+					beforeSend: function( xhr ) {
+						xhr.overrideMimeType( "text/plain");
+					}
+				})
+				.done(function(data) {
+					display_fragment_for_url(fragment, data);
+				})
+				.fail(function(xhr, text_status, error_thrown) {
+				})
+				.always(function() {
+				});
+			};
+		};
+
+		query_fragment(i)();
+	}
+}
+
+function display_urls_for_token(root, token, data) {
 	var selector = '#' + CSS.escape(token) + '-result';
 
 	var token_results_div = $(selector);
@@ -398,17 +442,18 @@ function display_urls_for_token(token, data) {
 	var urls = data.urls;
 	var meat = "<h5>Search results for " + token + "<h5>";
 
-	meat += '<ul>';
-
 	var url;
 	for (var i = 0; i < urls.length; i++) {
 		url = urls[i];
-		meat += "<li>" + url + "</li>";
+		meat += '<div>';
+		meat += '<a href="' + url + '">' + url + '</a>';
+		meat += '<div id="' + url + '-fragment"></div>';
+		meat += '</div>';
 	}
 
-	meat += "</ul>";
-
 	token_results_div.html(meat);
+
+	display_fragments_for_urls(root, urls);
 }
 
 function display_urls_for_tokens(root, tokens) {
@@ -418,11 +463,17 @@ function display_urls_for_tokens(root, tokens) {
 			var url = root + "/assets/js/search/" + token;
 
 			return function() {
-				var jqxhr = $.getJSON(url)
-				.done(function(data) {
-					display_urls_for_token(token, data);
+				var jqxhr = $.ajax({
+					dataType: "json",
+					url: url,
+					beforeSend: function( xhr ) {
+						xhr.overrideMimeType( "application/json");
+					}
 				})
-				.fail(function() {
+				.done(function(data) {
+					display_urls_for_token(root, token, data);
+				})
+				.fail(function(xhr, a, b) {
 				})
 				.always(function() {
 				});
@@ -433,22 +484,12 @@ function display_urls_for_tokens(root, tokens) {
 	}
 }
 
-function setup_json_override() {
-	$.ajaxSetup({beforeSend: function(xhr){
-		if (xhr.overrideMimeType)
-		{
-			xhr.overrideMimeType("application/json");
-		}
-	}
-	});
-}
-
 function prepare_results_view (tokens) {
 	var results_div = $("#search_results");
 	$('#main').hide();
 	results_div.show()
 
-	var skeleton = "<h3>Search results</h3>";
+		var skeleton = "<h3>Search results</h3>";
 	var token = null;
 
 	for (var i = 0; i < tokens.length; i++) {
@@ -460,23 +501,23 @@ function prepare_results_view (tokens) {
 
 function debounce (func, threshold, execAsap) {
 
-    var timeout;
+	var timeout;
 
-    return function debounced () {
-        var obj = this, args = arguments;
-        function delayed () {
-            if (!execAsap)
-                func.apply(obj, args);
-            timeout = null;
-        };
+	return function debounced () {
+		var obj = this, args = arguments;
+		function delayed () {
+			if (!execAsap)
+				func.apply(obj, args);
+			timeout = null;
+		};
 
-        if (timeout)
-            clearTimeout(timeout);
-        else if (execAsap)
-            func.apply(obj, args);
+		if (timeout)
+			clearTimeout(timeout);
+		else if (execAsap)
+			func.apply(obj, args);
 
-        timeout = setTimeout(delayed, threshold || 100);
-    };
+		timeout = setTimeout(delayed, threshold || 100);
+	};
 
 }
 
@@ -495,8 +536,6 @@ function setupSearch(root) {
 
 		search_input.removeAttr('disabled');
 		search_input.attr('placeholder', 'Search');
-
-		setup_json_override();
 
 		var refresher = debounce(display_urls_for_tokens, 500);
 
