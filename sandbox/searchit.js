@@ -5,33 +5,24 @@ function escapeRegExp(string) {
 }
 
 function test_fun (fragment, term, size_goal) {
+	var words_remaining = (fragment.match(/\S+/g) || []).length;
+
+	if (words_remaining < size_goal) {
+		return fragment;
+	}
+
 	var sentences = fragment.match(/[^\.!\?]+([\.!\?]+|$)/g);
 	var regex = new RegExp(escapeRegExp(term), "gi");
 	var nmatches = (fragment.match(regex) || []).length;
-	console.log(nmatches, ' occurences');
-	console.log(sentences.length);
-
 	var matches_goal = Math.min(nmatches, size_goal / 20);
-
-	console.log('we want', matches_goal, 'matches');
-
 	var words_per_match = size_goal / matches_goal;
-
-	console.log('words per match', words_per_match);
-
-	var words_per_sentence = size_goal / sentences.length;
-
 	var result = '';
-
 	var passthrough = 0;
-
 	var words_included = 0;
-
-	var global_backbuffer = [];
 
 	for (var i = 0; i < sentences.length; i++) {
 		var sentence = sentences[i];
-		var local_backbuffer = [];
+		var backbuffer = [];
 
 		var words = sentence.match(/\S+/g);
 		for (var j = 0; j < words.length; j++) {
@@ -51,10 +42,8 @@ function test_fun (fragment, term, size_goal) {
 					words_included += 1;
 				}
 				backbuffer = [];
-				global_backbuffer = [];
 			} else {
 				backbuffer.push(word);
-				global_backbuffer.push(word);
 			}
 
 			if (words_included >= size_goal) {
@@ -62,6 +51,13 @@ function test_fun (fragment, term, size_goal) {
 				j = words.length;
 				i = sentences.length;
 				break;
+			}
+
+			words_remaining -= 1;
+			if (words_remaining > passthrough &&
+					words_remaining + words_included <= size_goal) {
+				console.log(words_remaining, words_included, passthrough);
+				passthrough += words_remaining;
 			}
 		}
 	}
