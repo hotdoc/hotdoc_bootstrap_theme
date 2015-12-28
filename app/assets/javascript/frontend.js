@@ -321,13 +321,13 @@ function setupSidenav() {
 	}
 
 	var extension_name = $('#page-wrapper').attr('data-extension');
-	var language = 'c';
+	var language = undefined;
 
 	var split_here = here.split('/');
 	var base_name = split_here.pop();
 
 	if (extension_name == 'gi-extension') {
-		var language = split_here.pop();
+		language = split_here.pop();
 		var widget = '<div class="btn-group">';
 		widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
 		widget += 'Language';
@@ -356,11 +356,15 @@ function setupSidenav() {
 		if (ref_extension_name != "gi-extension" && extension_name == 'gi-extension') {
 			$(this).attr('href', '../' + $(this).attr('href'));
 		} else if (ref_extension_name == 'gi-extension' && extension_name != 'gi-extension') {
-			$(this).attr('href', language + '/' + $(this).attr('href'));
+			if (language === undefined) {
+				$(this).attr('href', 'c/' + $(this).attr('href'));
+			} else {
+				$(this).attr('href', language + '/' + $(this).attr('href'));
+			}
 		}
 	});
 
-	return split_here.join('/');
+	return {root: split_here.join('/'), language: language};
 }
 
 function dirname(path) {
@@ -410,13 +414,13 @@ function display_fragment_for_url(fragment, data, token) {
 	fragment_div.html(html);
 }
 
-function display_fragments_for_urls(root, fragments, token) {
+function display_fragments_for_urls(context, fragments, token) {
 	var token = token;
 
 	for (var i = 0; i < fragments.length; i++) {
 		var query_fragment = function(i) {
 			var fragment = fragments[i];
-			var url = root +
+			var url = context.root +
 				"/assets/js/search/hotdoc_fragments/" +
 				encodeURIComponent(fragment) + ".fragment";
 
@@ -442,7 +446,36 @@ function display_fragments_for_urls(root, fragments, token) {
 	}
 }
 
-function display_urls_for_token(root, token, data) {
+function filter_url(url) {
+	var slash_index = url.indexOf('/');
+
+	if (slash_index === -1) {
+		if (this.language === undefined) {
+			return url;
+		} else {
+			return '..' + url;
+		}
+	}
+
+	var url_language = url.substring(0, slash_index);
+	var suburl = url.substring (slash_index + 1);
+
+	/* Remove urls where the same page matches for different languages
+	 * This is beginning to feel shitty
+	 */
+	if (this.language === undefined && !(suburl in this.seen_urls)) {
+		this.seen_urls[suburl] = true;
+		return url;
+	}
+
+	if (url_language != this.language) {
+		return null;
+	}
+
+	return suburl;
+}
+
+function display_urls_for_token(context, token, data) {
 	var selector = '#' + CSS.escape(token) + '-result';
 
 	var token_results_div = $(selector);
@@ -454,9 +487,17 @@ function display_urls_for_token(root, token, data) {
 	var urls = data.urls;
 	var meat = "<h5>Search results for " + token + "</h5>";
 
+	context = JSON.parse(JSON.stringify(context));;
+	context.seen_urls = {};
+
+	var filtered_urls = urls.map(filter_url, context);
+
 	var url;
-	for (var i = 0; i < urls.length; i++) {
-		url = urls[i];
+	for (var i = 0; i < filtered_urls.length; i++) {
+		url = filtered_urls[i];
+		if (url === null) {
+			continue;
+		}
 		meat += '<div class="search_result">';
 		meat += '<a href="' + url + '">' + url + '</a>';
 		meat += '<div id="' + url + '-fragment"></div>';
@@ -465,14 +506,14 @@ function display_urls_for_token(root, token, data) {
 
 	token_results_div.html(meat);
 
-	display_fragments_for_urls(root, urls, token);
+	display_fragments_for_urls(context, urls, token);
 }
 
-function display_urls_for_tokens(root, tokens) {
+function display_urls_for_tokens(context, tokens) {
 	for (var i = 0; i < tokens.length; i++) {
 		var query_token = function(i) {
 			var token = tokens[i];
-			var url = root + "/assets/js/search/" + token;
+			var url = context.root + "/assets/js/search/" + token;
 
 			return function() {
 				var jqxhr = $.ajax({
@@ -483,7 +524,7 @@ function display_urls_for_tokens(root, tokens) {
 					}
 				})
 				.done(function(data) {
-					display_urls_for_token(root, token, data);
+					display_urls_for_token(context, token, data);
 				})
 				.fail(function(xhr, a, b) {
 				})
@@ -533,9 +574,9 @@ function debounce (func, threshold, execAsap) {
 
 }
 
-function setupSearch(root) {
+function setupSearch(context) {
 	var req = new XMLHttpRequest();
-	req.open("GET", root + "/assets/js/search/dumped.trie", true);
+	req.open("GET", context.root + "/assets/js/search/dumped.trie", true);
 	req.overrideMimeType('text\/plain; charset=x-user-defined');
 
 	var here = dirname(window.location.href);
@@ -547,6 +588,7 @@ function setupSearch(root) {
 		search_input.val("");
 
 		search_input.removeAttr('disabled');
+		search_input.focus();
 		search_input.attr('placeholder', 'Search');
 
 		var refresher = debounce(display_urls_for_tokens, 500);
@@ -561,7 +603,7 @@ function setupSearch(root) {
 			} else {
 				var tokens = do_search(trie, word);
 				prepare_results_view(tokens);
-				refresher(root, tokens);
+				refresher(context, tokens);
 			}
 		});
 	};
@@ -570,7 +612,7 @@ function setupSearch(root) {
 }
 
 $(document).ready(function() {
-	var root = setupSidenav();
+	var context = setupSidenav();
 	setupFilters();
-	setupSearch(root);
+	setupSearch(context);
 });
