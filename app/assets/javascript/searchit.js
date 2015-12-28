@@ -4,7 +4,12 @@ function escapeRegExp(string) {
 
 function ellipsize_fragment (fragment, term, size_goal) {
 	var words_remaining = 0;
-	var sentences = fragment.match(/[^\.!\?]+([\.!\?]+\s|$)/g);
+	var sentences = fragment.replace(/(\.+|\:|\!|\?)(\"*|\'*|\)*|}*|]*)(\s|\n|\r|\r\n)/gm, "$1$2|").split("|");
+
+	if (sentences === null) {
+		return fragment;
+	}
+
 	for (var i = 0; i < sentences.length; i++) {
 		words_remaining += (sentences[i].match(/\S+/g) || []).length;
 	}
@@ -38,7 +43,7 @@ function ellipsize_fragment (fragment, term, size_goal) {
 				passthrough = words_per_match - start_index;
 
                                 if (start_index > 0 && start_index < backbuffer.length) {
-                                       result += 'ELLIPSIS ';
+                                       result += '... ';
                                 }
 
 				for (var k = start_index; k < j; k++) {
@@ -56,7 +61,7 @@ function ellipsize_fragment (fragment, term, size_goal) {
 				backbuffer.push(word);
 			}
 
-			if (words_included >= size_goal) {
+			if (words_included > size_goal) {
 				/* Break awaaaaay !!! */
 				j = words.length;
 				i = sentences.length;

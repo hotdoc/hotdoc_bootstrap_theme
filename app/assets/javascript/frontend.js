@@ -390,6 +390,17 @@ function do_search(trie, word) {
 	return results;
 }
 
+$.fn.wrapInTag = function(opts) {
+  var tag = opts.tag || 'strong'
+    , words = opts.words || []
+    , regex = RegExp(words.join('|'), 'gi') // case insensitive
+    , replacement = '<'+ tag +'>$&</'+ tag +'>';
+
+  return this.html(function() {
+    return $(this).text().replace(regex, replacement);
+  });
+};
+
 function display_fragment_for_url(fragment, data, token) {
 	var selector = '#' + CSS.escape(fragment) + '-fragment';
 
@@ -403,15 +414,11 @@ function display_fragment_for_url(fragment, data, token) {
 
 	var compact = $(html).text().match(/\S+/g).join(' ');
 
-	try {
-		compact = ellipsize_fragment(compact, token, 40);
-	} catch (err) {
-		console.log(err);
-	}
+	compact = $.parseHTML('<p>' +
+			ellipsize_fragment(compact, token, 40) +
+			'</p>');
 
-	html = '<p>' + compact + '</p>'
-
-	fragment_div.html(html);
+	fragment_div.html($(compact).wrapInTag({tag: 'strong', words: [token]}));
 }
 
 function display_fragments_for_urls(context, fragments, token) {
@@ -487,26 +494,31 @@ function display_urls_for_token(context, token, data) {
 	var urls = data.urls;
 	var meat = "<h5>Search results for " + token + "</h5>";
 
-	context = JSON.parse(JSON.stringify(context));;
-	context.seen_urls = {};
+	filter_context = JSON.parse(JSON.stringify(context));;
+	filter_context.seen_urls = {};
 
-	var filtered_urls = urls.map(filter_url, context);
+	var filtered_urls = urls.map(filter_url, filter_context);
 
 	var url;
+	var final_urls = [];
 	for (var i = 0; i < filtered_urls.length; i++) {
 		url = filtered_urls[i];
 		if (url === null) {
 			continue;
 		}
+
+		var final_url = urls[i];
+
 		meat += '<div class="search_result">';
 		meat += '<a href="' + url + '">' + url + '</a>';
-		meat += '<div id="' + url + '-fragment"></div>';
+		meat += '<div id="' + final_url + '-fragment"></div>';
 		meat += '</div>';
+		final_urls.push(final_url);
 	}
 
 	token_results_div.html(meat);
 
-	display_fragments_for_urls(context, urls, token);
+	display_fragments_for_urls(context, final_urls, token);
 }
 
 function display_urls_for_tokens(context, tokens) {
