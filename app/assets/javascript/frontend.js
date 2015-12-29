@@ -586,6 +586,46 @@ function debounce (func, threshold, execAsap) {
 
 }
 
+function getSortedKeys(obj) {
+	var keys = []; for(var key in obj) keys.push(key);
+	return keys.sort(function(a,b){return obj[a]-obj[b]});
+}
+
+function search_source (query, sync_results) {
+	var results = [];
+
+	query = query.replace(/\./g, '}');
+	query = query.replace(/_/g, '|');
+
+	var completions = this.source.search_trie.lookup_submatches(query, 5);
+
+	console.log("completions are thus", completions);
+
+	results = completions.map(function (completion) {
+		return completion.get_word();
+	});
+
+	if (results.length == 0) {
+		var corrections = this.source.search_trie.search(query, 2);
+		var sorted_keys = getSortedKeys(corrections);
+
+		for (idx in sorted_keys) {
+			var word = sorted_keys[idx];
+			results.push(word);
+		}
+	}
+
+	for (idx in results) {
+		var result = results[idx];
+
+		var translated_back = result.replace(/\|/g, '_');
+		translated_back = translated_back.replace(/}/g, '.');
+		results[idx] = translated_back;
+	}
+
+	sync_results(results);
+};
+
 function setupSearch(context) {
 	var req = new XMLHttpRequest();
 	req.open("GET", context.root + "/assets/js/search/dumped.trie", true);
@@ -600,8 +640,20 @@ function setupSearch(context) {
 		search_input.val("");
 
 		search_input.removeAttr('disabled');
-		search_input.focus();
 		search_input.attr('placeholder', 'Search');
+
+		search_source.search_trie = trie;
+
+		search_input.typeahead({
+			minLength: 4
+		},
+		{
+			name: 'search-trie',
+			source: search_source,
+			local: trie,
+		});
+
+		search_input.focus();
 
 		var refresher = debounce(display_urls_for_tokens, 500);
 
