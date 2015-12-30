@@ -22,50 +22,62 @@ function ellipsize_fragment (fragment, term, size_goal) {
 	var nmatches = (fragment.match(regex) || []).length;
 	var matches_goal = Math.min(nmatches, size_goal / 20);
 	var words_per_match = size_goal / matches_goal;
+	var max_lookback = words_per_match / 2;
 	var result = '';
 	var passthrough = 0;
 	var words_included = 0;
-
-	var backbuffer = [];
+	var matches_found = 0;
+	var position = 0;
+	var last_word_included = 0;
 
 	for (var i = 0; i < sentences.length; i++) {
 		var sentence = sentences[i];
 		var words = sentence.match(/\S+/g);
 		for (var j = 0; j < words.length; j++) {
 			var word = words[j];
+			var is_match = word.toLowerCase().indexOf(term) != -1;
+
+			if (is_match) {
+				matches_found += 1;
+			}
 
 			if (passthrough > 0) {
 				result += word + ' ';
 				words_included += 1;
 				passthrough -= 1;
-			} else if (word.toLowerCase().indexOf(term) != -1) {
-				start_index = Math.max(j - words_per_match / 2, 0);
-				passthrough = words_per_match - start_index;
+				last_word_included = position;
+			} else if (is_match) {
+				var start_index = j - max_lookback;
+				start_index = Math.max(0, start_index);
+				if (j - start_index >= position - last_word_included) {
+					start_index = Math.max (0, j - (position - last_word_included));
+				} else {
+					result += '... ';
+				}
 
-                                if (start_index > 0 && start_index < backbuffer.length) {
-                                       result += '... ';
-                                }
+				var k = start_index;
 
 				for (var k = start_index; k < j; k++) {
-					if (backbuffer[k] != undefined) {
-						result += backbuffer[k] + ' ';
-						words_included += 1;
-					} else {
-						passthrough += 1;
-					}
+					result += words[k] + ' ';
+					words_included += 1;
 				}
+
 				result += word + ' ';
 				words_included += 1;
-				backbuffer = [];
-			} else {
-				backbuffer.push(word);
+				last_word_included = position;
+
+				passthrough = max_lookback;
 			}
 
-			if (words_included > size_goal) {
+			if (matches_found === matches_goal) {
+				passthrough = size_goal - words_included;
+			}
+
+			if (words_included >= size_goal) {
+				result += '...';
 				/* Break awaaaaay !!! */
 				j = words.length;
 				i = sentences.length;
-				result += '...';
 				break;
 			}
 
@@ -77,6 +89,7 @@ function ellipsize_fragment (fragment, term, size_goal) {
 				}
 				passthrough += words_remaining;
 			}
+			position += 1;
 		}
 	}
 
