@@ -429,7 +429,7 @@ function display_fragments_for_urls(context, fragments, token) {
 			var fragment = fragments[i];
 			var url = context.root +
 				"/assets/js/search/hotdoc_fragments/" +
-				encodeURIComponent(fragment) + ".fragment";
+				escape(fragment) + ".fragment";
 
 			return function() {
 				var jqxhr = $.ajax({
