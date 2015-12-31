@@ -8,6 +8,8 @@ String.prototype.endsWith = function(suffix) {
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
+var context = undefined;
+
 function createTagsDropdown(tags_hashtable) {
 	for (var key in tags_hashtable) {
 		var values = tags_hashtable[key];
@@ -374,7 +376,7 @@ function dirname(path) {
 
 function to_original(word) {
 	return word.replace(/\|/g, '_').replace(/}/g, '.');
-	}
+}
 
 function do_search(trie, word) {
 	var results = [];
@@ -401,8 +403,17 @@ $.fn.wrapInTag = function(opts) {
   });
 };
 
-function display_fragment_for_url(fragment, data, token) {
-	var selector = '#' + CSS.escape(fragment) + '-fragment';
+function inject_script(src) {
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = src;
+	head.appendChild(script);
+}
+
+function display_fragment_for_url(data) {
+	var selector = '#' + CSS.escape(data.url) + '-fragment';
+	var token = $("#sidenav-lookup-field").val();
 
 	var fragment_div = $(selector);
 
@@ -410,7 +421,7 @@ function display_fragment_for_url(fragment, data, token) {
 		return;
 	}
 
-	var html = $.parseHTML(data);
+	var html = $.parseHTML(data.fragment);
 
 	var compact = $(html).text().match(/\S+/g).join(' ');
 
@@ -421,35 +432,17 @@ function display_fragment_for_url(fragment, data, token) {
 	fragment_div.html($(compact).wrapInTag({tag: 'strong', words: [token]}));
 }
 
-function display_fragments_for_urls(context, fragments, token) {
+function fragment_downloaded_cb(data) {
+	display_fragment_for_url(data);
+}
+
+function display_fragments_for_urls(fragments, token) {
 	var token = token;
 
 	for (var i = 0; i < fragments.length; i++) {
-		var query_fragment = function(i) {
-			var fragment = fragments[i];
-			var url = context.root +
-				"/assets/js/search/hotdoc_fragments/" +
-				escape(fragment) + ".fragment";
-
-			return function() {
-				var jqxhr = $.ajax({
-					url: url,
-					dataType: "text",
-					beforeSend: function( xhr ) {
-						xhr.overrideMimeType( "text/plain");
-					}
-				})
-				.done(function(data) {
-					display_fragment_for_url(fragment, data, token);
-				})
-				.fail(function(xhr, text_status, error_thrown) {
-				})
-				.always(function() {
-				});
-			};
-		};
-
-		query_fragment(i)();
+		var src = context.root + "/assets/js/search/hotdoc_fragments/" +
+			escape(fragments[i]) + ".fragment";
+		inject_script(src);
 	}
 }
 
@@ -457,7 +450,7 @@ function filter_url(url) {
 	var slash_index = url.indexOf('/');
 
 	if (slash_index === -1) {
-		if (this.language === undefined) {
+		if (context.language === undefined) {
 			return url;
 		} else {
 			return '..' + url;
@@ -470,20 +463,20 @@ function filter_url(url) {
 	/* Remove urls where the same page matches for different languages
 	 * This is beginning to feel shitty
 	 */
-	if (this.language === undefined && !(suburl in this.seen_urls)) {
+	if (context.language === undefined && !(suburl in this.seen_urls)) {
 		this.seen_urls[suburl] = true;
 		return url;
 	}
 
-	if (url_language != this.language) {
+	if (url_language != context.language) {
 		return null;
 	}
 
 	return suburl;
 }
 
-function display_urls_for_token(context, token, data) {
-	var selector = '#' + CSS.escape(token) + '-result';
+function display_urls_for_token(data) {
+	var selector = '#' + CSS.escape(data.token) + '-result';
 
 	var token_results_div = $(selector);
 
@@ -492,7 +485,7 @@ function display_urls_for_token(context, token, data) {
 	}
 
 	var urls = data.urls;
-	var meat = "<h5>Search results for " + token + "</h5>";
+	var meat = "<h5>Search results for " + data.token + "</h5>";
 
 	filter_context = JSON.parse(JSON.stringify(context));;
 	filter_context.seen_urls = {};
@@ -518,43 +511,26 @@ function display_urls_for_token(context, token, data) {
 
 	token_results_div.html(meat);
 
-	display_fragments_for_urls(context, final_urls, token);
+	display_fragments_for_urls(final_urls, data.token);
 }
 
-function display_urls_for_tokens(context, tokens) {
+function urls_downloaded_cb(data) {
+	display_urls_for_token(data);
+}
+
+function display_urls_for_tokens(tokens) {
 	for (var i = 0; i < tokens.length; i++) {
-		var query_token = function(i) {
-			var token = tokens[i];
-			var url = context.root + "/assets/js/search/" + token;
-
-			return function() {
-				var jqxhr = $.ajax({
-					dataType: "json",
-					url: url,
-					beforeSend: function( xhr ) {
-						xhr.overrideMimeType( "application/json");
-					}
-				})
-				.done(function(data) {
-					display_urls_for_token(context, token, data);
-				})
-				.fail(function(xhr, a, b) {
-				})
-				.always(function() {
-				});
-			};
-		};
-
-		query_token(i)();
+		var src = context.root + "/assets/js/search/" + tokens[i];
+		inject_script(src);
 	}
 }
 
 function prepare_results_view (tokens) {
 	var results_div = $("#search_results");
 	$('#main').hide();
-	results_div.show()
+	results_div.show();
 
-		var skeleton = "<h3>Search results</h3>";
+	var skeleton = "<h3>Search results</h3>";
 	var token = null;
 
 	for (var i = 0; i < tokens.length; i++) {
@@ -599,8 +575,6 @@ function search_source (query, sync_results) {
 
 	var completions = this.source.search_trie.lookup_submatches(query, 5);
 
-	console.log("completions are thus", completions);
-
 	results = completions.map(function (completion) {
 		return completion.get_word();
 	});
@@ -626,9 +600,9 @@ function search_source (query, sync_results) {
 	sync_results(results);
 };
 
-function setupSearch(context) {
+function setupSearchXHR() {
 	var req = new XMLHttpRequest();
-	req.open("GET", context.root + "/assets/js/search/dumped.trie", true);
+	req.open("GET", context.root + "/dumped.trie", true);
 	req.overrideMimeType('text\/plain; charset=x-user-defined');
 
 	var here = dirname(window.location.href);
@@ -667,7 +641,7 @@ function setupSearch(context) {
 			} else {
 				var tokens = do_search(trie, word);
 				prepare_results_view(tokens);
-				refresher(context, tokens);
+				refresher(tokens);
 			}
 		});
 	};
@@ -675,8 +649,62 @@ function setupSearch(context) {
 	req.send(null);
 }
 
+function setupSearchInject() {
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src = context.root + "/assets/js/trie_index.js";
+
+	script.onload = function () {
+		var trie = new Trie(trie_data, true);
+		var search_input = $('#sidenav-lookup-field');
+
+		search_input.val("");
+
+		search_input.removeAttr('disabled');
+		search_input.attr('placeholder', 'Search');
+
+		search_source.search_trie = trie;
+
+		search_input.typeahead({
+			minLength: 4
+		},
+		{
+			name: 'search-trie',
+			source: search_source,
+			local: trie,
+		});
+
+		search_input.focus();
+
+		var refresher = display_urls_for_tokens;
+
+		search_input.keyup(function () {
+			var word = $(this).val();
+			if (word.length == 0) {
+				var search_results = $('#search_results');
+				search_results.html('');
+				search_results.hide();
+				$('#main').show();
+			} else {
+				var tokens = do_search(trie, word);
+				prepare_results_view(tokens);
+				refresher(tokens);
+			}
+		});
+	};
+
+	head.appendChild(script);
+}
+
 $(document).ready(function() {
-	var context = setupSidenav();
+	context = setupSidenav();
 	setupFilters();
-	setupSearch(context);
+	if (location.protocol === 'file:') {
+		/* Works even with chrome */
+		setupSearchInject();
+	} else {
+		/* size of initial download divided by two */
+		setupSearchXHR();
+	}
 });
