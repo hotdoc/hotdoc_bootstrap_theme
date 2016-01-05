@@ -1,0 +1,3 @@
+guard 'livereload' do
+  watch('trigger_refresh')
+end
