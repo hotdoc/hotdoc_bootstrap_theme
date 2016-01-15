@@ -374,19 +374,12 @@ function dirname(path) {
 		.replace(/\/[^\/]*\/?$/, '');
 }
 
-function to_original(word) {
-	return word.replace(/\|/g, '_').replace(/}/g, '.');
-}
-
 function do_search(trie, word) {
 	var results = [];
-	var query = word.replace(/\./g, '}');
-	query = query.replace(/_/g, '|');
-
-	var node = trie.lookup_node(query);
+	var node = trie.lookup_node(word);
 
 	if (node && node.is_final) {
-		results.push (to_original(node.get_word()));
+		results.push (node.get_word());
 	}
 
 	return results;
@@ -570,9 +563,6 @@ function getSortedKeys(obj) {
 function search_source (query, sync_results) {
 	var results = [];
 
-	query = query.replace(/\./g, '}');
-	query = query.replace(/_/g, '|');
-
 	var completions = this.source.search_trie.lookup_submatches(query, 5);
 
 	results = completions.map(function (completion) {
@@ -587,14 +577,6 @@ function search_source (query, sync_results) {
 			var word = sorted_keys[idx];
 			results.push(word);
 		}
-	}
-
-	for (idx in results) {
-		var result = results[idx];
-
-		var translated_back = result.replace(/\|/g, '_');
-		translated_back = translated_back.replace(/}/g, '.');
-		results[idx] = translated_back;
 	}
 
 	sync_results(results);
