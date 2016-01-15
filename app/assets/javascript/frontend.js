@@ -8,7 +8,7 @@ String.prototype.endsWith = function(suffix) {
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
-var context = undefined;
+var context = {};
 
 function createTagsDropdown(tags_hashtable) {
 	for (var key in tags_hashtable) {
@@ -281,16 +281,11 @@ function setupFilters() {
 }
 
 function setupSidenav() {
-	var here =  window.location.href;
-	var hash_index = here.indexOf("#");
 	var panel = undefined;
-	if (hash_index != -1) {
-		here = here.substring(0, hash_index);
-	}
 
 	$('.panel-collapse[data-nav-ref]').map(function() {
 		var navref = $(this).attr('data-nav-ref');
-		if (here.endsWith('/' + navref)) {
+		if (context.here.endsWith('/' + navref)) {
 			panel = $(this);
 		}
 	});
@@ -322,29 +317,23 @@ function setupSidenav() {
 		panel.append(widget);
 	}
 
-	var extension_name = $('#page-wrapper').attr('data-extension');
-	var language = undefined;
 
-	var split_here = here.split('/');
-	var base_name = split_here.pop();
-
-	if (extension_name == 'gi-extension') {
-		language = split_here.pop();
+	if (context.extension_name == 'gi-extension') {
 		var widget = '<div class="btn-group">';
 		widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
 		widget += 'Language';
 		widget += '<span class="caret"></span></button>';
 		widget += '<ul class="dropdown-menu">';
 
-		widget += '<li><a href="' + '../c/' + base_name + '">';
+		widget += '<li><a href="' + '../c/' + context.base_name + '">';
 		widget += 'C';
 		widget += '</a></li>';
 
-		widget += '<li><a href="' + '../javascript/' + base_name + '">';
+		widget += '<li><a href="' + '../javascript/' + context.base_name + '">';
 		widget += 'Javascript';
 		widget += '</a></li>';
 
-		widget += '<li><a href="' + '../python/' + base_name + '">';
+		widget += '<li><a href="' + '../python/' + context.base_name + '">';
 		widget += 'Python';
 		widget += '</a></li>';
 
@@ -355,18 +344,18 @@ function setupSidenav() {
 
 	$('.sidenav-ref').map(function() {
 		var ref_extension_name = $(this).attr('data-extension');
-		if (ref_extension_name != "gi-extension" && extension_name == 'gi-extension') {
+		if (ref_extension_name != "gi-extension" &&
+				context.extension_name == 'gi-extension') {
 			$(this).attr('href', '../' + $(this).attr('href'));
-		} else if (ref_extension_name == 'gi-extension' && extension_name != 'gi-extension') {
-			if (language === undefined) {
+		} else if (ref_extension_name == 'gi-extension' &&
+				context.extension_name != 'gi-extension') {
+			if (context.language === undefined) {
 				$(this).attr('href', 'c/' + $(this).attr('href'));
 			} else {
-				$(this).attr('href', language + '/' + $(this).attr('href'));
+				$(this).attr('href', context.language + '/' + $(this).attr('href'));
 			}
 		}
 	});
-
-	return {root: split_here.join('/'), language: language};
 }
 
 function dirname(path) {
@@ -679,8 +668,25 @@ function setupSearchInject() {
 	head.appendChild(script);
 }
 
+function create_context() {
+	context.here =  window.location.href;
+	var hash_index = context.here.indexOf("#");
+	if (hash_index != -1) {
+		context.here = context.here.substring(0, hash_index);
+	}
+
+	var split_here = context.here.split('/');
+	context.base_name = split_here.pop();
+	context.extension_name = $('#page-wrapper').attr('data-extension');
+	context.language = undefined;
+	if (context.extension_name == 'gi-extension') {
+		context.language = split_here.pop();
+	}
+	context.root = split_here.join('/');
+}
+
 $(document).ready(function() {
-	context = setupSidenav();
+	create_context();
 	setupFilters();
 	if (location.protocol === 'file:') {
 		/* Works even with chrome */
@@ -690,3 +696,9 @@ $(document).ready(function() {
 		setupSearchXHR();
 	}
 });
+
+function site_navigation_downloaded_cb(site_navigation) {
+	create_context();
+	$('#site-navigation').html(site_navigation);
+	setupSidenav();
+}

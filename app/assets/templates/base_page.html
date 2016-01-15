@@ -1,4 +1,4 @@
-@require(page, assets_path, scripts, site_navigation)
+@require(page, assets_path, scripts)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,10 +46,7 @@
 					<input type="text" placeholder="Fetching index" id="sidenav-lookup-field" disabled="disabled"/>
 				</div>
 				<div class="sidenav-main-panel-body">
-					<div>
-						@if site_navigation:
-						@site_navigation
-						@end
+					<div id="site-navigation">
 					</div>
 				</div>
 			</div>
@@ -71,4 +68,5 @@
 	</div>
 </div>
 </body>
+<script src="@assets_path/js/site_navigation.js"></script>
 </html>
