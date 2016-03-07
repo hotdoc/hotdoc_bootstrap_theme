@@ -7,7 +7,7 @@ fi
 
 grunt &&
 rm -rf html/ hotdoc-private/ sandbox/html/ &&
-hotdoc --html-theme ./dist run --conf-file $1 &&
+hotdoc --html-theme $PWD/dist run --conf-file $1 &&
 mv html/ sandbox/ &&
 rm -rf hotdoc-private &&
 touch sandbox/trigger_refresh
