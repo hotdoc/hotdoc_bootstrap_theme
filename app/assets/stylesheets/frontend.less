@@ -18,6 +18,28 @@
 	}
 }
 
+.base_symbol_container {
+	> table {
+		overflow: auto;
+		margin-bottom: 16px;
+		word-break: keep-all;
+		width: 100%;
+		display: block;
+		> thead,
+		> tbody,
+		> tfoot {
+			> tr {
+				background-color: #FFF;
+				border-top: 1px solid #CCC;
+				th, td {
+					padding: 6px 13px;
+					border: 1px solid #DDD;
+				}
+			}
+		}
+	}
+}
+
 .page_container {
 	&:extend(.container-fluid);
 }
