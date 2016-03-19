@@ -1,4 +1,4 @@
-@require(page, assets_path, scripts)
+@require(page, assets_path, scripts, stylesheets)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +14,10 @@
 
 @for script in scripts:
 <script src="@assets_path/js/@script"></script>
+@end
+
+@for stylesheet in stylesheets:
+<link rel="stylesheet" href="@assets_path/css/@stylesheet" type="text/css"/>
 @end
 
 </head>
@@ -41,7 +45,7 @@
 
 	<div class="row">
 		<div class="col-md-2" id="sidenav-column">
-			<div class="panel panel-collapse" id="sidenav">
+			<div class="panel panel-collapse" id="sidenav" data-hotdoc-role="navigation">
 				<div id="sidenav-search" role="search">
 					<input type="text" placeholder="Fetching index" id="sidenav-lookup-field" disabled="disabled"/>
 				</div>
