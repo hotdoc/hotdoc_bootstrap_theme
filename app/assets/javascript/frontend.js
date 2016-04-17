@@ -305,7 +305,7 @@ function setupSidenav() {
 		widget += '<div class="scrollspy" id="sidenav-wrapper">';
 		widget += '<ul class="nav">';
 
-		$('h2[id]').map(function() {
+		$('h1[id],h2[id]').map(function() {
 			widget += '<li><a href="#' + $(this).attr('id') + '">';
 			widget += $(this).text();
 			widget += '</a></li>';
@@ -687,6 +687,7 @@ function create_context() {
 
 $(document).ready(function() {
 	create_context();
+	setupSidenav();
 	setupFilters();
 	if (location.protocol === 'file:') {
 		/* Works even with chrome */
@@ -700,5 +701,4 @@ $(document).ready(function() {
 function site_navigation_downloaded_cb(site_navigation) {
 	create_context();
 	$('#site-navigation').html(site_navigation);
-	setupSidenav();
 }
