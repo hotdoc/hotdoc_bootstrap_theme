@@ -44,6 +44,8 @@ module.exports = function(grunt) {
 	  './node_modules/css.escape/css.escape.js',
 	  './bower_components/typeahead.js/dist/typeahead.jquery.js',
           './app/assets/javascript/searchit.js',
+	  './app/assets/javascript/language_switching.js',
+	  './app/assets/javascript/navigation.js',
           './app/assets/javascript/frontend.js'
         ],
         dest: './dist/js/frontend.js',

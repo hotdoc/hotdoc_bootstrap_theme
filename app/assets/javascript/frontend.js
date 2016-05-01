@@ -280,84 +280,6 @@ function setupFilters() {
 
 }
 
-function setupSidenav() {
-	var panel = undefined;
-
-	$('.panel-collapse[data-nav-ref]').map(function() {
-		var navref = $(this).attr('data-nav-ref');
-		if (context.here.endsWith('/' + navref)) {
-			panel = $(this);
-		}
-	});
-
-	if (panel != undefined) {
-		var elem = panel;
-		while (elem.length) {
-			if (elem.hasClass('collapse')) {
-				$.support.transition = false;
-				elem.collapse(false);
-				$.support.transition = true;
-			}
-			elem = elem.parent();
-		}
-
-		var widget = '';
-		widget += '<div class="scrollspy" id="sidenav-wrapper">';
-		widget += '<ul class="nav">';
-
-		$('h1[id],h2[id]').map(function() {
-			widget += '<li><a href="#' + $(this).attr('id') + '">';
-			widget += $(this).text();
-			widget += '</a></li>';
-		});
-
-		widget += '</ul>';
-		widget += '</div>';
-
-		panel.append(widget);
-	}
-
-
-	if (context.extension_name == 'gi-extension') {
-		var widget = '<div class="btn-group">';
-		widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-		widget += 'Language';
-		widget += '<span class="caret"></span></button>';
-		widget += '<ul class="dropdown-menu">';
-
-		widget += '<li><a href="' + '../c/' + context.base_name + '">';
-		widget += 'C';
-		widget += '</a></li>';
-
-		widget += '<li><a href="' + '../javascript/' + context.base_name + '">';
-		widget += 'Javascript';
-		widget += '</a></li>';
-
-		widget += '<li><a href="' + '../python/' + context.base_name + '">';
-		widget += 'Python';
-		widget += '</a></li>';
-
-		widget += '</ul>';
-		widget += '</div>';
-		$("#menu").append (widget);
-	}
-
-	$('.sidenav-ref').map(function() {
-		var ref_extension_name = $(this).attr('data-extension');
-		if (ref_extension_name != "gi-extension" &&
-				context.extension_name == 'gi-extension') {
-			$(this).attr('href', '../' + $(this).attr('href'));
-		} else if (ref_extension_name == 'gi-extension' &&
-				context.extension_name != 'gi-extension') {
-			if (context.language === undefined) {
-				$(this).attr('href', 'c/' + $(this).attr('href'));
-			} else {
-				$(this).attr('href', context.language + '/' + $(this).attr('href'));
-			}
-		}
-	});
-}
-
 function dirname(path) {
 	return path.replace(/\\/g, '/')
 		.replace(/\/[^\/]*\/?$/, '');
@@ -687,7 +609,6 @@ function create_context() {
 
 $(document).ready(function() {
 	create_context();
-	setupSidenav();
 	setupFilters();
 	if (location.protocol === 'file:') {
 		/* Works even with chrome */
