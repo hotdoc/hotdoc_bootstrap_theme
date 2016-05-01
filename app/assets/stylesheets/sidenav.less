@@ -1,0 +1,81 @@
+@import 'base.less';
+
+// sidenav
+
+#sidenav-column {
+	padding: 0px;
+}
+
+#sidenav {
+	position: fixed;
+	top: 34px;
+	bottom: 0px;
+	left: 0px;
+	overflow-y: auto;
+	width: 15%;
+	margin-bottom: 0px;
+	background-color: #313232;
+	border: 0px;
+	border-radius: 0px;
+}
+
+.sidenav-panel-body {
+  &:extend(.panel-body);
+  padding: 0px;
+  padding-left: 5px;
+  color: white;
+}
+
+.sidenav-main-panel-body {
+  &:extend(.sidenav-panel-body);
+  padding: 0px;
+}
+
+.sidenav-panel-even {
+	background-color: #131313;
+}
+
+.sidenav-panel-odd {
+	background-color: #313232;
+}
+
+a[aria-expanded=true] .glyphicon-chevron-right {
+   display: none;
+}
+a[aria-expanded=false] .glyphicon-chevron-down {
+   display: none;
+}
+
+// Scrollspy
+
+.scrollspy {
+	padding-left: 5px;
+	background-color: #1C1C1C;
+}
+
+#sidenav-wrapper {
+	background-color: #2C2C2C;
+}
+
+.nav a {
+  font-style: italic;
+  color: white;
+}
+
+.nav li a:hover,
+.nav li a:focus {
+  background: #758aa6;
+}
+
+.nav .active {
+  font-weight: bold;
+  border-left: 5px solid black;
+}
+
+.nav .nav {
+  display: none;
+}
+
+.nav .active .nav {
+  display: block;
+}

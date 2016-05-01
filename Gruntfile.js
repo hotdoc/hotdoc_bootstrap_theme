@@ -1,79 +1,93 @@
 module.exports = function(grunt) {
 
-    grunt.initConfig({
+	grunt.initConfig({
 
-    copy: {  
-      fonts: {
-        expand: true,
-        cwd: 'bower_components/bootstrap/fonts/',
-        src: '**',
-        dest: 'dist/fonts/',
-        flatten: true,
-        filter: 'isFile',
-      },
-      templates: {
-	expand: true,
-	cwd: 'app/assets/templates',
-	src: '**',
-	dest: 'dist/templates/',
-	flatten: true,
-	filter: 'isFile',
-      }
-    },      
-    less: {
-        development: {
-            options: {
-              compress: true,
-            },
-            files: {
-              "./dist/css/frontend.css":"./app/assets/stylesheets/frontend.less",
-            }
-        }
-    },
-    concat: {
-      options: {
-        separator: ';',
-      },
-      js_frontend: {
-        src: [
-          './bower_components/jquery/dist/jquery.js',
-          './bower_components/bootstrap/dist/js/bootstrap.js',
-	  './bower_components/bootstrap-toggle/js/bootstrap-toggle.js',
-	  './bower_components/isotope/dist/isotope.pkgd.min.js',
-	  './bower_components/compare-versions/index.js',
-	  './node_modules/css.escape/css.escape.js',
-	  './bower_components/typeahead.js/dist/typeahead.jquery.js',
-          './app/assets/javascript/searchit.js',
-	  './app/assets/javascript/language_switching.js',
-	  './app/assets/javascript/navigation.js',
-          './app/assets/javascript/frontend.js'
-        ],
-        dest: './dist/js/frontend.js',
-      },
-      css_frontend: {
-        src: [
-	  './dist/css/frontend.css',
-	  './bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css',
-	],
-	dest: './dist/css/frontend.css',
-      }
-    },
-    uglify: {
-      options: {
-        mangle: false
-      },
-      frontend: {
-        files: {
-          './dist/js/frontend.js': './dist/js/frontend.js',
-        }
-      },
-    },
-    });
+		copy: {
+			fonts: {
+				expand: true,
+				cwd: 'bower_components/bootstrap/fonts/',
+				src: '**',
+				dest: 'dist/fonts/',
+				flatten: true,
+				filter: 'isFile',
+			},
+			templates: {
+				expand: true,
+				cwd: 'app/assets/templates',
+				src: '**',
+				dest: 'dist/templates/',
+				flatten: true,
+				filter: 'isFile',
+			},
+			jquery: {
+				src: './bower_components/jquery/dist/jquery.js',
+				dest: './dist/js/jquery.js',
+			},
+			bootstrap: {
+				src: './bower_components/bootstrap/dist/js/bootstrap.js',
+				dest: './dist/js/bootstrap.js',
+			},
+			bootstrap_toggle: {
+				src: './bower_components/bootstrap-toggle/js/bootstrap-toggle.js',
+				dest: './dist/js/bootstrap-toggle.js',
+			},
+			isotope: {
+				src: './bower_components/isotope/dist/isotope.pkgd.min.js',
+				dest: './dist/js/isotope.pkgd.min.js',
+			},
+			compare_versions: {
+				src: './bower_components/compare-versions/index.js',
+				dest: './dist/js/compare-versions.js',
+			},
+			typeahead: {
+				src: './bower_components/typeahead.js/dist/typeahead.jquery.js',
+				dest: './dist/js/typeahead.jquery.js',
+			},
+			search: {
+				src: './app/assets/javascript/search.js',
+				dest: './dist/js/search.js',
+			},
+			tag_filtering: {
+				src: './app/assets/javascript/tag_filtering.js',
+				dest: './dist/js/tag_filtering.js',
+			},
+			language_switching: {
+				src: './app/assets/javascript/language_switching.js',
+				dest: './dist/js/language_switching.js',
+			},
+			navigation: {
+				src: './app/assets/javascript/navigation.js',
+				dest: './dist/js/navigation.js',
+			},
+			utils: {
+				src: './app/assets/javascript/utils.js',
+				dest: './dist/js/utils.js',
+			},
+			bootstrap_css: {
+				src: './bower_components/bootstrap/dist/css/bootstrap.min.css',
+				dest: './dist/css/bootstrap.min.css',
+			},
+			bootstrap_toggle_css: {
+				src: './bower_components/bootstrap-toggle/css/bootstrap-toggle.css',
+				dest: './dist/css/bootstrap-toggle.css',
+			}
+		},      
+		less: {
+			development: {
+				options: {
+					compress: true,
+				},
+				files: {
+					"./dist/css/frontend.css":"./app/assets/stylesheets/frontend.less",
+					"./dist/css/sidenav.css":"./app/assets/stylesheets/sidenav.less",
+					"./dist/css/search.css":"./app/assets/stylesheets/search.less",
+				}
+			}
+		},
+	});
 
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['copy', 'less', 'concat', 'uglify']);
+	grunt.registerTask('default', ['copy', 'less']);
 };
