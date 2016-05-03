@@ -1,0 +1,42 @@
+@import 'base.less';
+
+.parameter_container, .member_container, .multi_return_value_container {
+	> table {
+		&:extend(.table all);
+		> thead,
+		> tbody,
+		> tfoot {
+		  > tr {
+		    td:nth-child(3) {
+		            text-align: right;
+		    }
+		    td:nth-child(4) {
+		            text-align: right;
+		    }
+		  }
+		}
+	}
+}
+
+.base_symbol_container, #page-description {
+	> table {
+		overflow: auto;
+		margin-bottom: 16px;
+		word-break: keep-all;
+		width: 100%;
+		display: block;
+		> thead,
+		> tbody,
+		> tfoot {
+			> tr {
+				background-color: #FFF;
+				border-top: 1px solid #CCC;
+				th, td {
+					padding: 6px 13px;
+					border: 1px solid #DDD;
+				}
+			}
+		}
+	}
+}
+

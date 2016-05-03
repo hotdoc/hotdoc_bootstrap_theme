@@ -81,6 +81,7 @@ module.exports = function(grunt) {
 					"./dist/css/frontend.css":"./app/assets/stylesheets/frontend.less",
 					"./dist/css/sidenav.css":"./app/assets/stylesheets/sidenav.less",
 					"./dist/css/search.css":"./app/assets/stylesheets/search.less",
+					"./dist/css/tables.css":"./app/assets/stylesheets/tables.less",
 				}
 			}
 		},
