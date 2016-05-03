@@ -2,10 +2,8 @@ function unfold_current_page(base_name) {
 	var panel = $('.panel-collapse[data-nav-ref="' + base_name + '"]');
 
 
-	console.log ("Unfolding");
 	if (panel != undefined) {
 		var elem = panel;
-		console.log("Hello");
 		while (elem.length) {
 			if (elem.hasClass('collapse')) {
 				$.support.transition = false;
@@ -20,7 +18,6 @@ function unfold_current_page(base_name) {
 		widget += '<ul class="nav">';
 
 		$('h1[id],h2[id]').map(function() {
-			console.log("I see", $(this).attr('id'));
 			widget += '<li><a href="#' + $(this).attr('id') + '">';
 			widget += $(this).text();
 			widget += '</a></li>';
@@ -33,12 +30,40 @@ function unfold_current_page(base_name) {
 	}
 }
 
+function list_subpages(subpages) {
+	var table;
+	var page_description;
+
+	if (subpages.length == 0)
+		return;
+
+	page_description = $("#page-description");
+	page_description.append('<h3>Subpages</h3>');
+
+	table = '<table><tbody>';
+	for (var i = 0; i < subpages.length; i++) {
+		var node = subpages[i];
+
+		table += '<tr>';
+		table += '<td><a href="' + node.url + '">' + node.title + '</a></td>';
+		if (node.short_description != null)
+			table += '<td>' + node.short_description + '</td>';
+		else
+			table += '<td>No summary available</td>';
+		table += '</tr>';
+	}
+	table += '</tbody></table>';
+
+	page_description.append(table);
+}
+
 function sitemap_downloaded_cb(sitemap_json) {
 	var sitemap = JSON.parse(sitemap_json);
 	var level = 0;
 	var parent_name = 'main';
 	var sidenav = '';
 	var context = parse_location();
+	var subpages = [];
 
 	function fill_sidenav(node) {
 		var name = parent_name + '-' + level;
@@ -71,6 +96,9 @@ function sitemap_downloaded_cb(sitemap_json) {
 		sidenav += ' data-extension="' + node.extension + '">';
 		sidenav += node.title + '</a>';
 
+		if (node.url == context.base_name)
+			subpages = node.subpages;
+
 		if (node.subpages.length) {
 			sidenav += '<a class="sidenav-toggle" data-toggle="collapse" data-parent="';
 			sidenav += parent_name + '"';
@@ -91,6 +119,7 @@ function sitemap_downloaded_cb(sitemap_json) {
 		}
 		level -= 1;
 
+		node.url = url;
 		sidenav += '</div></div>';
 	}
 
@@ -99,6 +128,8 @@ function sitemap_downloaded_cb(sitemap_json) {
 	$("#site-navigation").html(sidenav);
 
 	unfold_current_page(context.base_name);
+
+	list_subpages(subpages);
 }
 
 $(document).ready(function() {
