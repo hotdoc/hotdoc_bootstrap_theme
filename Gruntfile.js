@@ -63,6 +63,10 @@ module.exports = function(grunt) {
 				src: './app/assets/javascript/utils.js',
 				dest: './dist/js/utils.js',
 			},
+			navbar_offset_scroller: {
+				src: './app/assets/javascript/navbar_offset_scroller.js',
+				dest: './dist/js/navbar_offset_scroller.js',
+			},
 			bootstrap_css: {
 				src: './bower_components/bootstrap/dist/css/bootstrap.min.css',
 				dest: './dist/css/bootstrap.min.css',
