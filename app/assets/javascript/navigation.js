@@ -17,8 +17,12 @@ function unfold_current_page(base_name) {
 		widget += '<div class="scrollspy" id="sidenav-wrapper">';
 		widget += '<ul class="nav">';
 
-		$('h1[id],h2[id]').map(function() {
-			widget += '<li><a href="#' + $(this).attr('id') + '">';
+		$('h1[id],h2[id],h3[id]').map(function() {
+			var klass = "nav-" + $(this).prop("tagName").toLowerCase();
+			console.log(klass);
+			widget += '<li><a href="#' + $(this).attr('id') + '" class="' + klass + '">';
+			if (klass != "nav-h1")
+				widget += "↳ ";
 			widget += $(this).text();
 			widget += '</a></li>';
 		});
