@@ -19,7 +19,6 @@ function unfold_current_page(base_name) {
 
 		$('h1[id],h2[id],h3[id]').map(function() {
 			var klass = "nav-" + $(this).prop("tagName").toLowerCase();
-			console.log(klass);
 			widget += '<li><a href="#' + $(this).attr('id') + '" class="' + klass + '">';
 			if (klass != "nav-h1")
 				widget += "↳ ";

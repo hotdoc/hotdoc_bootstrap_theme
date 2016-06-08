@@ -63,6 +63,10 @@ module.exports = function(grunt) {
 				src: './app/assets/javascript/utils.js',
 				dest: './dist/js/utils.js',
 			},
+			lines_around_headings: {
+				src: './app/assets/javascript/lines_around_headings.js',
+				dest: './dist/js/lines_around_headings.js',
+			},
 			navbar_offset_scroller: {
 				src: './app/assets/javascript/navbar_offset_scroller.js',
 				dest: './dist/js/navbar_offset_scroller.js',
