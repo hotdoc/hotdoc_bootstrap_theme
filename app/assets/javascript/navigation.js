@@ -30,6 +30,8 @@ function unfold_current_page(base_name) {
 		widget += '</div>';
 
 		panel.append(widget);
+		var wrapper = $("#sitenav-wrapper");
+		wrapper.mCustomScrollbar("scrollTo", panel.offset().top - wrapper.offset().top - 36);
 	}
 }
 
@@ -138,4 +140,5 @@ function sitemap_downloaded_cb(sitemap_json) {
 $(document).ready(function() {
 	var context = parse_location();
 	inject_script(context.root + "/assets/js/sitemap.js");
+	$("#sitenav-wrapper").mCustomScrollbar({ "scrollInertia": 0 });
 });

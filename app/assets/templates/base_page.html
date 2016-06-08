@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="@assets_path/css/sidenav.css" type="text/css"/>
 <link rel="stylesheet" href="@assets_path/css/search.css" type="text/css"/>
 <link rel="stylesheet" href="@assets_path/css/tables.css" type="text/css"/>
+<link rel="stylesheet" href="@assets_path/css/jquery.mCustomScrollbar.css" />
 
 <script src="@assets_path/js/jquery.js"></script>
 <script src="@assets_path/js/bootstrap.js"></script>
@@ -22,6 +23,7 @@
 <script src="@assets_path/js/isotope.pkgd.min.js"></script>
 <script src="@assets_path/js/compare-versions.js"></script>
 <script src="@assets_path/js/typeahead.jquery.js"></script>
+<script src="@assets_path/js/jquery.mCustomScrollbar.concat.min.js"></script>
 
 @for script in scripts:
 <script src="@assets_path/js/@script"></script>
@@ -67,9 +69,11 @@
 				<div id="sidenav-search" role="search">
 					<input type="text" placeholder="Fetching index" id="sidenav-lookup-field" disabled="disabled"/>
 				</div>
-				<div class="sidenav-main-panel-body">
+				<div id="sitenav-wrapper" class="mCustomScrollbar" data-mcs-theme="minimal">
+				<div id="sitenav-wrapper" class="sidenav-main-panel-body">
 					<div id="site-navigation">
 					</div>
+				</div>
 				</div>
 			</div>
 		</div>

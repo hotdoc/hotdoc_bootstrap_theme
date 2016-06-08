@@ -78,6 +78,14 @@ module.exports = function(grunt) {
 			bootstrap_toggle_css: {
 				src: './bower_components/bootstrap-toggle/css/bootstrap-toggle.css',
 				dest: './dist/css/bootstrap-toggle.css',
+			},
+			malihu_scroll_css: {
+				src: './bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css',
+				dest: './dist/css/jquery.mCustomScrollbar.css',
+			},
+			malihu_scroll_js: {
+				src: './bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js',
+				dest: './dist/js/jquery.mCustomScrollbar.concat.min.js',
 			}
 		},      
 		less: {
