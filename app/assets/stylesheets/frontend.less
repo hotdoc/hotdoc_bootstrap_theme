@@ -64,20 +64,30 @@ a, a:active, a:focus {
 
 .base_symbol_container {
 	width: 100%;
+	padding-left: 15px;
+	padding-right: 15px;
+	width: 100%;
 }
 
 .symbols_toc, .base_symbol_header {
 	list-style: none;
 	width: 100%;
 	margin: 0;
-	padding: 0;
+}
+
+.symbols_toc {
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 .base_symbol_header {
 	> li {
 		display: inline-block;
-		padding: 0px 4px;
+		h3 > span > code {
+			padding: 0;
+		}
 	}
+	padding: 0;
 }
 
 .symbols_toc:after {
@@ -113,7 +123,14 @@ img {
 	max-width: 100%;
 }
 
-#page-description, #symbols-description {
-	margin: 0 15px 30px 15px;
+#page-description {
+	width: 100%;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.symbol_section {
+	padding-left: 15px;
+	padding-right: 15px;
 	width: 100%;
 }

@@ -242,7 +242,7 @@ function setupFilters() {
 	mainEl.isotope({
 		layoutMode: 'vertical',
 		animationEngine: 'best-available',
-		containerStyle: null,
+		containerStyle: "margin-left: 15px;",
 		filter: isotopeFilter,
 		animationOptions: {
 			duration: transitionDuration
