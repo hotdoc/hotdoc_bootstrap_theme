@@ -21,8 +21,8 @@ function unfold_current_page(base_name) {
 			var klass = "nav-" + $(this).prop("tagName").toLowerCase();
 			widget += '<li><a href="#' + $(this).attr('id') + '" class="' + klass + '">';
 			if (klass != "nav-h1")
-				widget += "↳ ";
-			widget += $(this).text();
+				widget += "↳";
+			widget += $(this).text().trim();
 			widget += '</a></li>';
 		});
 
@@ -69,6 +69,7 @@ function sitemap_downloaded_cb(sitemap_json) {
 	var sidenav = '';
 	var context = parse_location();
 	var subpages = [];
+	var home_url = undefined;
 
 	function fill_sidenav(node) {
 		var name = parent_name + '-' + level;
@@ -88,6 +89,9 @@ function sitemap_downloaded_cb(sitemap_json) {
 		if (context.extension_name == 'gi-extension') {
 			url = '../' + url;
 		}
+
+		if (home_url === undefined)
+			home_url = url;
 
 		if (level % 2 == 0)
 			panel_class = "sidenav-panel-odd";
@@ -133,6 +137,8 @@ function sitemap_downloaded_cb(sitemap_json) {
 	$("#site-navigation").html(sidenav);
 
 	unfold_current_page(context.base_name);
+
+	$("#home-link").attr("href", home_url);
 
 	list_subpages(subpages);
 }
