@@ -23,32 +23,6 @@ body {
 	font-family: sans-serif;
 }
 
-.section_headings {
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    text-align: center;
-}
-
-.section_headings:before, .section_headings:after {
-    position: absolute;
-    top: 51%;
-    overflow: hidden;
-    width: 50%;
-    height: 1px;
-    content: '\a0';
-    background-color: black;
-}
-
-.section_headings:before {
-    margin-left: -51%;
-    text-align: right;
-}
-
-.section_headings:after {
-    margin-left: 1%;
-}
-
 h1:nth-of-type(1) {
 	margin-top: 0px;
 }
@@ -58,10 +32,12 @@ h1, h2 {
 }
 
 h2 {
+	border-top: 1px solid #dddddd;
 	padding-top: 8px;
 }
 
 h3 {
+	border-top: 1px solid #eeeeee;
 	padding-top: 8px;
 	margin-bottom: 12px
 }
