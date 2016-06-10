@@ -155,3 +155,16 @@ img {
 #navbar-wrapper > span {
 	color: #777;
 }
+
+/* Page breaks on the print layout. */
+h2 {
+	page-break-before: always;
+}
+
+h1 + h2 {
+	page-break-before: avoid;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	page-break-after: avoid;
+}
