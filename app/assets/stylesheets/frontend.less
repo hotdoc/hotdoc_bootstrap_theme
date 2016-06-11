@@ -19,7 +19,6 @@
 body {
 	padding-top: 70px;
 	// scrollspying
-	position: relative;
 	font-family: sans-serif;
 }
 
@@ -127,6 +126,7 @@ img {
 	width: 100%;
 	padding-left: 15px;
 	padding-right: 15px;
+	padding-bottom: 15px;
 }
 
 .symbol_section {
@@ -155,3 +155,41 @@ img {
 #navbar-wrapper > span {
 	color: #777;
 }
+
+.license-description {
+	width: 100%;
+	padding-bottom: 15px;
+	> table {
+		width: 100%;
+		> tbody > tr > td:nth-child(2) {
+			text-align: right;
+			> a > .license-logo {
+				max-width: 100px;
+			}
+		}
+	}
+}
+
+// http://galengidman.com/2014/03/25/responsive-flexible-height-sticky-footers-in-css/
+// Begins to feel like like a css tricks exhibition in there
+
+html, body {
+	height: 100%;
+	margin: 0pt;
+}
+
+html {
+	position: relative;
+}
+
+body {
+  display: table;
+  width: 100%;
+}
+
+.page-row {
+  display: table-row;
+  height: 1px;
+}
+
+.page-row-expanded { height: 100%; }

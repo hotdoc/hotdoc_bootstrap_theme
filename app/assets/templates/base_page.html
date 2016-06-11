@@ -2,102 +2,117 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<title>@page.get_title()</title>
+		<title>@page.get_title()</title>
 
-<link rel="stylesheet" href="@assets_path/css/bootstrap.min.css" type="text/css"/>
-<link rel="stylesheet" href="@assets_path/css/bootstrap-toggle.css" type="text/css"/>
-<link rel="stylesheet" href="@assets_path/css/frontend.css" type="text/css"/>
-<link rel="stylesheet" href="@assets_path/css/sidenav.css" type="text/css"/>
-<link rel="stylesheet" href="@assets_path/css/search.css" type="text/css"/>
-<link rel="stylesheet" href="@assets_path/css/tables.css" type="text/css"/>
-<link rel="stylesheet" href="@assets_path/css/jquery.mCustomScrollbar.css" />
+		<link rel="stylesheet" href="@assets_path/css/bootstrap.min.css" type="text/css"/>
+		<link rel="stylesheet" href="@assets_path/css/bootstrap-toggle.css" type="text/css"/>
+		<link rel="stylesheet" href="@assets_path/css/frontend.css" type="text/css"/>
+		<link rel="stylesheet" href="@assets_path/css/sidenav.css" type="text/css"/>
+		<link rel="stylesheet" href="@assets_path/css/search.css" type="text/css"/>
+		<link rel="stylesheet" href="@assets_path/css/tables.css" type="text/css"/>
+		<link rel="stylesheet" href="@assets_path/css/jquery.mCustomScrollbar.css" />
 
-<script src="@assets_path/js/jquery.js"></script>
-<script src="@assets_path/js/bootstrap.js"></script>
-<script src="@assets_path/js/bootstrap-toggle.js"></script>
-<script src="@assets_path/js/isotope.pkgd.min.js"></script>
-<script src="@assets_path/js/compare-versions.js"></script>
-<script src="@assets_path/js/typeahead.jquery.js"></script>
-<script src="@assets_path/js/jquery.mCustomScrollbar.concat.min.js"></script>
+		<script src="@assets_path/js/jquery.js"></script>
+		<script src="@assets_path/js/bootstrap.js"></script>
+		<script src="@assets_path/js/bootstrap-toggle.js"></script>
+		<script src="@assets_path/js/isotope.pkgd.min.js"></script>
+		<script src="@assets_path/js/compare-versions.js"></script>
+		<script src="@assets_path/js/typeahead.jquery.js"></script>
+		<script src="@assets_path/js/jquery.mCustomScrollbar.concat.min.js"></script>
 
-@for script in scripts:
-<script src="@assets_path/js/@script"></script>
-@end
+		@for script in scripts:
+		<script src="@assets_path/js/@script"></script>
+		@end
 
-<script src="@assets_path/js/search.js"></script>
-<script src="@assets_path/js/tag_filtering.js"></script>
-<script src="@assets_path/js/language_switching.js"></script>
-<script src="@assets_path/js/navigation.js"></script>
-<script src="@assets_path/js/utils.js"></script>
-<script src="@assets_path/js/lines_around_headings.js"></script>
+		<script src="@assets_path/js/search.js"></script>
+		<script src="@assets_path/js/tag_filtering.js"></script>
+		<script src="@assets_path/js/language_switching.js"></script>
+		<script src="@assets_path/js/navigation.js"></script>
+		<script src="@assets_path/js/utils.js"></script>
+		<script src="@assets_path/js/lines_around_headings.js"></script>
 
-@for stylesheet in stylesheets:
-<link rel="stylesheet" href="@assets_path/css/@stylesheet" type="text/css"/>
-@end
+		@for stylesheet in stylesheets:
+		<link rel="stylesheet" href="@assets_path/css/@stylesheet" type="text/css"/>
+		@end
 
-</head>
+	</head>
 
-<body data-spy="scroll" data-target=".scrollspy" data-offset="70">
-<div data-extension="@str(page.extension_name)" class="page_container" id="page-wrapper">
+	<body data-spy="scroll" data-target=".scrollspy" data-offset="70">
+		<main class="page-row page-row-expanded">
+		<div data-extension="@str(page.extension_name)" class="page_container" id="page-wrapper">
 
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-wrapper" aria-expanded="false">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-collapse" id="navbar-wrapper">
-				<div class="btn-group" id="menu">
-					<ul class="nav navbar-nav">
-	                                        <li><a id="home-link"><span class="glyphicon glyphicon-home"></span></a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</nav>
-
-
-	<div class="row">
-		<div class="hidden-xs hidden-sm col-md-3 col-xl-2" id="sidenav-column">
-			<div class="panel panel-collapse" id="sidenav" data-hotdoc-role="navigation">
-				<div id="sidenav-search" role="search">
-					<input type="text" placeholder="Fetching index" id="sidenav-lookup-field" disabled="disabled"/>
-				</div>
-				<div id="sitenav-wrapper" class="mCustomScrollbar" data-mcs-theme="minimal">
-				<div class="sidenav-main-panel-body">
-					<div id="site-navigation">
+			<nav class="navbar navbar-default navbar-fixed-top">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-wrapper" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+					<div class="collapse navbar-collapse" id="navbar-wrapper">
+						<div class="btn-group" id="menu">
+							<ul class="nav navbar-nav">
+								<li><a id="home-link"><span class="glyphicon glyphicon-home"></span></a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
-				<!-- FIXME -->
-				<div style="height: 76px;"></div>
+			</nav>
+
+
+			<div class="row">
+				<div class="hidden-xs hidden-sm col-md-3 col-xl-2" id="sidenav-column">
+					<div class="panel panel-collapse" id="sidenav" data-hotdoc-role="navigation">
+						<div id="sidenav-search" role="search">
+							<input type="text" placeholder="Fetching index" id="sidenav-lookup-field" disabled="disabled"/>
+						</div>
+						<div id="sitenav-wrapper" class="mCustomScrollbar" data-mcs-theme="minimal">
+							<div class="sidenav-main-panel-body">
+								<div id="site-navigation">
+								</div>
+							</div>
+							<!-- FIXME -->
+							<div style="height: 76px;"></div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-sm-12 col-md-9 col-xl-8">
+					<div id="main">
+						@def content():
+						@end
+						@content()
+					</div>
+					<div id="search_results">
+						<p>The results of the search are</p>
+					</div>
+				</div>
+				<div class="hidden-xs col-xl-2">
 				</div>
 			</div>
 		</div>
-
-
-		<div class="col-sm-12 col-md-9 col-xl-8">
-			<div id="main">
-				@def content():
-				@end
-				@content()
+		</main>
+		<footer class="page-row">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="hidden-xs hidden-sm col-md-3 col-xl-2"></div>
+					<div class="col-sm-12 col-md-9 col-xl-8">
+						@def footer():
+						@end
+						@footer()
+					</div>
+					<div class="hidden-xs col-xl-2"></div>
+				</div>
 			</div>
-			<div id="search_results">
-				<p>The results of the search are</p>
-			</div>
-		</div>
-		<div class="hidden-xs col-xl-2">
-		</div>
-	</div>
-</div>
-</body>
-<script src="@assets_path/js/navbar_offset_scroller.js"></script>
+		</footer>
+	</body>
+	<script src="@assets_path/js/navbar_offset_scroller.js"></script>
 </html>
