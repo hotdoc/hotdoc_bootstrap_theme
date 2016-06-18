@@ -137,7 +137,7 @@ function display_fragments_for_urls(context, fragments, token) {
 
 	for (var i = 0; i < fragments.length; i++) {
 		var src = context.root + "/assets/js/search/hotdoc_fragments/" +
-			escape(fragments[i]) + ".fragment";
+			escape(fragments[i].replace('#', '-')) + ".fragment";
 		inject_script(src);
 	}
 }
