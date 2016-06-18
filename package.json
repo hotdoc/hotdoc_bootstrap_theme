@@ -13,7 +13,7 @@
     "Bootstrap"
   ],
   "author": "Mathieu Duponchelle",
-  "license": "LGPL",
+  "license": "LGPL-2.1", 
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-concat": "~0.3.0",
