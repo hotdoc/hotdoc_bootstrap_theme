@@ -1,10 +1,15 @@
 function scroll_if_anchor(href) {
-    href = typeof(href) == "string" ? href : $(this).attr("href");
-    
+    var context = parse_location();
     var fromTop = 50;
-    
+    href = typeof(href) == "string" ? href : $(this).attr("href");
+    var destination = _parse_location(href);
+
+    if (destination.base_name == context.base_name && destination.fragment != undefined)  {
+        href = destination.fragment;
+    }
+
     if(href.indexOf("#") == 0) {
-        var $target = $(href);
+	var $target = $(href.replace( /(:|\.|\[|\]|,)/g, "\\$1"));
         
         if($target.length) {
             $('html, body').animate({ scrollTop: $target.offset().top - fromTop });

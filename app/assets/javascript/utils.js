@@ -26,12 +26,14 @@ function inject_script(src) {
 	head.appendChild(script);
 }
 
-function parse_location() {
+function _parse_location(href) {
 	var context = {}
 
-	context.here =  window.location.href;
+	context.here = href;
+	context.fragment = undefined;
 	var hash_index = context.here.indexOf("#");
 	if (hash_index != -1) {
+		context.fragment = context.here.substring(hash_index);
 		context.here = context.here.substring(0, hash_index);
 	}
 
@@ -45,4 +47,8 @@ function parse_location() {
 	context.root = split_here.join('/');
 
 	return context;
+}
+
+function parse_location() {
+	return _parse_location(window.location.href);
 }

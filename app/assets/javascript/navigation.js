@@ -119,7 +119,7 @@ function sitemap_downloaded_cb(sitemap_json) {
 
 		sidenav += '</h4></div>';
 		sidenav += '<div id="' + name + '-children" class="panel-collapse collapse"';
-		sidenav += 'data-nav-ref="' + node.url + '">';
+		sidenav += 'data-nav-ref="' + node.extension + "-" + node.url + '">';
 
 		parent_name = name;
 		level += 1;
@@ -136,7 +136,7 @@ function sitemap_downloaded_cb(sitemap_json) {
 
 	$("#site-navigation").html(sidenav);
 
-	unfold_current_page(context.base_name);
+	unfold_current_page(context.extension_name + "-" + context.base_name);
 
 	$("#home-link").attr("href", home_url);
 
