@@ -4,7 +4,9 @@ function scroll_if_anchor(href) {
     href = typeof(href) == "string" ? href : $(this).attr("href");
     var destination = _parse_location(href);
 
-    if (destination.base_name == context.base_name && destination.fragment != undefined)  {
+    if (destination.base_name == context.base_name &&
+	destination.fragment != undefined &&
+	(destination.root == '' || destination.root == context.root)) {
         href = destination.fragment;
     }
 
