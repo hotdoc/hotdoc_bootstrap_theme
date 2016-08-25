@@ -142,7 +142,7 @@ function doCompareDeprecated(all_values, filter_value, item_value) {
 
 function setupFilters() {
 	var mainEl = $('#main');
-	var tocEl = $(".symbols_toc");
+	var tocEl = $("#table-of-contents");
 	var transitionDuration = 800;
 	var currentFilters = {};
 	var customCompareFunctions = {'since': doCompareVersions,
@@ -232,7 +232,6 @@ function setupFilters() {
 	tocEl.isotope({
 		layoutMode: 'vertical',
 		animationEngine: 'best-available',
-		containerStyle: null,
 		filter: isotopeFilter,
 		animationOptions: {
 			duration: transitionDuration
@@ -253,6 +252,7 @@ function setupFilters() {
 
 		setTimeout(function(){
 			mainEl.isotope('layout');
+			tocEl.isotope('layout');
 		}, transitionDuration);
 
 	}
@@ -266,7 +266,3 @@ function setupFilters() {
 		location.hash = "#" + hash;
 	}
 }
-
-$(document).ready(function() {
-	setupFilters();
-});

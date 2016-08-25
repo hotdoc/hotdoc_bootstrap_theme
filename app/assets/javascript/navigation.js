@@ -15,11 +15,20 @@ function unfold_current_page(base_name) {
 
 		var widget = '';
 		widget += '<div class="scrollspy" id="sidenav-wrapper">';
-		widget += '<ul class="nav">';
+		widget += '<ul class="nav" id="table-of-contents">';
 
 		$('h1[id],h2[id],h3[id]').map(function() {
 			var klass = "nav-" + $(this).prop("tagName").toLowerCase();
-			widget += '<li><a href="#' + $(this).attr('id') + '" class="' + klass + '">';
+			var hotdoc_tags = $(this).closest(".base_symbol_container").attr("data-hotdoc-tags");
+
+			widget += "<li";
+			if (hotdoc_tags != undefined)
+				widget += ' data-hotdoc-tags="' + hotdoc_tags + '"';
+
+			if ($(this).hasClass('symbol_section'))
+				widget += ' class="summary_section_title"';
+
+			widget += '><a href="#' + $(this).attr('id') + '" class="' + klass + '">';
 			if (klass != "nav-h1")
 				widget += "↳";
 			widget += $(this).text().trim();
@@ -141,6 +150,9 @@ function sitemap_downloaded_cb(sitemap_json) {
 	$("#home-link").attr("href", home_url);
 
 	list_subpages(subpages);
+
+	/* Defined in tag_filtering.js */
+	setupFilters();
 }
 
 $(document).ready(function() {
