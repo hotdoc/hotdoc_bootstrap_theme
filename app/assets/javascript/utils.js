@@ -46,6 +46,11 @@ function _parse_location(href) {
 	}
 	context.root = split_here.join('/');
 
+	/* We assume a standard server redirecting to index.html */
+	if (!context.base_name) {
+		context.base_name = 'index.html';
+	}
+
 	return context;
 }
 
