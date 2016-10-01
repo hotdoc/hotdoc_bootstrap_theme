@@ -254,7 +254,6 @@ function setupFilters() {
 			mainEl.isotope('layout');
 			tocEl.isotope('layout');
 		}, transitionDuration);
-
 	}
 
 	layoutTimer();
@@ -265,4 +264,7 @@ function setupFilters() {
 		var hash = window.location.href.substring(hash_index + 1);
 		location.hash = "#" + hash;
 	}
+
+	// From navbar_offset_scroller.js
+	scroll_if_anchor(window.location.hash);
 }
