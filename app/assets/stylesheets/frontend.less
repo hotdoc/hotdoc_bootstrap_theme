@@ -1,26 +1,15 @@
-@import 'base.less';
+@import (reference) 'base.less';
 
 .page_container {
 	&:extend(.container-fluid);
 }
 
-.navbar {
-	min-height: 34px;
-	background-color: #313232;
-	border-color: black;
-}
-
-.navbar-nav > li > a {
-	padding-top: 7px;
-	padding-bottom: 0px;
-}
-
 // Account for the navbar, official solution
 body {
-	padding-top: 70px;
-	// scrollspying
-	font-family: sans-serif;
+	padding-top: @navbar-height;
 }
+
+// lines around headings
 
 .section_headings {
     position: relative;
@@ -48,123 +37,32 @@ body {
     margin-left: 1%;
 }
 
-h1:nth-of-type(1) {
-	margin-top: 0px;
-}
-
-h1, h2 {
-    margin-bottom: 20px;
-}
-
 a, a:active, a:focus {
         outline: none !important;
         cursor: pointer;
 }
 
-.base_symbol_container {
+// pad symbol containers in the center column
+
+.base_symbol_container, .symbol_section, #page-description {
 	width: 100%;
-	padding-left: 15px;
-	padding-right: 15px;
-	width: 100%;
-}
-
-.symbols_toc, .base_symbol_header {
-	list-style: none;
-	width: 100%;
-	margin: 0;
-}
-
-.symbols_toc {
-	padding-left: 15px;
-	padding-right: 15px;
-}
-
-.base_symbol_header {
-	> li {
-		display: inline-block;
-		h3 > span > code {
-			padding: 0;
-		}
-	}
-	padding: 0;
-}
-
-.symbols_toc:after {
-	content: '';
-	display: block;
-	clear: both;
-}
-
-.base_symbol_summary {
-	width: 100%;
-	clear: both;
-}
-
-.base_symbol_summary > * {
-	display: inline-block;
-	padding: 0px 4px;
-}
-
-.base_symbol_summary .summary_type {
-	width: 30%;
-	text-align: right;
-}
-
-.base_symbol_summary .summary_name {
-	width: 40%;
-}
-
-.base_symbol_summary .summary_extra {
-	width: 20%;
+	padding-left: @padding-large-horizontal;
+	padding-right: @padding-large-horizontal;
 }
 
 img {
 	max-width: 100%;
 }
 
-#page-description {
-	width: 100%;
-	padding-left: 15px;
-	padding-right: 15px;
-	padding-bottom: 15px;
-}
-
-.symbol_section {
-	padding-left: 15px;
-	padding-right: 15px;
-	width: 100%;
-}
-
-#menu {
-       	> .btn-group {
-		> button, ul {
-			background-color: #313232;
-			color: white;
-			border-color: #777;
-			> .divider {
-				background-color: #131313;
-			}
-		}
-	}
-}
-
-.dropdown-menu > li > a {
-	color: white;
-}
-
-#navbar-wrapper > span {
-	color: #777;
-}
-
 .license-description {
 	width: 100%;
-	padding-bottom: 15px;
-	> table {
+	padding-bottom: @padding-large-vertical;
+	table {
 		width: 100%;
-		> tbody > tr > td:nth-child(2) {
+		tbody tr td:nth-child(2) {
 			text-align: right;
-			> a > .license-logo {
-				max-width: 100px;
+			a .license-logo {
+				max-width: @license-logo-max-width;
 			}
 		}
 	}
@@ -173,11 +71,7 @@ img {
 // bootstrap default blockquotes are too obnoxiously large
 
 blockquote {
-	padding: 10px 20px;
-	margin: 0 0 20px;
-	border-left: 5px solid #eee;
-	font-size: 14px;
-	font-style: italic;
+	font-style: @blockquote-font-style;
 }
 
 // http://galengidman.com/2014/03/25/responsive-flexible-height-sticky-footers-in-css/
@@ -203,3 +97,17 @@ body {
 }
 
 .page-row-expanded { height: 100%; }
+
+// Allow easy customisation of the brand logo, defaults to home icon
+
+.hotdoc-navbar-brand {
+	height: @navbar-height;
+	padding: @padding-small-vertical;
+	float: left;
+
+	img {
+		max-height: @navbar-height - @padding-small-vertical * 2;
+		min-height: @navbar-height - @padding-small-vertical * 2;
+		min-width: @navbar-height - @padding-small-vertical * 2;
+	}
+}

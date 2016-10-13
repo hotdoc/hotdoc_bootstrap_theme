@@ -1,9 +1,13 @@
 function unfold_current_page(base_name) {
 	var panel = $('.panel-collapse[data-nav-ref="' + base_name + '"]');
 
-
 	if (panel != undefined) {
 		var elem = panel;
+		var sidenav_klass = 'sidenav-panel-even';
+		if (panel.parent().hasClass('sidenav-panel-even')) {
+			sidenav_klass = 'sidenav-panel-odd';
+		}
+
 		while (elem.length) {
 			if (elem.hasClass('collapse')) {
 				$.support.transition = false;
@@ -14,7 +18,8 @@ function unfold_current_page(base_name) {
 		}
 
 		var widget = '';
-		widget += '<div class="scrollspy" id="sidenav-wrapper">';
+		widget += '<div class="scrollspy '
+		widget += sidenav_klass + '" id="sidenav-wrapper">';
 		widget += '<ul class="nav" id="table-of-contents">';
 
 		$('h1[id],h2[id],h3[id]').map(function() {

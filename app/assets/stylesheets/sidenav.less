@@ -1,4 +1,4 @@
-@import 'base.less';
+@import (reference) "base.less";
 
 // sidenav
 
@@ -8,7 +8,7 @@
 
 #sidenav {
 	position: fixed;
-	top: 34px;
+	top: @navbar-height;
 	bottom: 0px;
 	left: 0px;
 	width: 25%;
@@ -16,9 +16,10 @@
 		width: 16.66%;
 	}
 	margin-bottom: 0px;
-	background-color: #313232;
+	background-color: @navbar-default-bg;
 	border: 0px;
 	border-radius: 0px;
+	color: @navbar-default-color;
 }
 
 #sitenav-wrapper {
@@ -26,15 +27,10 @@
 	height: 100%;
 }
 
-.navbar-nav > li > a:hover > .glyphicon {
-	color: #336699;
-}
-
 .sidenav-panel-body {
   &:extend(.panel-body);
   padding: 0px;
   padding-left: 5px;
-  color: white;
 }
 
 .sidenav-main-panel-body {
@@ -42,12 +38,12 @@
   padding: 0px;
 }
 
-.sidenav-panel-even {
-	background-color: #131313;
+.sidenav-panel-odd {
+	background-color: @navbar-default-bg;
 }
 
-.sidenav-panel-odd {
-	background-color: #313232;
+.sidenav-panel-even {
+	background-color: darken(@navbar-default-bg, 7%);
 }
 
 a[aria-expanded=true] .glyphicon-chevron-right {
@@ -61,45 +57,49 @@ a[aria-expanded=false] .glyphicon-chevron-down {
 
 .scrollspy {
 	padding-left: 5px;
-	background-color: #1C1C1C;
 }
 
 #sidenav-wrapper {
-	background-color: #2C2C2C;
 	position: relative;
+
+	> .nav li {
+	  width: 100%;
+	}
+
+	> .nav a {
+	  font-style: italic;
+	  color: @navbar-default-color;
+	}
+
+	> .nav li a:hover,
+	> .nav li a:focus {
+	  background-color: darken(@navbar-default-bg, 14%);
+	}
+
+	> .nav .active {
+	  font-weight: bold;
+	  border-left: 5px solid black;
+	  background-color: darken(@navbar-default-bg, 14%);
+	}
+
+	> .nav .nav {
+	  display: none;
+	}
+
+	> .nav .active .nav {
+	  display: block;
+	}
+
+	> .nav > li > .nav-h2 {
+	  padding-left: 15px;
+	}
+
+	> .nav > li > .nav-h3 {
+	  padding-left: 35px;
+	}
+
+	> .panel-title {
+	  font-size: 14px;
+	}
 }
 
-.nav a {
-  font-style: italic;
-  color: white;
-}
-
-.nav li a:hover,
-.nav li a:focus {
-  background: #758aa6;
-}
-
-.nav .active {
-  font-weight: bold;
-  border-left: 5px solid black;
-}
-
-.nav .nav {
-  display: none;
-}
-
-.nav .active .nav {
-  display: block;
-}
-
-.nav > li > .nav-h2 {
-  padding-left: 15px;
-}
-
-.nav > li > .nav-h3 {
-  padding-left: 35px;
-}
-
-.panel-title {
-  font-size: 14px;
-}

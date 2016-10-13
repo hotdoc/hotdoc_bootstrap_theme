@@ -1,10 +1,11 @@
+@import (reference) "base.less";
 // search
 
 #sidenav-search {
 	width: 100%;
 	text-align: center;
 	padding: 25px;
-	background-color: #336699;
+	background-color: @brand-primary;
 }
 
 #sidenav-lookup-field {
@@ -21,11 +22,11 @@
 // search typeahead
 
 .tt-menu {
-  width: 178px;
+  width: 100%;
   text-align: left;
   margin: 2px 0;
   padding: 8px 0;
-  background-color: #fff;
+  background-color: @body-bg;
 }
 
 .tt-suggestion {
@@ -35,13 +36,13 @@
 
 .tt-suggestion:hover {
   cursor: pointer;
-  color: #fff;
-  background-color: #0097cf;
+  color: @body-bg;
+  background-color: @gray;
 }
 
 .tt-suggestion.tt-cursor {
-  color: #fff;
-  background-color: #0097cf;
+  color: @body-bg;
+  background-color: @brand-primary;
 
 }
 

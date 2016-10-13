@@ -19,13 +19,17 @@ module.exports = function(grunt) {
 				flatten: true,
 				filter: 'isFile',
 			},
+			images: {
+				expand: true,
+				cwd: 'app/assets/images',
+				src: '**',
+				dest: 'dist/images/',
+				flatten: true,
+				filter: 'isFile',
+			},
 			jquery: {
 				src: './bower_components/jquery/dist/jquery.js',
 				dest: './dist/js/jquery.js',
-			},
-			bootstrap: {
-				src: './bower_components/bootstrap/dist/js/bootstrap.js',
-				dest: './dist/js/bootstrap.js',
 			},
 			bootstrap_toggle: {
 				src: './bower_components/bootstrap-toggle/js/bootstrap-toggle.js',
@@ -98,6 +102,7 @@ module.exports = function(grunt) {
 					"./dist/css/sidenav.css":"./app/assets/stylesheets/sidenav.less",
 					"./dist/css/search.css":"./app/assets/stylesheets/search.less",
 					"./dist/css/tables.css":"./app/assets/stylesheets/tables.less",
+					"./dist/css/custom_bootstrap.css": "./app/assets/stylesheets/custom_bootstrap.less",
 				}
 			}
 		},

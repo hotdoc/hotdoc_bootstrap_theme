@@ -8,18 +8,22 @@ function createTagsDropdown(tags_hashtable) {
 		}
 
 		if (title == 'deprecated') {
-			var menu = $("#navbar-wrapper");
-			var widget = '<span>Deprecated functions: </span><input type="checkbox" id="show-deprecated">';
+			var menu = $("#menu");
+			var widget = '';
+			widget += '<li class="navbar-btn">';
+			widget += '<div class="checkbox">'
+			widget += '<label>';
+			widget += '<input type="checkbox" id="show-deprecated">';
+			widget += 'Deprecated symbols';
+			widget += '</label>';
+			widget += '</div>';
+			widget += '</li>';
 			menu.append(widget);
-			$('#show-deprecated').bootstrapToggle({
-				on: 'Visible',
-				off: 'Hidden',
-			});
 		} else {
 			var menu = $('#menu');
-			var widget = '<div class="btn-group">';
-			widget += '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-			widget += title.capitalizeFirstLetter();
+			var widget = '<li class="dropdown">';
+			widget += '<a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+			widget += title.capitalizeFirstLetter() + ' ';
 			widget += '<span class="caret"></span></button>';
 			widget += '<ul class="dropdown-menu" id="' + key + '-menu">';
 
@@ -32,7 +36,7 @@ function createTagsDropdown(tags_hashtable) {
 				widget += '</a></li>';
 			});
 			widget += '</ul>';
-			widget += '</div>';
+			widget += '</li>';
 			menu.append(widget);
 		}
 	}

@@ -1,6 +1,6 @@
 function scroll_if_anchor(href) {
     var context = parse_location();
-    var fromTop = 50;
+    var fromTop = parseInt($('body').css('padding-top'));
     href = typeof(href) == "string" ? href : $(this).attr("href");
     var destination = _parse_location(href);
 

@@ -1,12 +1,12 @@
-@import 'base.less';
+@import (reference) "base.less";
 
 .parameter_container, .member_container, .multi_return_value_container {
-	> table {
+	table {
 		&:extend(.table all);
-		> thead,
-		> tbody,
-		> tfoot {
-		  > tr {
+		thead,
+		tbody,
+		tfoot {
+		  tr {
 		    td:nth-child(3) {
 		            text-align: right;
 		    }
@@ -19,17 +19,17 @@
 }
 
 .base_symbol_container, #page-description, .csp-previewer {
-	> table, .authors-description > table {
+	table, .authors-description table {
 		overflow: auto;
 		margin-bottom: 16px;
 		word-break: keep-all;
 		width: 100%;
 		display: block;
-		> thead,
-		> tbody,
-		> tfoot {
-			> tr {
-				background-color: #FFF;
+		thead,
+		tbody,
+		tfoot {
+			tr {
+				background-color: @body-bg;
 				border-top: 1px solid #CCC;
 				th, td {
 					padding: 6px 13px;
