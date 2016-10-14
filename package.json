@@ -13,15 +13,10 @@
     "Bootstrap"
   ],
   "author": "Mathieu Duponchelle",
-  "license": "LGPL-2.1", 
-  "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-less": "~0.8.2",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-copy": "0.8.2"
-  },
+  "license": "LGPL-2.1",
+  "devDependencies": {},
   "dependencies": {
-    "css.escape": "^1.4.0"
+    "bower": "^1.7.9",
+    "less": "^2.7.1"
   }
 }
