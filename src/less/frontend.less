@@ -1,0 +1,309 @@
+@import (reference) 'base.less';
+
+.page_container {
+	&:extend(.container-fluid);
+}
+
+// Account for the navbar, official solution
+body {
+	padding-top: @navbar-height;
+}
+
+// lines around headings
+
+.section_headings {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    text-align: center;
+}
+
+.section_headings:before, .section_headings:after {
+    position: absolute;
+    top: 51%;
+    overflow: hidden;
+    width: 50%;
+    height: 1px;
+    content: '\a0';
+    background-color: black;
+}
+
+.section_headings:before {
+    margin-left: -51%;
+    text-align: right;
+}
+
+.section_headings:after {
+    margin-left: 1%;
+}
+
+a, a:active, a:focus {
+        outline: none !important;
+        cursor: pointer;
+}
+
+// pad symbol containers in the center column
+
+.base_symbol_container, .symbol_section, #page-description {
+	width: 100%;
+	padding-left: @padding-large-horizontal;
+	padding-right: @padding-large-horizontal;
+}
+
+img {
+	max-width: 100%;
+}
+
+.license-description {
+	width: 100%;
+	padding-bottom: @padding-large-vertical;
+	table {
+		width: 100%;
+		tbody tr td:nth-child(2) {
+			text-align: right;
+			a .license-logo {
+				max-width: @license-logo-max-width;
+			}
+		}
+	}
+}
+
+// bootstrap default blockquotes are too obnoxiously large
+
+blockquote {
+	font-style: @blockquote-font-style;
+}
+
+// http://galengidman.com/2014/03/25/responsive-flexible-height-sticky-footers-in-css/
+// Begins to feel like like a css tricks exhibition in there
+
+html, body {
+	height: 100%;
+	margin: 0pt;
+}
+
+html {
+	position: relative;
+}
+
+body {
+  display: table;
+  width: 100%;
+}
+
+.page-row {
+  display: table-row;
+  height: 1px;
+}
+
+.page-row-expanded { height: 100%; }
+
+// Allow easy customisation of the brand logo, defaults to home icon
+
+.hotdoc-navbar-brand {
+	height: @navbar-height;
+	padding: @padding-small-vertical;
+	float: left;
+
+	img {
+		max-height: @navbar-height - @padding-small-vertical * 2;
+		min-height: @navbar-height - @padding-small-vertical * 2;
+		min-width: @navbar-height - @padding-small-vertical * 2;
+	}
+}
+
+// search
+
+#sidenav-search {
+	width: 100%;
+	text-align: center;
+	padding: 25px;
+	background-color: @brand-primary;
+}
+
+#sidenav-lookup-field {
+	width: 100%;
+}
+
+#search_results {
+	display: none;
+}
+
+.search_result {
+}
+
+// search typeahead
+
+.tt-menu {
+  width: 100%;
+  text-align: left;
+  margin: 2px 0;
+  padding: 8px 0;
+  background-color: @body-bg;
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  line-height: 24px;
+}
+
+.tt-suggestion:hover {
+  cursor: pointer;
+  color: @body-bg;
+  background-color: @gray;
+}
+
+.tt-suggestion.tt-cursor {
+  color: @body-bg;
+  background-color: @brand-primary;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+// sidenav
+
+#sidenav-column {
+	padding: 0px;
+}
+
+#sidenav {
+	position: fixed;
+	top: @navbar-height;
+	bottom: 0px;
+	left: 0px;
+	width: 25%;
+	@media (min-width: 1600px) {
+		width: 16.66%;
+	}
+	margin-bottom: 0px;
+	background-color: @navbar-default-bg;
+	border: 0px;
+	border-radius: 0px;
+	color: @navbar-default-color;
+}
+
+#sitenav-wrapper {
+	overflow-y: auto;
+	height: 100%;
+}
+
+.sidenav-panel-body {
+  &:extend(.panel-body);
+  padding: 0px;
+  padding-left: 5px;
+}
+
+.sidenav-main-panel-body {
+  &:extend(.sidenav-panel-body);
+  padding: 0px;
+}
+
+.sidenav-panel-odd {
+	background-color: @navbar-default-bg;
+}
+
+.sidenav-panel-even {
+	background-color: darken(@navbar-default-bg, 7%);
+}
+
+a[aria-expanded=true] .glyphicon-chevron-right {
+   display: none;
+}
+a[aria-expanded=false] .glyphicon-chevron-down {
+   display: none;
+}
+
+// Scrollspy
+
+.scrollspy {
+	padding-left: 5px;
+}
+
+#sidenav-wrapper {
+	position: relative;
+
+	> .nav li {
+	  width: 100%;
+	}
+
+	> .nav a {
+	  font-style: italic;
+	  color: @navbar-default-color;
+	}
+
+	> .nav li a:hover,
+	> .nav li a:focus {
+	  background-color: darken(@navbar-default-bg, 14%);
+	}
+
+	> .nav .active {
+	  font-weight: bold;
+	  border-left: 5px solid black;
+	  background-color: darken(@navbar-default-bg, 14%);
+	}
+
+	> .nav .nav {
+	  display: none;
+	}
+
+	> .nav .active .nav {
+	  display: block;
+	}
+
+	> .nav > li > .nav-h2 {
+	  padding-left: 15px;
+	}
+
+	> .nav > li > .nav-h3 {
+	  padding-left: 35px;
+	}
+
+	> .panel-title {
+	  font-size: 14px;
+	}
+}
+
+// tables
+
+.parameter_container, .member_container, .multi_return_value_container {
+	table {
+		&:extend(.table all);
+		thead,
+		tbody,
+		tfoot {
+		  tr {
+		    td:nth-child(3) {
+		            text-align: right;
+		    }
+		    td:nth-child(4) {
+		            text-align: right;
+		    }
+		  }
+		}
+	}
+}
+
+.base_symbol_container, #page-description, .csp-previewer {
+	table, .authors-description table {
+		overflow: auto;
+		margin-bottom: 16px;
+		word-break: keep-all;
+		width: 100%;
+		display: block;
+		thead,
+		tbody,
+		tfoot {
+			tr {
+				background-color: @body-bg;
+				border-top: 1px solid #CCC;
+				th, td {
+					padding: 6px 13px;
+					border: 1px solid #DDD;
+				}
+			}
+		}
+	}
+}
