@@ -315,8 +315,6 @@ function setupSearchXHR(context) {
 			local: trie,
 		});
 
-		search_input.focus();
-
 		var refresher = debounce(display_urls_for_tokens, 500);
 
 		search_input.keyup(function () {
@@ -362,8 +360,6 @@ function setupSearchInject(context) {
 			source: search_source,
 			local: trie,
 		});
-
-		search_input.focus();
 
 		var refresher = display_urls_for_tokens;
 
