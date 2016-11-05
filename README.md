@@ -19,3 +19,9 @@ Build the theme:
 ```
 make
 ```
+
+## Testing
+
+```
+make check
+```

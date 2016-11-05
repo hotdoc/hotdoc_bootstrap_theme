@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="@assets_path/css/@stylesheet" type="text/css"/>
 @end
 
+<script src="@assets_path/js/mustache.min.js"></script>
 <script src="@assets_path/js/jquery.js"></script>
 <script src="@assets_path/js/bootstrap.js"></script>
 <script src="@assets_path/js/typeahead.jquery.min.js"></script>
@@ -24,10 +25,10 @@
 <script src="@assets_path/js/isotope.pkgd.min.js"></script>
 <script src="@assets_path/js/compare-versions.js"></script>
 <script src="@assets_path/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="@assets_path/js/utils.js"></script>
 <script src="@assets_path/js/tag_filtering.js"></script>
 <script src="@assets_path/js/language_switching.js"></script>
 <script src="@assets_path/js/navigation.js"></script>
-<script src="@assets_path/js/utils.js"></script>
 
 @include("scripts.html")
 
@@ -44,7 +45,11 @@
 @include("navbar.html")
 
 <main class="page-row page-row-expanded">
-<div data-extension="@str(page.extension_name)" class="page_container" id="page-wrapper">
+<div data-extension="@str(page.extension_name)" data-hotdoc-ref="@str(page.link.ref)" class="page_container" id="page-wrapper"
+@for key, value in page.meta.get('extra', {}).items():
+data-hotdoc-meta-@key="@str(value)"\
+@end
+>
 	<div class="row">
 		@include("page_content.html")
 	</div>

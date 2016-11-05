@@ -8,14 +8,14 @@ function dirname(path) {
 }
 
 $.fn.wrapInTag = function(opts) {
-  var tag = opts.tag || 'strong'
-    , words = opts.words || []
-    , regex = RegExp(words.join('|'), 'gi') // case insensitive
-    , replacement = '<'+ tag +'>$&</'+ tag +'>';
+	var tag = opts.tag || 'strong'
+		, words = opts.words || []
+		, regex = RegExp(words.join('|'), 'gi') // case insensitive
+		, replacement = '<'+ tag +'>$&</'+ tag +'>';
 
-  return this.html(function() {
-    return $(this).text().replace(regex, replacement);
-  });
+	return this.html(function() {
+		return $(this).text().replace(regex, replacement);
+	});
 };
 
 function inject_script(src) {
@@ -26,71 +26,79 @@ function inject_script(src) {
 	head.appendChild(script);
 }
 
-function _parse_location(href) {
-	var context = {}
-
-	context.here = href;
-	context.fragment = undefined;
-	var hash_index = context.here.indexOf("#");
-	if (hash_index != -1) {
-		context.fragment = context.here.substring(hash_index);
-		context.here = context.here.substring(0, hash_index);
+function assert(condition, message) {
+	if (!condition) {
+		message = message || "Assertion failed";
+		if (typeof Error !== "undefined") {
+			throw new Error(message);
+		}
+		throw message;
 	}
-
-	var split_here = context.here.split('/');
-	context.base_name = split_here.pop();
-	context.extension_name = $('#page-wrapper').attr('data-extension');
-	context.language = undefined;
-	if (context.extension_name == 'gi-extension') {
-		context.language = split_here.pop();
-	}
-	context.root = split_here.join('/');
-
-	/* We assume a standard server redirecting to index.html */
-	if (!context.base_name) {
-		context.base_name = 'index.html';
-	}
-
-	return context;
 }
 
-function parse_location() {
-	return _parse_location(window.location.href);
-}
-
-function get_extension() {
-	return $('#page-wrapper').attr('data-extension');
-}
-
-// parseUri 1.2.2
-// (c) Steven Levithan <stevenlevithan.com>
-// MIT License
-
-function parseUri (str) {
-	var	o   = parseUri.options,
-		m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
-		uri = {},
-		i   = 14;
-
-	while (i--) uri[o.key[i]] = m[i] || "";
-
-	uri[o.q.name] = {};
-	uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
-		if ($1) uri[o.q.name][$1] = $2;
-	});
-
-	return uri;
-};
-
-parseUri.options = {
-	strictMode: false,
-	key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
-	q:   {
-		name:   "queryKey",
-		parser: /(?:^|&)([^&=]*)=?([^&]*)/g
-	},
-	parser: {
-		strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-		loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+Function.prototype.memoize = function(){
+	var self = this, cache = {};
+	return function( arg ){
+		if(arg in cache) {
+			return cache[arg];
+		} else {
+			return cache[arg] = self( arg );
+		}
 	}
-};
+}
+
+var utils = utils || {};
+
+utils.parseUri = (function (str) {
+	var pattern = RegExp("^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?");
+	var matches = str.match(pattern);
+	return {
+		file: matches[5].substr(matches[5].lastIndexOf('/') + 1),
+		scheme: matches[2],
+		authority: matches[4],
+		path: matches[5],
+		query: matches[7],
+		fragment: matches[9]
+	};
+});
+
+utils.uri_is_in_page = (function(parsedPageUri, uri) {
+	var parsedUri = utils.parseUri(uri);
+
+	if (parsedUri.path == parsedPageUri.path &&
+			parsedUri.authority == parsedPageUri.authority)
+		return true;
+
+	if (parsedUri.authority == undefined) {
+		if (parsedUri.file == parsedPageUri.file)
+			return true;
+		if (parsedUri.file == '')
+			return true;
+	}
+
+	return false;
+});
+
+utils.uri_is_in_this_page = (function(uri) {
+	return utils.uri_is_in_page(utils.parseUri(window.location.href), uri);
+});
+
+utils.HDContext = (class {
+	constructor(href) {
+		this.parsedUri = utils.parseUri(href);
+		this.extension = $('#page-wrapper').attr('data-extension');
+		this.hd_basename = $('#page-wrapper').attr('data-hotdoc-ref');
+		this.hd_root = this.parsedUri['scheme'] + '://' + this.parsedUri['authority'] + this.parsedUri['path'];
+		this.hd_root = this.hd_root.replace(new RegExp(this.hd_basename + "$"),'');
+
+		if (this.extension == 'gi-extension') {
+			this.gi_language = $('#page-wrapper').attr('data-hotdoc-meta-gi-language');
+			this.gi_languages = $('#page-wrapper').attr('data-hotdoc-meta-gi-languages').split(',');
+			this.hd_root = this.hd_root.replace(new RegExp(this.gi_language + '/$'), '');
+		}
+	}
+});
+
+$(document).ready(function() {
+	utils.hd_context = new utils.HDContext(window.location.href);
+});

@@ -1,28 +1,42 @@
+var hd_language_switching = hd_language_switching || {};
+
+hd_language_switching.item_template = [
+	'<li>',
+	'<a href="{{{root}}}{{{language}}}/{{{basename}}}">',
+	'{{language}}',
+	'</a>',
+	'</li>'].join('\n');
+
+hd_language_switching.list_template = [
+	'<li class="dropdown">',
+	'<a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+	'Language ',
+	'<span class="caret"></span>',
+	'<ul class="dropdown-menu">',
+	'{{#items}}',
+	'{{{.}}}',
+	'{{/items}}',
+	'</ul>',
+	'</a>',
+	'</li>'].join('\n');
+
 $(document).ready(function() {
-	var context = parse_location();
+	if (utils.hd_context.extension == 'gi-extension') {
+		var list_data = {'items': []}
+		for (var i = 0; i < utils.hd_context.gi_languages.length; i++) {
+			var language = utils.hd_context.gi_languages[i];
+			list_data.items.push(Mustache.to_html(
+						hd_language_switching.item_template, {
+							'root': utils.hd_context.hd_root,
+							'language': language,
+							'basename': utils.hd_context.hd_basename,
+						}));
+		}
 
-	if (context.extension_name == 'gi-extension') {
-		var widget = '<li class="dropdown">';
-		widget += '<a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-		widget += 'Language ';
-		widget += '<span class="caret"></span></button>';
-		widget += '</button>';
-		widget += '<ul class="dropdown-menu">';
+		var widget = Mustache.to_html(
+				hd_language_switching.list_template,
+				list_data);
 
-		widget += '<li><a href="' + '../c/' + context.base_name + '">';
-		widget += 'C';
-		widget += '</a></li>';
-
-		widget += '<li><a href="' + '../javascript/' + context.base_name + '">';
-		widget += 'Javascript';
-		widget += '</a></li>';
-
-		widget += '<li><a href="' + '../python/' + context.base_name + '">';
-		widget += 'Python';
-		widget += '</a></li>';
-
-		widget += '</ul>';
-		widget += '</li>';
 		$("#menu").append (widget);
 	}
 });

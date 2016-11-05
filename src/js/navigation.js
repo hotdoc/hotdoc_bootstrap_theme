@@ -1,7 +1,9 @@
+var hd_navigation = hd_navigation || {};
+
 function unfold_current_page(base_name) {
 	var panel = $('.panel-collapse[data-nav-ref="' + base_name + '"]');
 
-	if (panel != undefined) {
+	if (panel.length) {
 		var elem = panel;
 		var sidenav_klass = 'sidenav-panel-even';
 		if (panel.parent().hasClass('sidenav-panel-even')) {
@@ -19,7 +21,7 @@ function unfold_current_page(base_name) {
 
 		var widget = '';
 		widget += '<div class="scrollspy '
-		widget += sidenav_klass + '" id="sidenav-wrapper">';
+			widget += sidenav_klass + '" id="sidenav-wrapper">';
 		widget += '<ul class="nav" id="table-of-contents">';
 
 		$('h1[id],h2[id],h3[id]').map(function() {
@@ -76,33 +78,58 @@ function list_subpages(subpages) {
 	page_description.append(table);
 }
 
+hd_navigation.panel_template = [
+	'<div class="sidenav-panel-body {{panel_class}}">',
+	'<div class="panel-heading">',
+	'<h4 class="panel-title">',
+	'<a class="sidenav-ref" href="{{{url}}}"',
+	' data-extension="{{extension}}">',
+	'{{title}}</a>',
+	'{{{panel_unfold}}}',
+	'</h4></div>',
+	'<div id="{{name}}-children" class="panel-collapse collapse"',
+	'data-nav-ref="{{extension}}-{{{node_url}}}">',
+	'{{#subpages}}',
+	'{{{.}}}',
+	'{{/subpages}}',
+	'</div></div>'
+].join('\n');
+
+hd_navigation.panel_unfold_template = [
+	'<a class="sidenav-toggle" data-toggle="collapse" data-parent="{{parent_name}}" ',
+	'data-target="#{{name}}-children" aria-expanded="false">',
+	'<i class="glyphicon glyphicon-chevron-right pull-right"></i>',
+	'<i class="glyphicon glyphicon-chevron-down pull-right"></i>',
+	'</a>',
+].join('\n');
+
+hd_navigation.url_for_node = (function(node) {
+	var url = utils.hd_context.hd_root;
+
+	if (node.extension == 'gi-extension') {
+		if (utils.hd_context.gi_language === undefined) {
+			url += 'c';
+		} else {
+			url += utils.hd_context.gi_language;
+		}
+		url += '/';
+	}
+
+	url += node.url;
+	return url;
+});
+
 function sitemap_downloaded_cb(sitemap_json) {
 	var sitemap = JSON.parse(sitemap_json);
 	var level = 0;
 	var parent_name = 'main';
-	var sidenav = '';
-	var context = parse_location();
 	var subpages = [];
 	var home_url = undefined;
 
 	function fill_sidenav(node) {
-		var name = parent_name + '-' + level;
 		var panel_class;
-		var url;
-
-		if (node.extension == 'gi-extension') {
-			if (context.language === undefined) {
-				url = 'c/' + node.url;
-			} else {
-				url = context.language + '/' + node.url;
-			}
-		} else {
-			url = node.url;
-		}
-
-		if (context.extension_name == 'gi-extension') {
-			url = '../' + url;
-		}
+		var name = parent_name + '-' + level;
+		var url = hd_navigation.url_for_node(node);
 
 		if (home_url === undefined)
 			home_url = url;
@@ -112,45 +139,50 @@ function sitemap_downloaded_cb(sitemap_json) {
 		else
 			panel_class = "sidenav-panel-even";
 
-		sidenav += '<div class="sidenav-panel-body ' + panel_class + '">';
-		sidenav += '<div class="panel-heading">';
-		sidenav += '<h4 class="panel-title">';
-		sidenav += '<a class="sidenav-ref" href="' + url + '"';
-		sidenav += ' data-extension="' + node.extension + '">';
-		sidenav += node.title + '</a>';
+		if (node.subpages.length)
+			var panel_unfold = Mustache.to_html(
+					hd_navigation.panel_unfold_template,
+					{
+						'parent_name': parent_name,
+						'name': name,
+					});
+		else
+			var panel_unfold = '';
 
-		if (node.url == context.base_name)
+		if (node.url == utils.hd_context.hd_basename)
 			subpages = node.subpages;
-
-		if (node.subpages.length) {
-			sidenav += '<a class="sidenav-toggle" data-toggle="collapse" data-parent="';
-			sidenav += parent_name + '"';
-			sidenav += ' data-target="#' + name + '-children" aria-expanded="false">';
-			sidenav += '<i class="glyphicon glyphicon-chevron-right pull-right"></i>';
-			sidenav += '<i class="glyphicon glyphicon-chevron-down pull-right"></i>';
-			sidenav += '</a>';
-		}
-
-		sidenav += '</h4></div>';
-		sidenav += '<div id="' + name + '-children" class="panel-collapse collapse"';
-		sidenav += 'data-nav-ref="' + node.extension + "-" + node.url + '">';
 
 		parent_name = name;
 		level += 1;
+		var rendered_subpages = [];
 		for (var i = 0; i < node.subpages.length; i++) {
-			fill_sidenav(node.subpages[i]);
+			rendered_subpages.push(fill_sidenav(node.subpages[i]));
 		}
 		level -= 1;
 
+		var res = Mustache.to_html(
+				hd_navigation.panel_template,
+				{
+					'panel_class': panel_class,
+					'url': url,
+					'extension': node.extension,
+					'title': node.title,
+					'panel_unfold': panel_unfold,
+					'name': name,
+					'node_url': node.url,
+					'subpages': rendered_subpages,
+				});
+
 		node.url = url;
-		sidenav += '</div></div>';
+
+		return res;
 	}
 
-	fill_sidenav(sitemap);
+	var sidenav = fill_sidenav(sitemap);
 
 	$("#site-navigation").html(sidenav);
 
-	unfold_current_page(context.extension_name + "-" + context.base_name);
+	unfold_current_page(utils.hd_context.extension + "-" + utils.hd_context.hd_basename);
 
 	$("#home-link").attr("href", home_url);
 
@@ -161,7 +193,6 @@ function sitemap_downloaded_cb(sitemap_json) {
 }
 
 $(document).ready(function() {
-	var context = parse_location();
-	inject_script(context.root + "/assets/js/sitemap.js");
+	inject_script("assets/js/sitemap.js");
 	$("#sitenav-wrapper").mCustomScrollbar({ "scrollInertia": 0 });
 });

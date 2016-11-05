@@ -132,11 +132,11 @@ function fragment_downloaded_cb(data) {
 	display_fragment_for_url(data);
 }
 
-function display_fragments_for_urls(context, fragments, token) {
+function display_fragments_for_urls(fragments, token) {
 	var token = token;
 
 	for (var i = 0; i < fragments.length; i++) {
-		var src = context.root + "/assets/js/search/hotdoc_fragments/" +
+		var src = "assets/js/search/hotdoc_fragments/" +
 			escape(fragments[i].replace('#', '-')) + ".fragment";
 		inject_script(src);
 	}
@@ -144,7 +144,6 @@ function display_fragments_for_urls(context, fragments, token) {
 
 
 function display_urls_for_token(data) {
-	var context = parse_location();
 	var selector = '#' + CSS.escape(data.token) + '-result';
 
 	var token_results_div = $(selector);
@@ -156,14 +155,14 @@ function display_urls_for_token(data) {
 	var urls = data.urls;
 	var meat = "<h5>Search results for " + data.token + "</h5>";
 
-	filter_context = JSON.parse(JSON.stringify(context));;
+	var filter_context = {};;
 	filter_context.seen_urls = {};
 
 	function filter_url(url) {
 		var slash_index = url.indexOf('/');
 
 		if (slash_index === -1) {
-			if (context.language === undefined) {
+			if (utils.hd_context.gi_language === undefined) {
 				return url;
 			} else {
 				return '..' + url;
@@ -176,12 +175,12 @@ function display_urls_for_token(data) {
 		/* Remove urls where the same page matches for different languages
 		 * This is beginning to feel shitty
 		 */
-		if (context.language === undefined && !(suburl in this.seen_urls)) {
+		if (utils.hd_context.gi_language === undefined && !(suburl in this.seen_urls)) {
 			this.seen_urls[suburl] = true;
 			return url;
 		}
 
-		if (url_language != context.language) {
+		if (url_language != utils.hd_context.gi_language) {
 			return null;
 		}
 
@@ -209,7 +208,7 @@ function display_urls_for_token(data) {
 
 	token_results_div.html(meat);
 
-	display_fragments_for_urls(context, final_urls, data.token);
+	display_fragments_for_urls(final_urls, data.token);
 }
 
 function urls_downloaded_cb(data) {
@@ -217,9 +216,8 @@ function urls_downloaded_cb(data) {
 }
 
 function display_urls_for_tokens(tokens) {
-	var context = parse_location();
 	for (var i = 0; i < tokens.length; i++) {
-		var src = context.root + "/assets/js/search/" + tokens[i];
+		var src = "assets/js/search/" + tokens[i];
 		inject_script(src);
 	}
 }
@@ -288,9 +286,9 @@ function search_source (query, sync_results) {
 	sync_results(results);
 };
 
-function setupSearchXHR(context) {
+function setupSearchXHR() {
 	var req = new XMLHttpRequest();
-	req.open("GET", context.root + "/dumped.trie", true);
+	req.open("GET", "dumped.trie", true);
 	req.overrideMimeType('text\/plain; charset=x-user-defined');
 
 	var here = dirname(window.location.href);
@@ -335,11 +333,11 @@ function setupSearchXHR(context) {
 	req.send(null);
 }
 
-function setupSearchInject(context) {
+function setupSearchInject() {
 	var head = document.getElementsByTagName('head')[0];
 	var script = document.createElement('script');
 	script.type = 'text/javascript';
-	script.src = context.root + "/assets/js/trie_index.js";
+	script.src = "assets/js/trie_index.js";
 
 	script.onload = function () {
 		var trie = new Trie(trie_data, true);
@@ -382,13 +380,11 @@ function setupSearchInject(context) {
 }
 
 $(document).ready(function() {
-	var context = parse_location();
-
 	if (location.protocol === 'file:') {
 		/* Works even with chrome */
-		setupSearchInject(context);
+		setupSearchInject();
 	} else {
 		/* size of initial download divided by two */
-		setupSearchXHR(context);
+		setupSearchXHR();
 	}
 });

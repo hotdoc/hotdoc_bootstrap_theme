@@ -34,6 +34,7 @@ SRC_JS = \
 	bower_components/isotope/dist/isotope.pkgd.min.js \
 	bower_components/typeahead.js/dist/typeahead.jquery.min.js \
 	bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js \
+	bower_components/mustache.js/mustache.min.js \
 	src/js/language_switching.js \
 	src/js/lines_around_headings.js \
 	src/js/navbar_offset_scroller.js \
@@ -96,3 +97,6 @@ $(foreach src_dir,$(SRC_DIRS),$(eval $(call COPY_DIR_template,dist/$(notdir $(sr
 
 theme.stamp: $(SRC_THEME)
 	touch theme.stamp
+
+check:
+	npm test
