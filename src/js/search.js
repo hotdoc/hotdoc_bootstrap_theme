@@ -154,45 +154,10 @@ function display_urls_for_token(data) {
 
 	var urls = data.urls;
 	var meat = "<h5>Search results for " + data.token + "</h5>";
-
-	var filter_context = {};;
-	filter_context.seen_urls = {};
-
-	function filter_url(url) {
-		var slash_index = url.indexOf('/');
-
-		if (slash_index === -1) {
-			if (utils.hd_context.gi_language === undefined) {
-				return url;
-			} else {
-				return '..' + url;
-			}
-		}
-
-		var url_language = url.substring(0, slash_index);
-		var suburl = url.substring (slash_index + 1);
-
-		/* Remove urls where the same page matches for different languages
-		 * This is beginning to feel shitty
-		 */
-		if (utils.hd_context.gi_language === undefined && !(suburl in this.seen_urls)) {
-			this.seen_urls[suburl] = true;
-			return url;
-		}
-
-		if (url_language != utils.hd_context.gi_language) {
-			return null;
-		}
-
-		return suburl;
-	}
-
-	var filtered_urls = urls.map(filter_url, filter_context);
-
 	var url;
 	var final_urls = [];
-	for (var i = 0; i < filtered_urls.length; i++) {
-		url = filtered_urls[i];
+	for (var i = 0; i < urls.length; i++) {
+		url = utils.hd_context.hd_root + urls[i];
 		if (url === null) {
 			continue;
 		}
@@ -224,6 +189,7 @@ function display_urls_for_tokens(tokens) {
 
 function prepare_results_view (tokens) {
 	var results_div = $("#search_results");
+	results_div.on("click", "a[href]", clearSearch);
 	$('#main').hide();
 	results_div.show();
 
@@ -286,6 +252,13 @@ function search_source (query, sync_results) {
 	sync_results(results);
 };
 
+function clearSearch() {
+	var search_results = $('#search_results');
+	search_results.html('');
+	search_results.hide();
+	$('#main').show();
+}
+
 function setupSearchXHR() {
 	var req = new XMLHttpRequest();
 	req.open("GET", "dumped.trie", true);
@@ -315,13 +288,10 @@ function setupSearchXHR() {
 
 		var refresher = debounce(display_urls_for_tokens, 500);
 
-		search_input.keyup(function () {
+		search_input.on('input keyup typeahead:select', function () {
 			var word = $(this).val();
 			if (word.length == 0) {
-				var search_results = $('#search_results');
-				search_results.html('');
-				search_results.hide();
-				$('#main').show();
+				clearSearch()
 			} else {
 				var tokens = do_search(trie, word);
 				prepare_results_view(tokens);
@@ -361,13 +331,10 @@ function setupSearchInject() {
 
 		var refresher = display_urls_for_tokens;
 
-		search_input.keyup(function () {
+		search_input.on('input keyup typeahead:select', function () {
 			var word = $(this).val();
 			if (word.length == 0) {
-				var search_results = $('#search_results');
-				search_results.html('');
-				search_results.hide();
-				$('#main').show();
+				clearSearch();
 			} else {
 				var tokens = do_search(trie, word);
 				prepare_results_view(tokens);
