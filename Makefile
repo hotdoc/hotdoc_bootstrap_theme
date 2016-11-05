@@ -4,8 +4,8 @@ install:
 
 upload: theme.stamp
 	tar -zcvf dist.tgz dist/ && \
-	ssh meh@dhansak.collabora.co.uk "mkdir -p /home/meh/public_html/hotdoc_bootstrap_theme-0.8.1/" && \
-	scp dist.tgz meh@dhansak.collabora.co.uk:/home/meh/public_html/hotdoc_bootstrap_theme-0.8.1/dist.tgz
+	ssh meh@dhansak.collabora.co.uk "mkdir -p /home/meh/public_html/hotdoc_bootstrap_theme-0.8.2/" && \
+	scp dist.tgz meh@dhansak.collabora.co.uk:/home/meh/public_html/hotdoc_bootstrap_theme-0.8.2/dist.tgz
 
 clean:
 	rm -rf dist
