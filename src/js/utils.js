@@ -88,6 +88,10 @@ utils.HDContext = (class {
 		this.parsedUri = utils.parseUri(href);
 		this.extension = $('#page-wrapper').attr('data-extension');
 		this.hd_basename = $('#page-wrapper').attr('data-hotdoc-ref');
+		if (this.parsedUri.file == '') {
+			this.parsedUri.file = 'index.html';
+			this.parsedUri.path += 'index.html';
+		}
 		this.hd_root = this.parsedUri['scheme'] + '://' + this.parsedUri['authority'] + this.parsedUri['path'];
 		this.hd_root = this.hd_root.replace(new RegExp(this.hd_basename + "$"),'');
 
@@ -101,4 +105,5 @@ utils.HDContext = (class {
 
 $(document).ready(function() {
 	utils.hd_context = new utils.HDContext(window.location.href);
+	console.log('The context is', utils.hd_context);
 });
