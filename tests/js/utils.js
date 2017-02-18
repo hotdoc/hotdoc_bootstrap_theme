@@ -4,7 +4,7 @@ describe('core index', function() {
 	beforeEach(function () {
 		jasmine.getFixtures().fixturesPath = "base/tests/js/snippets";
 		jasmine.getFixtures().load('index.html');
-		hd_context = new utils.HDContext('http://test.com/doc/index.html');
+		hd_context = new utils.HDContext('http://test.com/doc/snippets/index.html');
 	});
 
 	it('Testing extension', function() {
@@ -17,7 +17,7 @@ describe('core index', function() {
 
 	it('Testing hotdoc root', function() {
 		expect(hd_context.hd_root).toBe('http://test.com/doc/');
-		hd_context = new utils.HDContext('http://test.com/doc/index.html#foo');
+		hd_context = new utils.HDContext('http://test.com/doc/snippets/index.html#foo');
 		expect(hd_context.hd_root).toBe('http://test.com/doc/');
 	});
 });
@@ -28,7 +28,7 @@ describe('gi index', function() {
 	beforeEach(function () {
 		jasmine.getFixtures().fixturesPath = "base/tests/js/snippets";
 		jasmine.getFixtures().load('gi-index.html');
-		hd_context = new utils.HDContext('http://test.com/doc/c/gi-index.html');
+		hd_context = new utils.HDContext('http://test.com/doc/snippets/c/gi-index.html');
 	});
 
 	it('Testing extension', function() {
