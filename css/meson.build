@@ -9,7 +9,8 @@ foreach css: csss
         cssname,
         input: join_paths(meson.current_source_dir(), css + '.less'),
         output: cssname, command: [less] + less_options + ['@INPUT@', '@OUTPUT0@'],
-        build_by_default: true
+        build_by_default: true,
+        depend_files: [get_option('less_include_path')],
         )
     ]
 endforeach

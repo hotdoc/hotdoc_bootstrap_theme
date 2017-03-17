@@ -104,7 +104,10 @@ hd_navigation.panel_unfold_template = [
 ].join('\n');
 
 hd_navigation.url_for_node = (function(node) {
-	var url = utils.hd_context.hd_root + node.project_name + '/';
+	var url = utils.hd_context.hd_root;
+
+    if (node.in_toplevel == false)
+        url += node.project_name + '/';
 
 	if (node.extension == 'gi-extension') {
 		if (utils.hd_context.gi_language === undefined) {
