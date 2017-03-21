@@ -193,7 +193,8 @@ function sitemap_downloaded_cb(sitemap_json) {
 
 	$("#home-link").attr("href", home_url);
 
-	list_subpages(subpages);
+	if (sitemap.render_subpages)
+		list_subpages(subpages);
 
 	/* Defined in tag_filtering.js */
 	setupFilters();
