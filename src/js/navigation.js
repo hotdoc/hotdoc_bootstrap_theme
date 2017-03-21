@@ -53,13 +53,13 @@ function unfold_current_page(base_name) {
 
 function list_subpages(subpages) {
 	var table;
-	var page_description;
+	var subpages_section;
 
 	if (subpages.length == 0)
 		return;
 
-	page_description = $("#page-description");
-	page_description.append('<h3>Subpages</h3>');
+	subpages_section = $("#subpages");
+	subpages_section.append('<h3>Subpages</h3>');
 
 	table = '<table><tbody>';
 	for (var i = 0; i < subpages.length; i++) {
@@ -75,7 +75,7 @@ function list_subpages(subpages) {
 	}
 	table += '</tbody></table>';
 
-	page_description.append(table);
+	subpages_section.append(table);
 }
 
 hd_navigation.panel_template = [
