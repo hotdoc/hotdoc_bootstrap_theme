@@ -155,7 +155,8 @@ function sitemap_downloaded_cb(sitemap_json) {
 
 		if (node.url == utils.hd_context.hd_basename && node.project_name == utils.hd_context.project_name) {
 			console.log("Hurray !");
-			subpages = node.subpages;
+			if (node.render_subpages)
+				subpages = node.subpages;
 		}
 
 		parent_name = name;
@@ -193,8 +194,7 @@ function sitemap_downloaded_cb(sitemap_json) {
 
 	$("#home-link").attr("href", home_url);
 
-	if (sitemap.render_subpages)
-		list_subpages(subpages);
+	list_subpages(subpages);
 
 	/* Defined in tag_filtering.js */
 	setupFilters();
