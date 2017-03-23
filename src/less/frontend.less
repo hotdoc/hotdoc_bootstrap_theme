@@ -277,17 +277,24 @@ a[aria-expanded=false] .glyphicon-chevron-down {
 .parameter_container, .member_container, .multi_return_value_container {
 	table {
 		&:extend(.table all);
+		border: none !important;
 		thead,
 		tbody,
 		tfoot {
-		  tr {
-		    td:nth-child(3) {
-		            text-align: right;
-		    }
-		    td:nth-child(4) {
-		            text-align: right;
-		    }
-		  }
+			tr {
+				border: none;
+				td:nth-child(3) {
+						border: none;
+						text-align: right;
+				}
+				td:nth-child(4) {
+					border: none;
+					text-align: right;
+				}
+			}
+			td {
+				border: none;
+			}
 		}
 	}
 }
@@ -298,7 +305,6 @@ a[aria-expanded=false] .glyphicon-chevron-down {
 		margin-bottom: 16px;
 		word-break: keep-all;
 		width: 100%;
-		display: block;
 		thead,
 		tbody,
 		tfoot {
