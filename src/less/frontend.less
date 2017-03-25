@@ -275,32 +275,29 @@ a[aria-expanded=false] .glyphicon-chevron-down {
 // tables
 
 .parameter_container, .member_container, .multi_return_value_container {
-	table {
-		&:extend(.table all);
-		border: none !important;
+	> table {
+		border: none;
+		width: 100%;
 		thead,
 		tbody,
 		tfoot {
 			tr {
-				border: none;
-				td:nth-child(3) {
-						border: none;
-						text-align: right;
+				td {
+					padding-left: 10px;
 				}
-				td:nth-child(4) {
-					border: none;
+				td:nth-child(3) {
 					text-align: right;
 				}
-			}
-			td {
-				border: none;
+				td:nth-child(4) {
+					text-align: right;
+				}
 			}
 		}
 	}
 }
 
 .base_symbol_container, #page-description, .csp-previewer, #subpages {
-	table, .authors-description table {
+	> table, .authors-description {
 		overflow: auto;
 		margin-bottom: 16px;
 		word-break: keep-all;
