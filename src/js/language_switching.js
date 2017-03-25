@@ -2,7 +2,7 @@ var hd_language_switching = hd_language_switching || {};
 
 hd_language_switching.item_template = [
 	'<li>',
-	'<a href="{{{root}}}{{{project_url_path}}}/{{{language}}}/{{{basename}}}">',
+	'<a href="{{{root}}}{{{project_url_path}}}{{{language}}}/{{{basename}}}">',
 	'{{language}}',
 	'</a>',
 	'</li>'].join('\n');
