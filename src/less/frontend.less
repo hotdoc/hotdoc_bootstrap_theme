@@ -43,6 +43,23 @@ a, a:active, a:focus {
         cursor: pointer;
 }
 
+button, button:active, button:focus {
+        outline: none !important;
+        cursor: pointer;
+}
+
+#navbar-wrapper > ul > li {
+	> button {
+		margin: 0;
+		height: @navbar-height;
+	}
+}
+
+.navbar {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
 // pad symbol containers in the center column
 
 .base_symbol_container, .symbol_section, #page-description, #subpages {
