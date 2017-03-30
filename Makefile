@@ -17,7 +17,7 @@ LESS = node_modules/less/bin/lessc $(if $(LESS_INCLUDE_PATH),--include-path=$(LE
 
 # Copy individual files
 
-define COPY_template =
+define COPY_template
 $(1): $(2)
 	@echo "Copying $(2) to $(1)";
 	@set -e;
@@ -58,7 +58,7 @@ $(foreach css_file,$(SRC_CSS),$(eval $(call COPY_template,dist/css/$(notdir $(cs
 
 # Compile less files
 
-define LESS_template =
+define LESS_template
 $(1): $(2) src/less/base.less src/less/bootstrapxl.less $(if $(LESS_INCLUDE_PATH),$(LESS_INCLUDE_PATH)/*,)
 	@echo "Compiling $(2) to $(1)";
 	@set -e;
@@ -77,7 +77,7 @@ $(foreach less_file,$(SRC_LESS),$(eval $(call LESS_template,dist/css/$(notdir $(
 
 # Copy whole directories
 
-define COPY_DIR_template =
+define COPY_DIR_template
 $(1): $(2)/*
 	@echo "Copying directory $(2) to $(1)";
 	@set -e;
