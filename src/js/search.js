@@ -336,7 +336,7 @@ function setupSearchXHR() {
 			if (query.length == 0) {
 				clearSearch()
 			} else {
-				do_search(trie, word);
+				do_search(trie, query);
 				prepare_results_view();
 				refresher();
 			}
@@ -375,11 +375,11 @@ function setupSearchInject() {
 		var refresher = display_urls_for_tokens;
 
 		search_input.on('input keyup typeahead:select', function () {
-			var word = $(this).val();
-			if (word.length == 0) {
+			var query = $(this).val();
+			if (query.length == 0) {
 				clearSearch();
 			} else {
-				do_search(trie, word);
+				do_search(trie, query);
 				prepare_results_view();
 				refresher();
 			}
