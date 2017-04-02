@@ -10,6 +10,7 @@
 <title>@page.get_title()</title>
 
 <link rel="stylesheet" href="@assets_path/css/custom_bootstrap.css" type="text/css"/>
+<link rel="stylesheet" href="@assets_path/css/bootstrap-toc.min.css" />
 <link rel="stylesheet" href="@assets_path/css/frontend.css" type="text/css"/>
 <link rel="stylesheet" href="@assets_path/css/jquery.mCustomScrollbar.min.css" />
 
@@ -25,6 +26,7 @@
 <script src="@assets_path/js/isotope.pkgd.min.js"></script>
 <script src="@assets_path/js/compare-versions.js"></script>
 <script src="@assets_path/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="@assets_path/js/bootstrap-toc.min.js"></script>
 <script src="@assets_path/js/utils.js"></script>
 <script src="@assets_path/js/tag_filtering.js"></script>
 <script src="@assets_path/js/language_switching.js"></script>
@@ -40,7 +42,7 @@
 
 </head>
 
-<body data-spy="scroll" data-target=".scrollspy" data-offset="70">
+<body data-spy="scroll" data-target="#toc" data-offset="70">
 
 @include("navbar.html")
 

@@ -35,6 +35,7 @@ SRC_JS = \
 	bower_components/typeahead.js/dist/typeahead.jquery.min.js \
 	bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js \
 	bower_components/mustache.js/mustache.min.js \
+	bower_components/bootstrap-toc/dist/bootstrap-toc.min.js \
 	src/js/language_switching.js \
 	src/js/lines_around_headings.js \
 	src/js/navbar_offset_scroller.js \
@@ -52,6 +53,7 @@ $(eval $(call COPY_template,dist/js/compare-versions.js,bower_components/compare
 
 SRC_CSS = \
 	bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css \
+	bower_components/bootstrap-toc/dist/bootstrap-toc.min.css \
 	$(NULL)
 
 $(foreach css_file,$(SRC_CSS),$(eval $(call COPY_template,dist/css/$(notdir $(css_file)),$(css_file))))

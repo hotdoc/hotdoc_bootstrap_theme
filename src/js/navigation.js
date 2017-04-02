@@ -1,5 +1,30 @@
 var hd_navigation = hd_navigation || {};
 
+hd_navigation.panel_template = [
+	'<div class="sidenav-panel-body {{panel_class}}">',
+	'<div class="panel-heading">',
+	'<h4 class="panel-title">',
+	'<a class="sidenav-ref" href="{{{url}}}"',
+	' data-extension="{{extension}}">',
+	'{{title}}</a>',
+	'{{{panel_unfold}}}',
+	'</h4></div>',
+	'<div id="{{name}}-children" class="panel-collapse collapse"',
+	'data-nav-ref="{{extension}}-{{{node_project}}}-{{{node_url}}}">',
+	'{{#subpages}}',
+	'{{{.}}}',
+	'{{/subpages}}',
+	'</div></div>'
+].join('\n');
+
+hd_navigation.panel_unfold_template = [
+	'<a class="sidenav-toggle" data-toggle="collapse" data-parent="{{parent_name}}" ',
+	'data-target="#{{name}}-children" aria-expanded="false">',
+	'<i class="glyphicon glyphicon-chevron-right pull-right"></i>',
+	'<i class="glyphicon glyphicon-chevron-down pull-right"></i>',
+	'</a>',
+].join('\n');
+
 function unfold_current_page(base_name) {
 	var panel = $('.panel-collapse[data-nav-ref="' + base_name + '"]');
 
@@ -18,34 +43,6 @@ function unfold_current_page(base_name) {
 			}
 			elem = elem.parent();
 		}
-
-		var widget = '';
-		widget += '<div class="scrollspy '
-			widget += sidenav_klass + '" id="sidenav-wrapper">';
-		widget += '<ul class="nav" id="table-of-contents">';
-
-		$('h1[id],h2[id],h3[id]').map(function() {
-			var klass = "nav-" + $(this).prop("tagName").toLowerCase();
-			var hotdoc_tags = $(this).closest(".base_symbol_container").attr("data-hotdoc-tags");
-
-			widget += "<li";
-			if (hotdoc_tags != undefined)
-				widget += ' data-hotdoc-tags="' + hotdoc_tags + '"';
-
-			if ($(this).hasClass('symbol_section'))
-				widget += ' class="summary_section_title"';
-
-			widget += '><a href="#' + $(this).attr('id') + '" class="' + klass + '">';
-			if (klass != "nav-h1")
-				widget += "↳";
-			widget += $(this).text().trim();
-			widget += '</a></li>';
-		});
-
-		widget += '</ul>';
-		widget += '</div>';
-
-		panel.append(widget);
 		var wrapper = $("#sitenav-wrapper");
 		wrapper.mCustomScrollbar("scrollTo", panel.offset().top - wrapper.offset().top - 36);
 	}
@@ -78,31 +75,6 @@ function list_subpages(subpages) {
 	subpages_section.append(table);
 }
 
-hd_navigation.panel_template = [
-	'<div class="sidenav-panel-body {{panel_class}}">',
-	'<div class="panel-heading">',
-	'<h4 class="panel-title">',
-	'<a class="sidenav-ref" href="{{{url}}}"',
-	' data-extension="{{extension}}">',
-	'{{title}}</a>',
-	'{{{panel_unfold}}}',
-	'</h4></div>',
-	'<div id="{{name}}-children" class="panel-collapse collapse"',
-	'data-nav-ref="{{extension}}-{{{node_project}}}-{{{node_url}}}">',
-	'{{#subpages}}',
-	'{{{.}}}',
-	'{{/subpages}}',
-	'</div></div>'
-].join('\n');
-
-hd_navigation.panel_unfold_template = [
-	'<a class="sidenav-toggle" data-toggle="collapse" data-parent="{{parent_name}}" ',
-	'data-target="#{{name}}-children" aria-expanded="false">',
-	'<i class="glyphicon glyphicon-chevron-right pull-right"></i>',
-	'<i class="glyphicon glyphicon-chevron-down pull-right"></i>',
-	'</a>',
-].join('\n');
-
 hd_navigation.url_for_node = (function(node) {
 	var url = utils.hd_context.hd_root;
 
@@ -119,7 +91,6 @@ hd_navigation.url_for_node = (function(node) {
 	}
 
 	url += node.url;
-	console.log("url is", url);
 	return url;
 });
 
@@ -154,7 +125,6 @@ function sitemap_downloaded_cb(sitemap_json) {
 			var panel_unfold = '';
 
 		if (node.url == utils.hd_context.hd_basename && node.project_name == utils.hd_context.project_name) {
-			console.log("Hurray !");
 			if (node.render_subpages)
 				subpages = node.subpages;
 		}
