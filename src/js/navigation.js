@@ -3,7 +3,7 @@ var hd_navigation = hd_navigation || {};
 hd_navigation.panel_template = [
 	'<div class="sidenav-panel-body {{panel_class}}">',
 	'<div class="panel-heading">',
-	'<h4 class="panel-title">',
+	'<h4 class="panel-title" data-toc-skip>',
 	'<a class="sidenav-ref" href="{{{url}}}"',
 	' data-extension="{{extension}}">',
 	'{{title}}</a>',
@@ -56,7 +56,7 @@ function list_subpages(subpages) {
 		return;
 
 	subpages_section = $("#subpages");
-	subpages_section.append('<h3>Subpages</h3>');
+	subpages_section.append('<h3 data-toc-skip>Subpages</h3>');
 
 	table = '<table><tbody>';
 	for (var i = 0; i < subpages.length; i++) {
