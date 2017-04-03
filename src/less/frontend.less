@@ -208,12 +208,17 @@ body {
 	color: @navbar-default-color;
 }
 
-#toc {
+#toc-column {
 	position: fixed;
 	top: @navbar-height + @padding-large-vertical;
 	bottom: 0px;
 	right: 0px;
 	width: 16.66%;
+}
+
+#toc-wrapper {
+	overflow-y: auto;
+	height: 100%;
 }
 
 nav[data-toggle='toc'] .nav > li > a:hover,
