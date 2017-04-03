@@ -17,6 +17,7 @@ endforeach
 
 css_files = [
   '../bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css',
+  '../bower_components/bootstrap-toc/dist/bootstrap-toc.min.css',
 ]
 foreach css: css_files
     cssname = css.split('/')[-1]
