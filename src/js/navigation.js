@@ -172,5 +172,6 @@ function sitemap_downloaded_cb(sitemap_json) {
 
 $(document).ready(function() {
 	inject_script("assets/js/sitemap.js");
-	$("#sitenav-wrapper").mCustomScrollbar({ "scrollInertia": 0 });
+	$("#sitenav-wrapper").mCustomScrollbar({ "scrollInertia": 0, "theme": "minimal" });
+	$("#toc-wrapper").mCustomScrollbar({ "scrollInertia": 0, "theme": "dark" });
 });
