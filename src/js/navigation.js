@@ -103,15 +103,12 @@ function sitemap_downloaded_cb(sitemap_json) {
 	var level = 0;
 	var parent_name = 'main';
 	var subpages = [];
-	var home_url = undefined;
+	var home_url = hd_navigation.url_for_node(sitemap);
 
 	function fill_sidenav(node) {
 		var panel_class;
 		var name = parent_name + '-' + level;
 		var url = hd_navigation.url_for_node(node);
-
-		if (home_url === undefined)
-			home_url = url;
 
 		if (level % 2 == 0)
 			panel_class = "sidenav-panel-odd";
