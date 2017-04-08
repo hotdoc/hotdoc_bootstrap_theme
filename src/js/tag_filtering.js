@@ -21,7 +21,7 @@ function createTagsDropdown(tags_hashtable) {
 			var widget = '<li class="dropdown">';
 			widget += '<a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
 			widget += title.capitalizeFirstLetter() + ' ';
-			widget += '<span class="caret"></span></button>';
+			widget += '<span class="caret"></span></a>';
 			widget += '<ul class="dropdown-menu" id="' + key + '-menu">';
 
 			widget += '<li><a id="' + key + '">Reset</a></li>';
