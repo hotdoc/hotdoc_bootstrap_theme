@@ -3,12 +3,14 @@ var hd_navigation = hd_navigation || {};
 hd_navigation.panel_template = [
 	'<div class="sidenav-panel-body {{panel_class}}">',
 	'<div class="panel-heading">',
+	'{{{panel_span_start}}}',
 	'<h4 class="panel-title" data-toc-skip>',
 	'<a class="sidenav-ref" href="{{{url}}}"',
 	' data-extension="{{extension}}">',
 	'{{title}}</a>',
 	'{{{panel_unfold}}}',
 	'</h4></div>',
+	'{{{panel_span_end}}}',
 	'<div id="{{name}}-children" class="panel-collapse collapse"',
 	'data-nav-ref="{{extension}}-{{{node_project}}}-{{{node_url}}}">',
 	'{{#subpages}}',
@@ -17,12 +19,14 @@ hd_navigation.panel_template = [
 	'</div></div>'
 ].join('\n');
 
-hd_navigation.panel_unfold_template = [
-	'<a class="sidenav-toggle" data-toggle="collapse" data-parent="{{parent_name}}" ',
+hd_navigation.panel_span_start_template =  [
+	'<span class="sidenav-toggle" data-toggle="collapse" data-parent="{{parent_name}}" ',
 	'data-target="#{{name}}-children" aria-expanded="false">',
+].join('\n')
+
+hd_navigation.panel_unfold_template = [
 	'<i class="glyphicon glyphicon-chevron-right pull-right"></i>',
 	'<i class="glyphicon glyphicon-chevron-down pull-right"></i>',
-	'</a>',
 ].join('\n');
 
 function unfold_current_page(base_name) {
@@ -114,15 +118,20 @@ function sitemap_downloaded_cb(sitemap_json) {
 		else
 			panel_class = "sidenav-panel-even";
 
-		if (node.subpages.length)
+		if (node.subpages.length) {
+			var panel_span_start = Mustache.to_html(
+					hd_navigation.panel_span_start_template,
+					{'parent_name': parent_name,
+					 'name': name});
 			var panel_unfold = Mustache.to_html(
 					hd_navigation.panel_unfold_template,
-					{
-						'parent_name': parent_name,
-						'name': name,
-					});
-		else
+					{});
+			var panel_span_end = '</span>';
+		} else {
+			var panel_span_start = '';
 			var panel_unfold = '';
+			var panel_span_end = '';
+		}
 
 		if (node.url == utils.hd_context.hd_basename && node.project_name == utils.hd_context.project_name) {
 			if (node.render_subpages)
@@ -145,6 +154,8 @@ function sitemap_downloaded_cb(sitemap_json) {
 					'extension': node.extension,
 					'title': node.title,
 					'panel_unfold': panel_unfold,
+					'panel_span_start': panel_span_start,
+					'panel_span_end': panel_span_end,
 					'name': name,
 					'node_project': node.project_name,
 					'node_url': node.url,

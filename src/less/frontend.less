@@ -314,6 +314,10 @@ nav[data-toggle='toc'] .nav > .active > ul {
   &:extend(.panel-body);
   padding: 0px;
   padding-left: 5px;
+
+  span {
+	  cursor: pointer;
+  }
 }
 
 .sidenav-main-panel-body {
@@ -329,10 +333,10 @@ nav[data-toggle='toc'] .nav > .active > ul {
 	background-color: darken(@navbar-default-bg, 7%);
 }
 
-a[aria-expanded=true] .glyphicon-chevron-right {
+span[aria-expanded=true] .glyphicon-chevron-right {
    display: none;
 }
-a[aria-expanded=false] .glyphicon-chevron-down {
+span[aria-expanded=false] .glyphicon-chevron-down {
    display: none;
 }
 
