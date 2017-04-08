@@ -188,6 +188,11 @@ function sitemap_downloaded_cb(sitemap_json) {
 
 	/* Defined in tag_filtering.js */
 	setupFilters();
+
+	$('a').click(function(e) {
+		scroll_if_anchor ($(this).attr("href"));
+		e.stopPropagation();
+	});
 }
 
 $(document).ready(function() {
