@@ -303,6 +303,13 @@ nav[data-toggle='toc'] .nav > .active > ul {
   }
 }
 
+a[data-hotdoc-role='edit-button'] {
+  &:extend(.btn);
+  &:extend(.btn-xs);
+  &:extend(.btn-primary);
+  &:hover {.btn; .btn-xs; .btn-primary}
+}
+
 .sidenav-main-panel-body {
   &:extend(.sidenav-panel-body);
   padding: 0px;
