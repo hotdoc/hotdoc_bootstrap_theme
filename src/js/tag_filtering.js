@@ -267,4 +267,10 @@ function setupFilters() {
 
 	// From navbar_offset_scroller.js
 	scroll_if_anchor(window.location.hash);
+
+	$("#content-column").attrchange(function(attrName) {
+		if (attrName=='class') {
+			layoutTimer();
+		}
+	});
 }

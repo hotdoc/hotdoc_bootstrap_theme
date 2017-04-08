@@ -208,6 +208,10 @@ body {
 	}
 }
 
+#sidenav.empty {
+	width: 0%;
+}
+
 @media (max-width: 992px) {
 	#sidenav {
 		margin-left: 0%;
@@ -235,6 +239,10 @@ body {
 	#offcanvasleft {
 		display: none;
 	}
+}
+
+#sidenav.empty + #offcanvasleft {
+	display: none;
 }
 
 #toc-column {
@@ -317,6 +325,7 @@ nav[data-toggle='toc'] .nav > .active > ul {
 
   span {
 	  cursor: pointer;
+	  height: 100%;
   }
 }
 
@@ -331,6 +340,15 @@ nav[data-toggle='toc'] .nav > .active > ul {
 
 .sidenav-panel-even {
 	background-color: darken(@navbar-default-bg, 7%);
+}
+
+.sidenav-panel-current {
+	> .panel-heading, > span > .panel-heading {
+		border-left: 3px solid @brand-success;
+		> .panel-title {
+			color: @brand-success;
+		}
+	}
 }
 
 span[aria-expanded=true] .glyphicon-chevron-right {

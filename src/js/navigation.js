@@ -2,8 +2,8 @@ var hd_navigation = hd_navigation || {};
 
 hd_navigation.panel_template = [
 	'<div class="sidenav-panel-body {{panel_class}}">',
-	'<div class="panel-heading">',
 	'{{{panel_span_start}}}',
+	'<div class="panel-heading">',
 	'<h4 class="panel-title" data-toc-skip>',
 	'<a class="sidenav-ref" href="{{{url}}}"',
 	' data-extension="{{extension}}">',
@@ -134,6 +134,7 @@ function sitemap_downloaded_cb(sitemap_json) {
 		}
 
 		if (node.url == utils.hd_context.hd_basename && node.project_name == utils.hd_context.project_name) {
+			panel_class += " sidenav-panel-current";
 			if (node.render_subpages)
 				subpages = node.subpages;
 		}
@@ -167,7 +168,18 @@ function sitemap_downloaded_cb(sitemap_json) {
 		return res;
 	}
 
-	var sidenav = fill_sidenav(sitemap);
+	if (sitemap.subpages.length == 0) {
+		$("#sidenav").toggleClass("empty");
+		$("#sidenav-column").attr("class", "col-xs-0");
+		$("#content-column").attr("class", "col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10");
+		$("#footer-left-column").attr("class", "col-xs-0");
+		$("#footer-content-column").attr("class", "col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10");
+	}
+
+	var sidenav = '';
+	for (var i = 0; i < sitemap.subpages.length; i++) {
+		sidenav += fill_sidenav (sitemap.subpages[i]);
+	}
 
 	$("#site-navigation").html(sidenav);
 
@@ -188,6 +200,8 @@ $(document).ready(function() {
 	$('#offcanvasleft').click(function() {
 		$('#sidenav').toggleClass('oc-collapsed');
 		$('#content-column').toggleClass("col-sm-12 col-sm-6 col-xs-12 col-xs-6");
+		$('#footer-left-column').toggleClass("hidden-xs col-xs-6 hidden-sm col-sm-6");
+		$('#footer-content-column').toggleClass("col-xs-12 col-xs-6 col-sm-12 col-sm-6");
 		$('#offcanvasleft-chevron').toggleClass("glyphicon-chevron-left glyphicon-chevron-right");
 	});
 });
