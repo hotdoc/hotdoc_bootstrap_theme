@@ -11,33 +11,6 @@ body {
 
 // lines around headings
 
-.section_headings {
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-    text-align: center;
-    padding-bottom: 4px;
-}
-
-.section_headings:before, .section_headings:after {
-    position: absolute;
-    top: 51%;
-    overflow: hidden;
-    width: 50%;
-    height: 1px;
-    content: '\a0';
-    background-color: @text-color;
-}
-
-.section_headings:before {
-    margin-left: -51%;
-    text-align: right;
-}
-
-.section_headings:after {
-    margin-left: 1%;
-}
-
 a, a:active, a:focus {
         outline: none !important;
         cursor: pointer;
@@ -206,6 +179,7 @@ body {
 	@media (min-width: 1600px) {
 		width: 16.66%;
 	}
+	z-index: 1;
 }
 
 #sidenav.empty {
@@ -383,6 +357,7 @@ span[aria-expanded=false] .glyphicon-chevron-down {
 }
 
 .base_symbol_container, #page-description, .csp-previewer, #subpages {
+	word-wrap: break-word;
 	> table, .authors-description {
 		overflow: auto;
 		margin-bottom: 16px;
