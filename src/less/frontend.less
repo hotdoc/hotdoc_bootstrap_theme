@@ -198,17 +198,43 @@ body {
 	bottom: 0px;
 	left: 0px;
 	width: 25%;
-	@media (max-width: 992px) {
-		margin-left: -25%;
-	}
-	@media (min-width: 1600px) {
-		width: 16.66%;
-	}
 	margin-bottom: 0px;
 	background-color: @navbar-default-bg;
 	border: 0px;
 	border-radius: 0px;
 	color: @navbar-default-color;
+	@media (min-width: 1600px) {
+		width: 16.66%;
+	}
+}
+
+@media (max-width: 992px) {
+	#sidenav {
+		margin-left: 0%;
+		width: 50%;
+	}
+
+	#sidenav.oc-collapsed {
+		margin-left: -50%;
+	}
+}
+
+#sidenav + #offcanvasleft {
+	position: fixed;
+	top: @navbar-height * 2;
+	left: 50%;
+	/* We're fixed, and overlapping the padding of the center div which isn't */
+	z-index: 1;
+}
+
+#sidenav.oc-collapsed + #offcanvasleft {
+	left: 0%;
+}
+
+@media (min-width: 992px) {
+	#offcanvasleft {
+		display: none;
+	}
 }
 
 #toc-column {

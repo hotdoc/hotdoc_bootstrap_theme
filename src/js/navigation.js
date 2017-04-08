@@ -174,4 +174,9 @@ $(document).ready(function() {
 	inject_script("assets/js/sitemap.js");
 	$("#sitenav-wrapper").mCustomScrollbar({ "scrollInertia": 0, "theme": "minimal" });
 	$("#toc-wrapper").mCustomScrollbar({ "scrollInertia": 0, "theme": "dark" });
+	$('#offcanvasleft').click(function() {
+		$('#sidenav').toggleClass('oc-collapsed');
+		$('#content-column').toggleClass("col-sm-12 col-sm-6 col-xs-12 col-xs-6");
+		$('#offcanvasleft-chevron').toggleClass("glyphicon-chevron-left glyphicon-chevron-right");
+	});
 });
