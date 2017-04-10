@@ -26,16 +26,15 @@
 </div>
 <div class="hidden-xs hidden-sm hidden-md col-lg-2 col-xl-2">
 	<div id="toc-column">
+		@def edit_button():
+		@end
+		@(btn = edit_button())
+		@if btn:
+			<div class="edit-button">
+				@btn
+			</div>
+		@end
 		<div id="toc-wrapper">
-			@def edit_button():
-			@end
-			@(btn = edit_button())
-			@if btn:
-				<div class="text-center">
-					@btn
-					<hr/>
-				</div>
-			@end
 			<nav id="toc"></nav>
 		</div>
 	</div>
