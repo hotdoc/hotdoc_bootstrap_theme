@@ -1,11 +1,11 @@
-@require(link_resolver, page, subpages)
+@require(page, subpages)
 
 <div id="subpages">
 	<table>
 		<tbody>
-			@for subpage in subpages:
+			@for link, subpage in subpages.items():
 			<tr>
-				<td><a href="@subpage.link.get_link(link_resolver)">@subpage.get_title()</a></td>
+				<td><a href="@link">@subpage.get_title()</a></td>
 				@if subpage.short_description:
 				<td>@subpage.short_description</td>
 				@else:

@@ -16,6 +16,9 @@
 		prefix = project.extensions[page.extension_name].formatter.get_output_folder(page)
 		page_link = page.link.get_link(project.app.link_resolver)
 
+		if prefix:
+			page_link = "%s/%s" % (prefix, page_link)
+
 		unique_ref = '%s-%s-%s' % (page.extension_name, page.project_name, page.link.get_link(project.app.link_resolver))
 
 		name = parent_name + '-' + str(level)
