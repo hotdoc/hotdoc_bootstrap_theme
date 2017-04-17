@@ -26,7 +26,7 @@ $(document).ready(function() {
 	setupFilters();
 
 	wrapper.mCustomScrollbar({ "scrollInertia": 0, "theme": "minimal" });
-	wrapper.mCustomScrollbar("scrollTo", $(this_panel).offset().top - wrapper.offset().top - $('#topnav').height() + 8);
+	wrapper.mCustomScrollbar("scrollTo", this_panel.offset().top - wrapper.offset().top - $('#topnav').height() + 8);
 
 	$("#toc-wrapper").mCustomScrollbar({ "scrollInertia": 0, "theme": "dark" });
 	$('#offcanvasleft').click(function() {
