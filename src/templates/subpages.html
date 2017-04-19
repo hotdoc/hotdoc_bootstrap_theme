@@ -1,5 +1,9 @@
 @require(page, subpages)
 
+@if not page.render_subpages:
+<div class="hide-if-js">
+@end
+
 <div id="subpages">
 	<table>
 		<tbody>
@@ -16,3 +20,7 @@
 		</tbody>
 	</table>
 </div>
+
+@if not page.render_subpages:
+</div>
+@end

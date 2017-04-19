@@ -134,7 +134,5 @@ $.fn.attrchange = function(callback) {
     }
 }
 
-$(document).ready(function() {
-	utils.hd_context = new utils.HDContext(window.location.href);
-	console.log('The context is', utils.hd_context);
-});
+utils.hd_context = new utils.HDContext(window.location.href);
+console.log('The context is', utils.hd_context);

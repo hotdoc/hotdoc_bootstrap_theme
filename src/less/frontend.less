@@ -411,6 +411,12 @@ span[aria-expanded=false] .glyphicon-chevron-down {
     z-index: -1;
 }
 
+body:not(.no-script) {
+	.hide-if-js {
+		display: none;
+	}
+}
+
 body.no-script {
 	#menu {
 		display: none;
