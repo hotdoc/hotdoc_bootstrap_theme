@@ -9,8 +9,6 @@ body {
 	padding-top: @navbar-height;
 }
 
-// lines around headings
-
 a, a:active, a:focus {
         outline: none !important;
         cursor: pointer;
@@ -33,16 +31,35 @@ button, button:active, button:focus {
 	border-bottom-style: solid;
 }
 
-// pad symbol containers in the center column
-
-.base_symbol_container, .symbol_section, #page-description, #subpages {
+.base_symbol_container {
 	width: 100%;
-	padding-left: @padding-large-horizontal;
-	padding-right: @padding-large-horizontal;
 }
 
-img {
+img, video {
 	max-width: 100%;
+	height: auto;
+}
+
+video {
+	width: 100%;
+}
+
+// Helpful class for embedding youtube videos with html
+
+.video-container {
+	position: relative;
+	padding-bottom: 56.25%;
+	padding-top: 30px; height: 0; overflow: hidden;
+}
+ 
+.video-container iframe,
+.video-container object,
+.video-container embed {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 #page-description img {
@@ -73,41 +90,81 @@ blockquote {
 	font-style: @blockquote-font-style;
 }
 
-// http://galengidman.com/2014/03/25/responsive-flexible-height-sticky-footers-in-css/
-// Begins to feel like like a css tricks exhibition in there
-
-html, body {
-	height: 100%;
-	margin: 0pt;
-}
-
-html {
-	position: relative;
-}
-
 body {
-  display: table;
-  width: 100%;
+	overflow-x: hidden;
 }
 
-.page-row {
-  display: table-row;
-  height: 1px;
+#body {
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	left: 16.66vw;
+	right: 16.66vw;
+
+	@media (max-width: 1200px) {
+		right: 0vw;
+		left: 25vw;
+	}
+
+	@media (max-width: 992px) {
+		left: 0vw;
+	}
+
+	top: @navbar-height;
+	bottom: 0px;
+	word-wrap: break-word;
 }
 
-.page-row-expanded { height: 100%; }
+body.full-width #body {
+	left: 0vw;
+	right: 0vw;
+}
+
+body.full-width {
+	#toc-toggle, #sidenav-toggle {
+		display: none;
+	}
+}
+
+#main {
+	flex: 1 0 auto;
+
+	> * {
+		padding-left: floor((@grid-gutter-width / 2));
+		padding-right: floor((@grid-gutter-width / 2));
+	}
+}
+
+#main::after {
+	content: '\00a0'; /* &nbsp; */
+	display: block;
+	margin-top: var(--space);
+	height: 0px;
+	visibility: hidden;
+}
+
+#footer {
+	flex: none;
+
+	> * {
+		padding-left: floor((@grid-gutter-width / 2));
+		padding-right: floor((@grid-gutter-width / 2));
+	}
+}
 
 // Allow easy customisation of the brand logo, defaults to home icon
 
 .hotdoc-navbar-brand {
 	height: @navbar-height;
 	padding: @padding-small-vertical;
+	padding-top: (@navbar-height - 30px) / 2;
+	padding-bottom: (@navbar-height - 30px) / 2;
 	float: left;
 
 	img {
-		max-height: @navbar-height - @padding-small-vertical * 2;
-		min-height: @navbar-height - @padding-small-vertical * 2;
-		min-width: @navbar-height - @padding-small-vertical * 2;
+		max-height: 30px;
+		min-height: 30px;
+		min-width: 30px;
 	}
 }
 
@@ -118,11 +175,18 @@ body {
 }
 
 #sidenav-lookup-field:focus, .twitter-typeahead input.form-control {
-  width:100%;
+	@media (min-width: 992px) {
+  		width:100%;
+	}
 }
 
 #search_results {
+	flex: 1 0 auto;
 	display: none;
+	> * {
+		padding-left: floor((@grid-gutter-width / 2));
+		padding-right: floor((@grid-gutter-width / 2));
+	}
 }
 
 .search_result {
@@ -167,74 +231,152 @@ body {
 
 #sidenav {
 	position: fixed;
-	top: @navbar-height;
-	bottom: 0px;
-	left: 0px;
-	width: 25%;
+	height: 100vh;
+	left: 0vw;
 	margin-bottom: 0px;
 	background-color: @navbar-default-bg;
 	border: 0px;
 	border-radius: 0px;
 	color: @navbar-default-color;
-	@media (min-width: 1600px) {
-		width: 16.66%;
+	width: 16.66vw;
+
+	@media (max-width: 992px) {
+		margin-left: -80vw;
+		width: 80vw;
 	}
+
+	@media (max-width: 1200px) {
+		width: 25vw;
+	}
+
 	z-index: 1;
-}
-
-#sidenav.empty {
-	width: 0%;
-}
-
-@media (max-width: 992px) {
-	#sidenav {
-		margin-left: 0%;
-		width: 50%;
-	}
-
-	#sidenav.oc-collapsed {
-		margin-left: -50%;
-	}
-}
-
-#sidenav + #offcanvasleft {
-	position: fixed;
-	top: @navbar-height * 2;
-	left: 50%;
-	/* We're fixed, and overlapping the padding of the center div which isn't */
-	z-index: 1;
-}
-
-#sidenav.oc-collapsed + #offcanvasleft {
-	left: 0%;
-}
-
-@media (min-width: 992px) {
-	#offcanvasleft {
-		display: none;
-	}
-}
-
-#sidenav.empty + #offcanvasleft {
-	display: none;
 }
 
 #toc-column {
 	position: fixed;
-	top: @navbar-height + @padding-large-vertical;
-	bottom: 0px;
-	right: 0px;
-	width: 16.66%;
+	height: 100vh;
+	right: 0vw;
+  	background-color: @body-bg;
+
+	@media (max-width: 1200px) {
+		margin-right: -80vw;
+		width: 80vw;
+	}
+
+	width: 16.66vw;
+	z-index: 1;
 }
 
-#toc-wrapper {
-	overflow-y: auto;
-	height: 100%;
+#sidenav.empty {
+	width: 0vw;
+}
+
+#sidenav-toggle, #toc-toggle {
+	font-size: 20px;
+	padding-top: (@navbar-height / 2) - 10px;
+	padding-bottom: (@navbar-height / 2) - 10px;
+	color: @navbar-default-toggle-icon-bar-bg;
+}
+
+#sidenav-toggle {
+	float: left;
+	@media (max-width: 765px) {
+		padding-left: 15px;
+	}
+	@media (min-width: 992px) {
+		display: none;
+	}
+}
+
+#toc-toggle {
+	float: right;
+	@media (min-width: 765px) {
+		padding-right: 15px;
+	}
+	@media (min-width: 1200px) {
+		display: none;
+	}
 }
 
 #sitenav-wrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: @navbar-height;
+	right: 0px;
 	overflow-y: auto;
-	height: 100%;
+}
+
+#toc-wrapper {
+	position: absolute;
+	top: @navbar-height;
+	left: 0;
+	right: 0;
+	bottom: @navbar-height;
+	overflow-y: auto;
+}
+
+@media (max-width: 1200px) {
+	#toc-column {
+		transition: right 0.4s ease-in-out, margin-right 0.4s ease-in-out, width 0.4s ease-in-out;
+	}
+}
+
+
+@media (max-width: 992px) {
+	#sidenav {
+		transition: left 0.4s ease-in-out, margin-left 0.4s ease-in-out, width 0.4s ease-in-out;
+	}
+}
+
+body.sitenav-expanded {
+	@media (max-width: 992px) {
+		#sidenav {
+			margin-left: 0vw;
+			left: 0vw;
+		}
+	}
+
+	@media (max-width: 1200px) {
+		#toc-column {
+			right: 0vw;
+		}
+	}
+
+	#sidenav-toggle .glyphicon-menu-right {
+		display: none;
+	}
+}
+
+body:not(.sitenav-expanded) {
+	#sidenav-toggle .glyphicon-menu-left {
+		display: none;
+	}
+}
+
+body.toc-expanded {
+	@media (max-width: 1200px) {
+		#toc-column {
+			margin-right: 0vw;
+			right: 0px;
+		}
+	}
+
+	@media (max-width: 992px) {
+		#sidenav {
+			left: 0vw;
+		}
+	}
+
+	#toc-toggle .glyphicon-menu-left {
+		display: none;
+	}
+}
+
+body:not(.toc-expanded) {
+	#toc-toggle .glyphicon-menu-right {
+		display: none;
+	}
 }
 
 nav[data-toggle='toc'] .nav > li > a {
@@ -313,6 +455,7 @@ a[data-hotdoc-role='edit-button'] {
 .edit-button {
   text-align: center;
   min-height: @padding-xs-vertical + @padding-large-vertical + 10px;
+  padding-top: @padding-large-vertical;
 }
 
 .sidenav-main-panel-body {
@@ -344,37 +487,35 @@ span[aria-expanded=false] .glyphicon-chevron-down {
    display: none;
 }
 
-// tables
+.parameter-extra, .return-value-extra, .member-value, .field-link {
+	@media (min-width: 992px) {
+		text-align: right;
+	}
+}
 
-.parameter_container, .member_container, .multi_return_value_container {
-	> table {
-		border: none;
-		width: 100%;
-		thead,
-		tbody,
-		tfoot {
-			tr {
-				td {
-					padding-left: 10px;
-				}
-				td:nth-child(3) {
-					text-align: right;
-				}
-				td:nth-child(4) {
-					text-align: right;
-				}
-			}
+.parameter-description,
+.return-value-description,
+.return-value-link,
+.parameter-extra,
+.return-value-extra,
+.field-description,
+.field-link,
+.member-description,
+.member-value,
+.subpage-description {
+	> * {
+		@media (max-width: 992px) {
+			padding-left: 10px;
 		}
 	}
 }
 
+// tables
+
 .base_symbol_container, #page-description, .csp-previewer, #subpages {
-	word-wrap: break-word;
 	> table, .authors-description {
-		overflow: auto;
-		margin-bottom: 16px;
-		word-break: keep-all;
-		width: 100%;
+		&:extend(.table-responsive);
+		table-layout: fixed;
 		thead,
 		tbody,
 		tfoot {
@@ -399,6 +540,9 @@ span[aria-expanded=false] .glyphicon-chevron-down {
 #navbar-search-form {
 	margin-top: (@navbar-height - @input-height-small) / 2;
 	margin-bottom: (@navbar-height - @input-height-small) / 2;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-right: @padding-large-vertical;
 }
 
 .navbar-center
@@ -409,6 +553,10 @@ span[aria-expanded=false] .glyphicon-chevron-down {
     top: 0;
     text-align: center;
     z-index: -1;
+}
+
+.navbar-toggle {
+	margin-right: 0px;
 }
 
 body:not(.no-script) {
