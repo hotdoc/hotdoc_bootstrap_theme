@@ -132,6 +132,7 @@ body.full-width {
 	> * {
 		padding-left: floor((@grid-gutter-width / 2));
 		padding-right: floor((@grid-gutter-width / 2));
+		width: 100%;
 	}
 }
 
@@ -240,13 +241,13 @@ body.full-width {
 	color: @navbar-default-color;
 	width: 16.66vw;
 
+	@media (max-width: 1200px) {
+		width: 25vw;
+	}
+
 	@media (max-width: 992px) {
 		margin-left: -80vw;
 		width: 80vw;
-	}
-
-	@media (max-width: 1200px) {
-		width: 25vw;
 	}
 
 	z-index: 1;
@@ -259,9 +260,15 @@ body.full-width {
   	background-color: @body-bg;
 
 	@media (max-width: 1200px) {
+		margin-right: -50vw;
+		width: 50vw;
+	}
+
+	@media (max-width: 992px) {
 		margin-right: -80vw;
 		width: 80vw;
 	}
+
 
 	width: 16.66vw;
 	z-index: 1;
