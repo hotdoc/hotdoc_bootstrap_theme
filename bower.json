@@ -8,6 +8,7 @@
     "mustache.js": "^2.2.1",
     "bootstrap-toc": "^0.4.1",
     "bootstrap": "^3.3.7",
-    "jquery-touchswipe": "^1.6.18"
+    "jquery-touchswipe": "^1.6.18",
+    "anchor-js": "^3.2.2"
   }
 }

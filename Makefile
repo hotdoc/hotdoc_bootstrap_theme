@@ -37,6 +37,7 @@ SRC_JS = \
 	bower_components/mustache.js/mustache.min.js \
 	bower_components/bootstrap-toc/dist/bootstrap-toc.min.js \
 	bower_components/jquery-touchswipe/jquery.touchSwipe.min.js \
+	bower_components/anchor-js/anchor.min.js \
 	src/js/language_switching.js \
 	src/js/lines_around_headings.js \
 	src/js/navbar_offset_scroller.js \

@@ -242,6 +242,21 @@ function setupFilters() {
 
 	Toc.init($myNav);
 
+	/* Fix BASE anchors */
+	$("#toc a").each (function () {
+		$(this).attr("href", utils.hd_context.rel_path + $(this).attr("href"));
+	});
+
+	anchors.options = {
+		visible: 'touch',
+	}
+
+	anchors.add("#main h1:not(data-toc-skip)[id],h2:not(data-toc-skip)[id],h3:not(data-toc-skip)[id],h4:not(data-toc-skip)[id],h5:not(data-toc-skip)[id]");
+
+	$(".anchorjs-link").each (function () {
+		$(this).attr("href", utils.hd_context.rel_path + $(this).attr("href"));
+	});
+
 	function layoutTimer(){
 
 		setTimeout(function(){
