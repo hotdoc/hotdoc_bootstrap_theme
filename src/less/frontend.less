@@ -101,6 +101,13 @@ body {
 	left: 16.66vw;
 	right: 16.66vw;
 
+	@media (min-width: 1200px) {
+		width: 800px;
+		margin: auto;
+	}
+
+	text-align: center;
+
 	@media (max-width: 1200px) {
 		right: 0vw;
 		left: 25vw;
@@ -132,12 +139,14 @@ body.full-width {
 
 #main {
 	flex: 1 0 auto;
+	text-align: left;
 
 	> * {
 		padding-left: floor((@grid-gutter-width / 2));
 		padding-right: floor((@grid-gutter-width / 2));
 		width: 100%;
 	}
+
 }
 
 #main::after {
@@ -453,27 +462,26 @@ span[aria-expanded=false] .glyphicon-chevron-down {
    display: none;
 }
 
-.parameter-extra, .return-value-extra, .member-value, .field-link {
-	@media (min-width: 992px) {
-		text-align: right;
+.symbol-detail {
+	padding: 5px 10px;
+	text-indent: -2em;
+	margin-left: 2em;
+	> div {
+		display: inline;
+		~ p {
+			display: inline;
+		}
 	}
 }
 
-.parameter-description,
-.return-value-description,
-.return-value-link,
-.parameter-extra,
-.return-value-extra,
-.field-description,
-.field-link,
-.member-description,
-.member-value,
-.subpage-description {
-	> * {
-		@media (max-width: 992px) {
-			padding-left: 10px;
-		}
-	}
+.return-values-container > .symbol-detail:first-child {
+	padding: 5px 0px;
+}
+
+.return-values-container,
+.parameters-container,
+.members-container {
+	margin-bottom: 10px;
 }
 
 // tables
@@ -509,6 +517,17 @@ span[aria-expanded=false] .glyphicon-chevron-down {
 	padding-top: 0px;
 	padding-bottom: 0px;
 	padding-right: @padding-large-vertical;
+}
+
+#subpages {
+	:first-child {
+		margin-bottom: 10px;
+	}
+
+	p {
+		text-indent: -2em;
+		margin-left: 2em;
+	}
 }
 
 .navbar-center
