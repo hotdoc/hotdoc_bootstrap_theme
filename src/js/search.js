@@ -169,15 +169,16 @@ function display_fragments_for_urls(fragments, token) {
 
 function update_cookie() {
   for (var i = 0; i < utils.hd_context.gi_languages.length; i++) {
-    if ($(this).hasClass('search_result_' + utils.hd_context.gi_languages[i]))
+    if ($(this).hasClass('search_result_' + utils.hd_context.gi_languages[i])) {
       utils.setLanguageCookie(utils.hd_context.gi_languages[i]);
+    }
   }
 }
 
 search_result_template = [
   '<div class="search_result">',
   '{{{search_alert}}}',
-  '<a href="{{{url}}}">{{{url}}}</a>',
+  '<a href="{{{url}}}" class="{{{extra_class}}}">{{{url}}}</a>',
   '<div search-id="{{{final_url}}}-fragment"></div>',
   '</div>'
 ].join('\n');
@@ -226,6 +227,7 @@ function display_urls_for_token(data) {
       if (gi_languages.indexOf('default') != -1 || gi_languages.indexOf(utils.hd_context.gi_language) != -1) {
         meat += Mustache.to_html(search_result_template, {
           'url': url,
+          'extra_class': '',
           'final_url': final_url,
           'search_alert': '',
         });
@@ -238,6 +240,7 @@ function display_urls_for_token(data) {
           });
           meat += Mustache.to_html(search_result_template, {
             'url': url,
+            'extra_class': 'search_result_' + gi_languages[k],
             'final_url': final_url,
             'search_alert': search_alert,
           });
