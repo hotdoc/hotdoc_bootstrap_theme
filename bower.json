@@ -6,7 +6,7 @@
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "typeahead.js": "^0.11.1",
     "mustache.js": "^2.2.1",
-    "bootstrap-toc": "^0.4.1",
+    "bootstrap-toc": "https://github.com/hotdoc/bootstrap-toc.git#gh-pages",
     "bootstrap": "^3.3.7",
     "jquery-touchswipe": "^1.6.18",
     "anchor-js": "^3.2.2"

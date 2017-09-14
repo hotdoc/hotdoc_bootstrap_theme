@@ -45,6 +45,7 @@ SRC_JS = \
 	src/js/search.js \
 	src/js/tag_filtering.js \
 	src/js/utils.js \
+	src/js/scrollspy.js \
 	$(NULL)
 
 $(foreach js_file,$(SRC_JS),$(eval $(call COPY_template,dist/js/$(notdir $(js_file)),$(js_file))))
