@@ -283,8 +283,6 @@ body.full-width {
 		margin-right: -80vw;
 		width: 80vw;
 	}
-
-
 	width: 16.66vw;
 	z-index: 1;
 }
@@ -294,32 +292,20 @@ body.full-width {
 }
 
 #sidenav-toggle, #toc-toggle {
-	font-size: 20px;
-	padding-top: (@navbar-height / 2) - 10px;
-	padding-bottom: (@navbar-height / 2) - 10px;
-	color: @navbar-default-toggle-icon-bar-bg;
+	font-size:16px;
+	padding: 3px 5px 1px 5px;
+	border-radius: 5px 5px 0 0;
+	text-transform: uppercase;
+	color: @body-bg;
+	background-color: @navbar-default-bg;
+	position: absolute;
+	top: 33%;
+	border: none;
 }
 
 #sidenav-toggle {
-	color: white;
-	background-color: #3E3F3A;
-	padding: 0 5px 0 5px;
-	border-radius: 5px 5px 0 0;
-	border: none;
-	text-transform: uppercase;
-	font-size: 16px;
-	position: absolute;
 	left: 100%;
-	top: 33%;
-	-webkit-transform: rotate(90deg);
-	-moz-transform: rotate(90deg);
-	-o-transform: rotate(90deg);
-	-ms-transform: rotate(90deg);
 	transform: rotate(90deg);
-	-webkit-transform-origin: left bottom;
-	-moz-transform-origin: left bottom;
-	-o-transform-origin: left bottom;
-	-ms-transform-origin: left bottom;
 	transform-origin: left bottom;
 	@media (min-width: 992px) {
 		display: none;
@@ -327,25 +313,8 @@ body.full-width {
 }
 
 #toc-toggle {
-	text-transform: uppercase;
-	color: white;
-	background-color: #3E3F3A;
-	position: absolute;
-	padding: 0 5px 0 5px;
 	right: 100%;
-	top: 33%;
-	border-radius: 5px 5px 0 0;
-	border: none;
-	font-size:16px;
-	-webkit-transform: rotate(-90deg);
-	-moz-transform: rotate(-90deg);
-	-o-transform: rotate(-90deg);
-	-ms-transform: rotate(-90deg);
 	transform: rotate(-90deg);
-	-webkit-transform-origin: right bottom;
-	-moz-transform-origin: right bottom;
-	-o-transform-origin: right bottom;
-	-ms-transform-origin: right bottom;
 	transform-origin: right bottom;
 	@media (min-width: 1200px) {
 		display: none;
