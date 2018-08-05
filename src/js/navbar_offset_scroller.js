@@ -1,7 +1,11 @@
 function update_url() {
   var parsedUri = utils.parseUri(window.location.href);
   var updatedUri = parsedUri['scheme'] + '://' + parsedUri['authority'] + parsedUri['path'];
-  updatedUri += "?gi-language=" + utils.hd_context.gi_language;
+
+	if (utils.hd_context.gi_languages.length) {
+    updatedUri += "?gi-language=" + utils.hd_context.gi_language;
+  }
+
   if (parsedUri['fragment'] != undefined)
     updatedUri += '#' + parsedUri['fragment'];
   history.replaceState({}, document.title, updatedUri);
