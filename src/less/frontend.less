@@ -74,6 +74,7 @@ video {
 	width: 100%;
 	padding-bottom: @padding-large-vertical;
 	table {
+		background-color: @body-bg;
 		width: 100%;
 		tbody tr td:nth-child(2) {
 			text-align: right;
@@ -489,14 +490,16 @@ span[aria-expanded=false] .glyphicon-chevron-down {
 // tables
 
 .base_symbol_container, #page-description, .csp-previewer, #subpages {
-	> table, .authors-description {
+	table, .authors-description {
 		&:extend(.table-responsive);
-		table-layout: fixed;
+		table-layout: auto;
+		width: 100%;
+		margin-bottom: 10px;
+		background-color: @body-bg;
 		thead,
 		tbody,
 		tfoot {
 			tr {
-				background-color: @body-bg;
 				border-top: 1px solid #CCC;
 				th, td {
 					padding: 6px 13px;
