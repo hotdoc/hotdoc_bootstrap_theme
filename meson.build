@@ -9,7 +9,7 @@ endif
 
 bower = find_program('node_modules/bower/bin/bower')
 message('Running bower install...')
-res = run_command(bower, ['install'])
+res = run_command(bower, ['--allow-root', 'install'])
 if res.returncode() != 0
     error('`bower install` FAILED:\n @1@\n@0@'.format(res.stdout(), res.stderr()))
 endif
