@@ -208,6 +208,25 @@ body.full-width {
 }
 
 .search_result {
+  > .search-match-type {
+    color: @search-match-type-text;
+    > abbr {
+      text-decoration: none;
+    }
+  }
+
+  > .search-match-type[data-hotdoc-node-type="symbol"] {
+    color: @search-match-type-symbol;
+  }
+
+  > .search-match-type[data-hotdoc-node-type="h1"],
+  > .search-match-type[data-hotdoc-node-type="h2"],
+  > .search-match-type[data-hotdoc-node-type="h3"],
+  > .search-match-type[data-hotdoc-node-type="h4"],
+  > .search-match-type[data-hotdoc-node-type="h5"],
+  > .search-match-type[data-hotdoc-node-type="h6"] {
+    color: @search-match-type-heading;
+  }
 }
 
 // search typeahead
