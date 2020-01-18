@@ -16,6 +16,7 @@ js_files = [
     'src/js/tag_filtering.js',
     'src/js/utils.js',
     'src/js/scrollspy.js'
+    'src/js/side-content-toggles.js'
 ]
 
 

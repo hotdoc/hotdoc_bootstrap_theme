@@ -284,8 +284,6 @@ body.full-width {
 		margin-right: -80vw;
 		width: 80vw;
 	}
-
-
 	width: 16.66vw;
 	z-index: 1;
 }
@@ -295,27 +293,30 @@ body.full-width {
 }
 
 #sidenav-toggle, #toc-toggle {
-	font-size: 20px;
-	padding-top: (@navbar-height / 2) - 10px;
-	padding-bottom: (@navbar-height / 2) - 10px;
-	color: @navbar-default-toggle-icon-bar-bg;
+	font-size:16px;
+	padding: 3px 5px 1px 5px;
+	border-radius: 5px 5px 0 0;
+	text-transform: uppercase;
+	color: @body-bg;
+	background-color: @navbar-default-bg;
+	position: absolute;
+	top: 33%;
+	border: none;
 }
 
 #sidenav-toggle {
-	float: left;
-	@media (max-width: 765px) {
-		padding-left: 15px;
-	}
+	left: 100%;
+	transform: rotate(90deg);
+	transform-origin: left bottom;
 	@media (min-width: 992px) {
 		display: none;
 	}
 }
 
 #toc-toggle {
-	float: right;
-	@media (min-width: 765px) {
-		padding-right: 15px;
-	}
+	right: 100%;
+	transform: rotate(-90deg);
+	transform-origin: right bottom;
 	@media (min-width: 1200px) {
 		display: none;
 	}
