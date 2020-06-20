@@ -50,6 +50,12 @@ SRC_JS = \
 
 $(foreach js_file,$(SRC_JS),$(eval $(call COPY_template,dist/js/$(notdir $(js_file)),$(js_file))))
 
+SRC_JS_SEARCH = \
+	src/js/search/enable_search.css \
+	$(NULL)
+
+$(foreach js_file,$(SRC_JS_SEARCH),$(eval $(call COPY_template,dist/js/search/$(notdir $(js_file)),$(js_file))))
+
 $(eval $(call COPY_template,dist/js/compare-versions.js,bower_components/compare-versions/index.js))
 
 ## CSS files

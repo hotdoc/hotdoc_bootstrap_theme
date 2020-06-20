@@ -38,3 +38,5 @@ targets += [custom_target(
   command: copy_command,
   build_by_default: true
 )]
+
+subdir('search')
