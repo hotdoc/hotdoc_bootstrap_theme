@@ -67,6 +67,12 @@ SRC_CSS = \
 
 $(foreach css_file,$(SRC_CSS),$(eval $(call COPY_template,dist/css/$(notdir $(css_file)),$(css_file))))
 
+SRC_THEME_META = \
+	src/theme.json \
+	$(NULL)
+
+$(foreach meta_file,$(SRC_THEME_META),$(eval $(call COPY_template,dist/$(notdir $(meta_file)),$(meta_file))))
+
 # Compile less files
 
 define LESS_template

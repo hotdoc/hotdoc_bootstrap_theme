@@ -23,6 +23,13 @@ endif
 
 targets = []
 copy_command = ['python3', '-c', 'import os, sys, shutil; shutil.copyfile(sys.argv[1], sys.argv[2])', '@INPUT@', '@OUTPUT@']
+
+targets += [custom_target('theme.json',
+    input: 'src/theme.json',
+    output: 'theme.json',
+    command: copy_command,
+    build_by_default: true)]
+
 subdir('css')
 subdir('js')
 subdir('fonts')
