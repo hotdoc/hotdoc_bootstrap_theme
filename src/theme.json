@@ -8,10 +8,6 @@
         "url": "http://getbootstrap.com",
         "license": "MIT"
     },
-    "isotope": {
-        "url": "http://isotope.metafizzy.co",
-        "license": "GPLv3"
-    },
     "jquery": {
         "url": "https://jquery.com/",
         "license": "MIT"

@@ -31,7 +31,6 @@ endef
 SRC_JS = \
 	bower_components/jquery/dist/jquery.js \
 	bower_components/bootstrap/dist/js/bootstrap.js \
-	bower_components/isotope/dist/isotope.pkgd.min.js \
 	bower_components/typeahead.js/dist/typeahead.jquery.min.js \
 	bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js \
 	bower_components/mustache.js/mustache.min.js \
