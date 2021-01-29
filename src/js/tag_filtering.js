@@ -271,6 +271,11 @@ function setupFilters() {
 		$(this).attr("data-target", old_href);
 	});
 
+  $("body").scrollspy({
+    target: "#toc",
+    offset: 70,
+  });
+
 	anchors.options = {
 		visible: 'touch',
 	}
