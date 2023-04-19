@@ -1,0 +1,47 @@
+@import (reference) 'base.less';
+
+body {
+	background-color: @navbar-default-bg;
+    height: 100vh;
+}
+
+.sidenav-panel-body {
+  &:extend(.panel-body);
+  padding: 0px;
+  padding-left: 5px;
+
+  span {
+	  cursor: pointer;
+	  height: 100%;
+  }
+}
+
+.sidenav-main-panel-body {
+  &:extend(.sidenav-panel-body);
+  padding: 0px;
+}
+
+.sidenav-panel-odd {
+	background-color: @navbar-default-bg;
+}
+
+.sidenav-panel-even {
+	background-color: darken(@navbar-default-bg, 7%);
+}
+
+.sidenav-panel-current {
+	> .panel-heading, > span > .panel-heading {
+		border-left: 3px solid @brand-success;
+		> .panel-title {
+			color: @brand-success;
+		}
+	}
+}
+
+span[aria-expanded=true] .glyphicon-chevron-right {
+   display: none;
+}
+span[aria-expanded=false] .glyphicon-chevron-down {
+   display: none;
+}
+

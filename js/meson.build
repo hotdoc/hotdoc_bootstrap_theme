@@ -10,6 +10,7 @@ js_files = [
     'src/js/language_switching.js',
     'src/js/lines_around_headings.js',
     'src/js/navbar_offset_scroller.js',
+    'src/js/full-width.js',
     'src/js/navigation.js',
     'src/js/search.js',
     'src/js/tag_filtering.js',

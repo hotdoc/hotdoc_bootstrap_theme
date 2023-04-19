@@ -41,6 +41,7 @@ SRC_JS = \
 	src/js/lines_around_headings.js \
 	src/js/navbar_offset_scroller.js \
 	src/js/navigation.js \
+	src/js/full-width.js \
 	src/js/search.js \
 	src/js/tag_filtering.js \
 	src/js/utils.js \
@@ -85,6 +86,7 @@ endef
 
 SRC_LESS = \
 	src/less/frontend.less \
+	src/less/sitenav.less \
 	src/less/custom_bootstrap.less \
 	$(NULL)
 

@@ -1,5 +1,6 @@
 csss = [
   '../src/less/frontend',
+  '../src/less/sitenav',
   '../src/less/custom_bootstrap',
 ]
 
