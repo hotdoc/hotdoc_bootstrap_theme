@@ -22,17 +22,16 @@ function scroll_to_current_page(hd_context) {
 	var this_panel = unfold_current_page(hd_context.extension + "-" + hd_context.project_name + "-" + hd_context.hd_basename, hd_context);
 
 	if ($(this_panel).length) {
-        console.log("Ya", this_panel.offset().top);
-
         $('html').get(0).scrollTo({top: this_panel.offset().top - hd_context.navbar_height});
 	}
 }
 
-console.log("Hm");
-
 window.addEventListener('message', event => {
-    console.log ("Magic!", event.data);
-    scroll_to_current_page(event.data);
+    if (event.data.action == "unfold") {
+      scroll_to_current_page(event.data);
+    } else if (event.data.action == "update-style") {
+      setPreferredStyleSheet();
+    }
 });
 
 $(document).ready(function() {

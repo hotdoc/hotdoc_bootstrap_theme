@@ -46,6 +46,7 @@ SRC_JS = \
 	src/js/tag_filtering.js \
 	src/js/utils.js \
 	src/js/scrollspy.js \
+	src/js/styleswitcher.js \
 	$(NULL)
 
 $(foreach js_file,$(SRC_JS),$(eval $(call COPY_template,dist/js/$(notdir $(js_file)),$(js_file))))
@@ -76,7 +77,7 @@ $(foreach meta_file,$(SRC_THEME_META),$(eval $(call COPY_template,dist/$(notdir 
 # Compile less files
 
 define LESS_template
-$(1): $(2) src/less/base.less src/less/bootstrapxl.less $(if $(LESS_INCLUDE_PATH),$(LESS_INCLUDE_PATH)/*,)
+$(1): $(2) src/less/frontend.less src/less/sitenav.less src/less/bootstrapxl.less $(if $(LESS_INCLUDE_PATH),$(LESS_INCLUDE_PATH)/*,)
 	@echo "Compiling $(2) to $(1)";
 	@set -e;
 	@mkdir -p dist/css;
@@ -85,9 +86,10 @@ SRC_THEME += $(1)
 endef
 
 SRC_LESS = \
-	src/less/frontend.less \
-	src/less/sitenav.less \
-	src/less/custom_bootstrap.less \
+	src/less/dark-frontend.less \
+	src/less/light-frontend.less \
+	src/less/dark-sitenav.less \
+	src/less/light-sitenav.less \
 	$(NULL)
 
 

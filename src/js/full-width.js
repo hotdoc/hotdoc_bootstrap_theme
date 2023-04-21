@@ -52,9 +52,13 @@ $(document).ready(function() {
      * it too upon reception of any message.
      */
     const frame = document.getElementById('sitenav-frame');
-    frame.contentWindow.postMessage(utils.hd_context, '*');
+    var message = {action: "unfold"}
+    Object.assign(message, utils.hd_context);
+    frame.contentWindow.postMessage(message, '*');
 
     $(window).on("message", function(e) {
-        frame.contentWindow.postMessage(utils.hd_context, '*');
+        var message = {action: "unfold"}
+        Object.assign(message, utils.hd_context);
+        frame.contentWindow.postMessage(message, '*');
     });
 });

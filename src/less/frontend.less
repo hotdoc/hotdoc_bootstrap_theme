@@ -1,4 +1,6 @@
-@import (reference) 'base.less';
+@import "../../bower_components/bootstrap/less/bootstrap.less";
+@import "bootstrapxl.less";
+@import "hotdoc-variables.less";
 
 .page_container {
 	&:extend(.container-fluid);
@@ -19,11 +21,19 @@ button, button:active, button:focus {
         cursor: pointer;
 }
 
+#lightmode-icon {
+  cursor: pointer;
+}
+
 #navbar-wrapper > ul > li {
 	> button {
 		margin: 0;
 		height: @navbar-height;
 	}
+
+  > span {
+    line-height: @navbar-height;
+  }
 }
 
 .navbar {

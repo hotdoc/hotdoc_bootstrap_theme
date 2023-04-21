@@ -15,7 +15,8 @@ js_files = [
     'src/js/search.js',
     'src/js/tag_filtering.js',
     'src/js/utils.js',
-    'src/js/scrollspy.js'
+    'src/js/scrollspy.js',
+    'src/js/styleswitcher.js',
 ]
 
 
