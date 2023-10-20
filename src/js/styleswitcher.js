@@ -1,4 +1,6 @@
 function setActiveStyleSheet(title) {
+  localStorage.setItem("hotdoc.style", title);
+
   var i, a;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
     if (!a.hasAttribute('rel')) {
@@ -10,8 +12,6 @@ function setActiveStyleSheet(title) {
       if(a.getAttribute("title") == title) a.disabled = false;
     }
   }
-
-  setCookie("style", title, 365);
 
   const frame = document.getElementById('sitenav-frame');
 
@@ -70,8 +70,8 @@ function readCookie(name) {
 }
 
 function setPreferredStyleSheet() {
-  var cookie = readCookie("style");
-  var title = cookie ? cookie : getPreferredStyleSheet();
+  const stored = localStorage.getItem("hotdoc.style");
+  const title = stored ? stored : getPreferredStyleSheet();
   setActiveStyleSheet(title);
 }
 
@@ -84,9 +84,7 @@ window.onunload = function(e) {
   setCookie("style", title, 365);
 }
 
-var cookie = readCookie("style");
-var title = cookie ? cookie : getPreferredStyleSheet();
-setPreferredStyleSheet(title);
+setPreferredStyleSheet();
 
 $(document).ready(function() {
   $('#lightmode-icon').click(function() {
