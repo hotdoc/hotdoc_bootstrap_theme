@@ -16,8 +16,8 @@ function setActiveStyleSheet(title) {
   const frame = document.getElementById('sitenav-frame');
 
   if (frame) {
-    var message = {action: "update-style"}
-    frame.contentWindow.postMessage(message, '*');
+    let msg = {"hotdoc/sitenav-action": "update-style"}
+    frame.contentWindow.postMessage(msg, '*');
   }
 }
 
