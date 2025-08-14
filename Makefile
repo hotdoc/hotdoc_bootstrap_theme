@@ -77,7 +77,7 @@ $(foreach meta_file,$(SRC_THEME_META),$(eval $(call COPY_template,dist/$(notdir 
 # Compile less files
 
 define LESS_template
-$(1): $(2) src/less/frontend.less src/less/sitenav.less src/less/bootstrapxl.less $(if $(LESS_INCLUDE_PATH),$(LESS_INCLUDE_PATH)/*,)
+$(1): $(2) src/css/frontend.less src/css/sitenav.less src/css/bootstrapxl.less $(if $(LESS_INCLUDE_PATH),$(LESS_INCLUDE_PATH)/*,)
 	@echo "Compiling $(2) to $(1)";
 	@set -e;
 	@mkdir -p dist/css;
@@ -86,10 +86,10 @@ SRC_THEME += $(1)
 endef
 
 SRC_LESS = \
-	src/less/dark-frontend.less \
-	src/less/light-frontend.less \
-	src/less/dark-sitenav.less \
-	src/less/light-sitenav.less \
+	src/css/dark-frontend.less \
+	src/css/light-frontend.less \
+	src/css/dark-sitenav.less \
+	src/css/light-sitenav.less \
 	$(NULL)
 
 
