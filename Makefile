@@ -46,6 +46,7 @@ SRC_JS = \
 	src/js/tag_filtering.js \
 	src/js/utils.js \
 	src/js/scrollspy.js \
+	src/js/toc_visible_highlight.js \
 	src/js/styleswitcher.js \
 	$(NULL)
 
