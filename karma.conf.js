@@ -15,7 +15,6 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/mustache.js/mustache.js',
       'bower_components/jquery/dist/jquery.js',
       'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
       'src/js/utils.js',

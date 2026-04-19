@@ -191,80 +191,125 @@ body.full-width {
 	}
 }
 
-// search
+// Search trigger button in the navbar
 
-#sidenav-lookup-field, .twitter-typeahead input.form-control {
-  width: 150px;
-}
+#search-trigger {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 4px;
+	padding: 4px 10px;
+	min-width: 180px;
+	background: fade(@body-bg, 40%);
+	color: @text-color;
+	border: 1px solid @panel-default-border;
+	border-radius: 4px;
+	font-size: 13px;
+	line-height: 1;
+	cursor: pointer;
 
-#sidenav-lookup-field:focus, .twitter-typeahead input.form-control {
-	@media (min-width: 992px) {
-  		width:100%;
+	.glyphicon-search {
+		color: @gray-light;
+	}
+	.search-trigger-label {
+		flex: 1;
+		text-align: left;
+		color: @gray-light;
+	}
+	.search-trigger-kbd {
+		background: @panel-default-heading-bg;
+		color: @text-color;
+		border: 1px solid @panel-default-border;
+		border-radius: 3px;
+		padding: 1px 6px;
+		font-size: 11px;
+		font-family: inherit;
+	}
+	&:hover {
+		border-color: @brand-primary;
+		.glyphicon-search, .search-trigger-label {
+			color: @text-color;
+		}
+	}
+	@media (max-width: 767px) {
+		min-width: 0;
+		.search-trigger-label,
+		.search-trigger-kbd { display: none; }
 	}
 }
 
-#search_results {
-	flex: 1 0 auto;
-	display: none;
-	text-align: left;
-	> * {
-		padding-left: floor((@grid-gutter-width / 2));
-		padding-right: floor((@grid-gutter-width / 2));
+// Modal overlay containing the Pagefind UI
+
+#search-dialog {
+	padding: 0;
+	width: ~"min(720px, 92vw)";
+	max-height: 80vh;
+	overflow: hidden;
+	background: @body-bg;
+	color: @text-color;
+	border: 1px solid @panel-default-border;
+	border-radius: 8px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+
+	&::backdrop {
+		background: rgba(0, 0, 0, 0.55);
 	}
 }
 
-.search_result {
-  > .search-match-type {
-    color: @search-match-type-text;
-    > abbr {
-      text-decoration: none;
-      border: none;
-    }
-  }
+#search {
+	padding: 16px 20px;
+	max-height: 80vh;
+	overflow-y: auto;
 
-  > .search-match-type[data-hotdoc-node-type="symbol"] {
-    color: @search-match-type-symbol;
-  }
+	// Map Pagefind's CSS custom properties onto the theme palette.
+	--pagefind-ui-primary: @brand-primary;
+	--pagefind-ui-text: @text-color;
+	--pagefind-ui-background: @body-bg;
+	--pagefind-ui-border: @panel-default-border;
+	--pagefind-ui-tag: @panel-default-heading-bg;
+	--pagefind-ui-border-width: 1px;
+	--pagefind-ui-border-radius: 6px;
+	--pagefind-ui-font: inherit;
 
-  > .search-match-type[data-hotdoc-node-type="h1"],
-  > .search-match-type[data-hotdoc-node-type="h2"],
-  > .search-match-type[data-hotdoc-node-type="h3"],
-  > .search-match-type[data-hotdoc-node-type="h4"],
-  > .search-match-type[data-hotdoc-node-type="h5"],
-  > .search-match-type[data-hotdoc-node-type="h6"] {
-    color: @search-match-type-heading;
-  }
-}
+	.pagefind-ui__search-input {
+		background: @body-bg;
+		color: @text-color;
+	}
 
-// search typeahead
+	.pagefind-ui__result-title,
+	.pagefind-ui__result-link,
+	.pagefind-ui__message,
+	.pagefind-ui__result-excerpt {
+		color: @text-color;
+	}
 
-.tt-menu {
-  width: 100%;
-  text-align: left;
-  margin: 2px 0;
-  padding: 8px 0;
-  background-color: @body-bg;
-}
+	mark {
+		background: fade(@brand-primary, 30%);
+		color: @text-color;
+		padding: 0 2px;
+		border-radius: 2px;
+	}
 
-.tt-suggestion {
-  padding: 3px 20px;
-  line-height: 24px;
-}
+	.pagefind-ui__result-link:hover,
+	.pagefind-ui__result-link.hd-pagefind-active {
+		color: @brand-primary;
+	}
 
-.tt-suggestion:hover {
-  cursor: pointer;
-  color: @body-bg;
-  background-color: @gray;
-}
+	.hd-pagefind-active {
+		outline: 2px solid @brand-primary;
+		outline-offset: 2px;
+		border-radius: 3px;
+		background: fade(@brand-primary, 10%);
+	}
 
-.tt-suggestion.tt-cursor {
-  color: @body-bg;
-  background-color: @brand-primary;
-
-}
-
-.tt-suggestion p {
-  margin: 0;
+	.pagefind-ui__filter-name,
+	.pagefind-ui__filter-value,
+	.pagefind-ui__result-tag,
+	.pagefind-ui__result-tags li {
+		color: @text-color;
+		background: @panel-default-heading-bg;
+		border-color: @panel-default-border;
+	}
 }
 
 // sidenav

@@ -31,7 +31,6 @@ endef
 SRC_JS = \
 	bower_components/jquery/dist/jquery.js \
 	bower_components/bootstrap/dist/js/bootstrap.js \
-	bower_components/typeahead.js/dist/typeahead.jquery.min.js \
 	bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js \
 	bower_components/mustache.js/mustache.min.js \
 	bower_components/bootstrap-toc/dist/bootstrap-toc.min.js \
@@ -42,7 +41,6 @@ SRC_JS = \
 	src/js/navbar_offset_scroller.js \
 	src/js/navigation.js \
 	src/js/full-width.js \
-	src/js/search.js \
 	src/js/tag_filtering.js \
 	src/js/utils.js \
 	src/js/scrollspy.js \
@@ -50,12 +48,6 @@ SRC_JS = \
 	$(NULL)
 
 $(foreach js_file,$(SRC_JS),$(eval $(call COPY_template,dist/js/$(notdir $(js_file)),$(js_file))))
-
-SRC_JS_SEARCH = \
-	src/js/search/enable_search.css \
-	$(NULL)
-
-$(foreach js_file,$(SRC_JS_SEARCH),$(eval $(call COPY_template,dist/js/search/$(notdir $(js_file)),$(js_file))))
 
 $(eval $(call COPY_template,dist/js/compare-versions.js,bower_components/compare-versions/index.js))
 

@@ -1,5 +1,19 @@
 @require(page)
 
+@(
+# Single page-level kind meta based on the most-defining symbol on
+# the page. Emitting kind on each symbol wrapper is unsafe because
+# pagefind only keeps the last value per meta key per page, so a
+# trailing enum on e.g. the GstElement class page would wrongly tag
+# the page as "enumerations".
+primary_priority = ('classes', 'aliases', 'interfaces', 'structures',
+                    'gst_element', 'gst_plugin', 'enumerations')
+page_tablenames = {getattr(symbol, '__tablename__', '')
+                   for symbol in getattr(page, 'symbols', [])}
+page_kind = next((k for k in primary_priority if k in page_tablenames), '')
+page_kind = page_kind.replace('_', '-').replace(' ', '-')
+)
+
 @if not page.meta.get("full-width"):
 <div class="panel panel-collapse oc-collapsed" id="sidenav" data-hotdoc-role="navigation">
 	<script src="assets/js/full-width.js"></script>
@@ -10,15 +24,16 @@
 @end
 
 <div id="body">
-	<div id="main">
+	<div id="main" data-pagefind-body\
+@if page_kind:
+ data-pagefind-meta="kind:@page_kind"\
+@end
+>
 		@def content():
 		@end
 		@content()
 		<subpages>
 		</subpages>
-	</div>
-	<div id="search_results">
-		<p>The results of the search are</p>
 	</div>
 	<div id="footer">
 		@include("footer.html")

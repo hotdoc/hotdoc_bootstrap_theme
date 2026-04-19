@@ -16,12 +16,8 @@
         "url": "https://manos.malihu.gr/jquery-custom-content-scroller/",
         "license": "MIT"
     },
-    "mustache": {
-        "url": "https://github.com/janl/mustache.js/",
-        "license": "MIT"
-    },
-    "typeahead": {
-        "url": "https://github.com/twitter/typeahead.js",
+    "pagefind": {
+        "url": "https://pagefind.app/",
         "license": "MIT"
     }
   }

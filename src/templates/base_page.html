@@ -20,7 +20,6 @@
 <link rel="alternate stylesheet" href="assets/css/light-frontend.css" type="text/css" title="light"/>
 <link rel="stylesheet" href="assets/css/bootstrap-toc.min.css" type="text/css"/>
 <link rel="stylesheet" href="assets/css/jquery.mCustomScrollbar.min.css" />
-<link rel="stylesheet" href="assets/js/search/enable_search.css" type="text/css"/>
 
 @for stylesheet in stylesheets:
 <link rel="stylesheet" href="assets/css/@stylesheet" type="text/css"/>
@@ -38,8 +37,6 @@
 <script src="assets/js/jquery.js"></script>
 <script src="assets/js/bootstrap.js"></script>
 <script src="assets/js/scrollspy.js"></script>
-<script src="assets/js/typeahead.jquery.min.js"></script>
-<script src="assets/js/search.js"></script>
 <script src="assets/js/compare-versions.js"></script>
 <script src="assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="assets/js/bootstrap-toc.min.js"></script>
@@ -84,5 +81,257 @@ data-hotdoc-meta-@key="@str(value)"\
 
 
 <script src="assets/js/navbar_offset_scroller.js"></script>
+<script>
+// Pagefind search modal. Trigger in the navbar opens a centered <dialog>;
+// pagefind-ui.js and its CSS/WASM are only fetched on first open.
+(function () {
+	var trigger = document.getElementById('search-trigger');
+	var dialog = document.getElementById('search-dialog');
+	var search_root = document.getElementById('search');
+	if (!trigger || !dialog || !search_root) return;
+
+	var loaded = false;
+	var loading = false;
+
+	function open_dialog() {
+		if (!dialog.open) {
+			if (typeof dialog.showModal === 'function') dialog.showModal();
+			else dialog.setAttribute('open', '');
+		}
+		if (loaded) {
+			var input = search_root.querySelector('.pagefind-ui__search-input');
+			if (input) input.focus();
+		} else {
+			load_pagefind();
+		}
+	}
+
+	function close_dialog() {
+		if (dialog.open) {
+			if (typeof dialog.close === 'function') dialog.close();
+			else dialog.removeAttribute('open');
+		}
+	}
+
+	// Arrow-key navigation + Enter-to-open over PagefindUI's result list.
+	// The UI itself only exposes links; we track a highlight index and move
+	// focus as the user presses Up/Down/Home/End.
+	function result_links() {
+		return Array.from(search_root.querySelectorAll(
+			'.pagefind-ui__result-link, .pagefind-ui__result-title a'));
+	}
+
+	function clear_highlight() {
+		search_root.querySelectorAll('.hd-pagefind-active').forEach(function (el) {
+			el.classList.remove('hd-pagefind-active');
+		});
+	}
+
+	function highlight(index) {
+		var links = result_links();
+		if (!links.length) return -1;
+		if (index < 0) index = links.length - 1;
+		if (index >= links.length) index = 0;
+		clear_highlight();
+		var link = links[index];
+		link.classList.add('hd-pagefind-active');
+		link.scrollIntoView({ block: 'nearest' });
+		return index;
+	}
+
+	function attach_keyboard_nav(input) {
+		var selected = -1;
+
+		// Reset selection whenever the result *list* changes — i.e. when
+		// Pagefind renders new results for a new query. Only listen for
+		// child list changes on the results container to avoid resetting
+		// when we toggle the highlight class.
+		function install_observer() {
+			var results_container = search_root.querySelector(
+				'.pagefind-ui__results, .pagefind-ui__drawer') || search_root;
+			var mo = new MutationObserver(function () {
+				selected = result_links().length ? 0 : -1;
+				clear_highlight();
+				if (selected === 0) highlight(0);
+			});
+			mo.observe(results_container, { childList: true, subtree: false });
+		}
+		// The results container may not exist yet; retry when it appears.
+		var retry = setInterval(function () {
+			if (search_root.querySelector('.pagefind-ui__results, .pagefind-ui__drawer')) {
+				clearInterval(retry);
+				install_observer();
+			}
+		}, 100);
+
+		// Also reset on each new input keystroke so first result is auto-picked.
+		input.addEventListener('input', function () {
+			setTimeout(function () {
+				var links = result_links();
+				selected = links.length ? 0 : -1;
+				clear_highlight();
+				if (selected === 0) highlight(0);
+			}, 250);
+		});
+
+		input.addEventListener('keydown', function (ev) {
+			var links = result_links();
+			if (ev.key === 'ArrowDown') {
+				ev.preventDefault();
+				selected = highlight(selected + 1);
+			} else if (ev.key === 'ArrowUp') {
+				ev.preventDefault();
+				selected = highlight(selected - 1);
+			} else if (ev.key === 'Home') {
+				ev.preventDefault();
+				selected = highlight(0);
+			} else if (ev.key === 'End') {
+				ev.preventDefault();
+				selected = highlight(links.length - 1);
+			} else if (ev.key === 'Enter') {
+				var target = links[selected >= 0 ? selected : 0];
+				if (target && target.href) {
+					ev.preventDefault();
+					close_dialog();
+					window.location.href = target.href;
+				}
+			}
+		});
+	}
+
+	function load_pagefind() {
+		if (loaded || loading) return;
+		loading = true;
+
+		var css = document.createElement('link');
+		css.rel = 'stylesheet';
+		css.href = 'pagefind/pagefind-ui.css';
+		document.head.appendChild(css);
+
+		var script = document.createElement('script');
+		script.src = 'pagefind/pagefind-ui.js';
+		// Current gi-language preference: ?gi-language=X wins, else
+		// localStorage (set by language_switching.js), else 'c'.
+		function current_gi_language() {
+			try {
+				var q = new URLSearchParams(window.location.search).get('gi-language');
+				if (q) return q;
+				var ls = localStorage.getItem('hotdoc.gi-language');
+				if (ls) return ls;
+			} catch (_) {}
+			return 'c';
+		}
+
+		script.onload = function () {
+			new PagefindUI({
+				element: search_root,
+				showSubResults: true,
+				showImages: false,
+				ranking: {
+					termSimilarity: 8.0,
+					termFrequency: 0.1,
+					termSaturation: 0.5
+				},
+				// Drop sub-results that belong to a gi-language wrapper
+				// that isn't the user's current preference. Each wrapper
+				// is tagged at build time with id="gi-lang-<lang>-<sym>",
+				// which surfaces in `result.anchors` with a numeric
+				// `location`. For each sub-result we look up the most
+				// recent preceding language boundary and compare.
+				processResult: function (result) {
+					if (!result || !result.sub_results) return result;
+					var anchors = result.anchors || [];
+					var regions = anchors
+						.filter(function (a) { return a.id && a.id.indexOf('gi-lang-') === 0; })
+						.map(function (a) {
+							return { lang: a.id.split('-')[2], loc: a.location };
+						})
+						.sort(function (a, b) { return a.loc - b.loc; });
+					if (!regions.length) return result;
+
+					var lang = current_gi_language();
+					function lang_at(loc) {
+						var hit = null;
+						for (var i = 0; i < regions.length; i++) {
+							if (regions[i].loc <= loc) hit = regions[i].lang;
+							else break;
+						}
+						return hit;
+					}
+
+					result.sub_results = result.sub_results.filter(function (sub) {
+						var loc = (sub.anchor && sub.anchor.location) ||
+							(sub.weighted_locations && sub.weighted_locations[0] &&
+								sub.weighted_locations[0].location) || 0;
+						var at = lang_at(loc);
+						return !at || at === lang;
+					});
+
+					// Three-tier sub-result ordering:
+					//   0: sub-result whose heading IS the query
+					//      (e.g. `gst_element_set_state`)
+					//   1: any other sub-result that corresponds to a
+					//      symbol (has a matching `sym-<id>` anchor)
+					//   2: prose / tutorial headings
+					var query = (search_root.querySelector(
+						'.pagefind-ui__search-input').value || '')
+							.trim().toLowerCase();
+					var symbol_ids = new Set(anchors
+						.filter(function (a) { return a.id && a.id.indexOf('sym-') === 0; })
+						.map(function (a) { return a.id.slice(4); }));
+					result.sub_results.sort(function (a, b) {
+						function rank(sub) {
+							var id = sub.anchor && sub.anchor.id || '';
+							if (query && id.toLowerCase() === query) return 0;
+							if (symbol_ids.has(id)) return 1;
+							return 2;
+						}
+						return rank(a) - rank(b);
+					});
+					return result;
+				}
+			});
+			loaded = true;
+			loading = false;
+			var input = search_root.querySelector('.pagefind-ui__search-input');
+			if (input) {
+				input.focus();
+				attach_keyboard_nav(input);
+			}
+		};
+		document.head.appendChild(script);
+	}
+
+	trigger.addEventListener('click', open_dialog);
+
+	// Clicking the dialog backdrop closes it. Native <dialog> delivers the
+	// click event with the dialog element as the target (not any child).
+	dialog.addEventListener('click', function (ev) {
+		if (ev.target === dialog) close_dialog();
+	});
+
+	// If the user clicks a result link, let navigation proceed but close
+	// the dialog first so history state is clean.
+	search_root.addEventListener('click', function (ev) {
+		var link = ev.target.closest('a[href]');
+		if (link) close_dialog();
+	});
+
+	document.addEventListener('keydown', function (ev) {
+		// Ctrl/Cmd-K opens search — standard shortcut.
+		if ((ev.ctrlKey || ev.metaKey) && ev.key === 'k') {
+			ev.preventDefault();
+			open_dialog();
+			return;
+		}
+		// '/' opens search when not in a text field — DocSearch convention.
+		if (ev.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(
+				(document.activeElement || {}).tagName)) {
+			ev.preventDefault();
+			open_dialog();
+		}
+	});
+})();
+</script>
 </body>
 </html>
