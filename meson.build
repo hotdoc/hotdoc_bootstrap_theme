@@ -13,6 +13,7 @@ if not get_option('offline')
 endif
 
 less = find_program('lessc', dirs: [meson.current_source_dir() / 'node_modules/less/bin/'], native: true)
+python = find_program('python3', native: true)
 if get_option('less_include_path') != ''
   less_options = ['--include-path=' + get_option('less_include_path')]
 else
