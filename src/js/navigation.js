@@ -5,7 +5,10 @@ function unfold_current_page(base_name, hd_context) {
 	panels_to_unfold.addClass("panel-body-current").parent().addClass('sidenav-panel-current');
 	this_panel.addClass("panel-body-current").parent().addClass('sidenav-panel-current');
 
-	$(this_panel_body).attr("href", hd_context.hd_basename + "#");
+	$(this_panel_body).attr(
+        "href",
+        $(this_panel_body).attr("href") + "#"
+    );
 
     /* Make sure we are already fully unfolded when the function returns,
      * so that scroll can reach the exact spot */
