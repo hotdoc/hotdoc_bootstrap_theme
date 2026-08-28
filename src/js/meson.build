@@ -8,6 +8,7 @@ js_files = files(
     'search.js',
     'styleswitcher.js',
     'tag_filtering.js',
+    'toc_visible_highlight.js',
     'utils.js',
 )
 

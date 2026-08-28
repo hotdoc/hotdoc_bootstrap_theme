@@ -155,6 +155,20 @@ body.full-width {
 		width: 100%;
 	}
 
+	// Highlight targeted heading with a left-border indicator
+	.hd-target-heading {
+		position: relative;
+		&::before {
+			content: '';
+			position: absolute;
+			left: -13px;
+			top: 0;
+			bottom: 0;
+			width: 5px;
+			background-color: @brand-primary;
+		}
+	}
+
 }
 
 #main::after {
@@ -167,7 +181,6 @@ body.full-width {
 
 #footer {
 	flex: none;
-	padding-top: 100vh;
 
 	> * {
 		padding-left: floor((@grid-gutter-width / 2));

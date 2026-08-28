@@ -8,7 +8,11 @@ function update_url() {
 
   if (parsedUri['fragment'] != undefined)
     updatedUri += '#' + parsedUri['fragment'];
-  history.replaceState({}, document.title, updatedUri);
+  // Only call replaceState when the URL actually changes. An unnecessary
+  // replaceState clears the CSS :target pseudo-class even if the hash is
+  // preserved in the new URL.
+  if (updatedUri !== window.location.href)
+    history.replaceState({}, document.title, updatedUri);
 }
 
 function scroll_if_anchor(href, initial) {
